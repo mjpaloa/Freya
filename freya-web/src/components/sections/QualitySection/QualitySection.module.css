@@ -1,0 +1,152 @@
+.section {
+  padding: 3rem 0;
+  background-color: var(--surface-container-low);
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1536px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.hubHeader {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hubTitle {
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.hubSubtitle {
+  color: var(--on-surface-variant);
+}
+
+.logoGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  opacity: 0.6;
+  filter: grayscale(100%);
+  transition: all 0.7s;
+}
+
+.logoGrid:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+.logoItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logoIcon {
+  font-size: 2rem !important;
+  color: var(--primary);
+}
+
+.logoName {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1.125rem;
+}
+
+.qualityCard {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .qualityCard {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.qualityContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.isoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  background-color: #f0fdf4; /* green-50 */
+  color: #15803d; /* green-700 */
+  border: 1px solid #dcfce7; /* green-100 */
+  width: min-content;
+  white-space: nowrap;
+}
+
+.isoText {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: var(--font-label);
+}
+
+.qualityTitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.qualityDesc {
+  color: var(--on-surface-variant);
+  line-height: 1.625;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.metricItem {
+  background-color: var(--surface);
+  padding: 1.25rem;
+  border-radius: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.metricValue {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+}

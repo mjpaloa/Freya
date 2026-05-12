@@ -1,0 +1,41 @@
+:root {
+  /* Brand Colors from FREYA logo */
+  --primary: #f16a36; /* Freya Orange */
+  --primary-hover: #d95a2b;
+  --secondary: #0b1c30; /* Freya Navy */
+  --tertiary: #4e5c64;
+  
+  /* Surface Colors */
+  --surface: #ffffff;
+  --surface-alt: #f8fafc;
+  --surface-dark: #0b1c30;
+  --surface-container: #f1f5f9;
+  
+  /* On-Surface (Text) */
+  --on-surface: #0b1c30;
+  --on-surface-variant: #475569;
+  --on-primary: #ffffff;
+  --on-dark: #ffffff;
+
+  /* Neutrals & Others */
+  --white: #ffffff;
+  --black: #000000;
+  --outline: #e2e8f0;
+  --outline-variant: #cbd5e1;
+
+  /* Typography - Professional & Minimalist */
+  --font-headline: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-label: 'Inter', sans-serif;
+  
+  /* Layout */
+  --container-max: 1400px;
+  --header-height: 90px;
+
+  /* Rounding - Keeping the sharp BECKON-inspired look */
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+}
+
+

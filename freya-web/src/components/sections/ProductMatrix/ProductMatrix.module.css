@@ -1,0 +1,205 @@
+.section {
+  padding: 3rem 0;
+  background-color: var(--surface-container-low);
+}
+
+.container {
+  max-width: 1536px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.label {
+  font-family: var(--font-label);
+  color: var(--primary);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.headerDesc {
+  color: var(--on-surface-variant);
+  max-width: 28rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s;
+}
+
+.col8 {
+  grid-column: span 8;
+}
+
+.col4 {
+  grid-column: span 4;
+}
+
+.imagingCard {
+  background-color: var(--surface-container-lowest);
+  min-height: 400px;
+  justify-content: flex-end;
+}
+
+.cardImageWrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 66.666667%;
+  height: 100%;
+  opacity: 0.1;
+  transition: opacity 0.3s;
+}
+
+.cardImageWrapperOpacity {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+}
+
+.card:hover .cardImageWrapper {
+  opacity: 0.2;
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cardIcon {
+  font-size: 2rem !important;
+  color: var(--primary);
+}
+
+.cardIconWhite {
+  font-size: 2rem !important;
+  color: white;
+}
+
+.cardIconSecondary {
+  font-size: 2rem !important;
+  color: var(--secondary);
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+  font-weight: 500;
+}
+
+.cardTitleWhite {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}
+
+.cardDesc {
+  color: var(--on-surface-variant);
+  max-width: 28rem;
+  font-size: 0.875rem;
+}
+
+.cardDescWhite {
+  color: #dbeafe; /* text-blue-100 */
+  font-size: 0.875rem;
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.cardLink:hover span:last-child {
+  transform: translateX(0.25rem);
+}
+
+.cardLinkWhite {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.lifeSupportCard {
+  background-color: var(--primary);
+  color: white;
+  justify-content: space-between;
+}
+
+.labCard {
+  background-color: var(--surface-container-highest);
+  min-height: 300px;
+  justify-content: space-between;
+}
+
+.surgicalCard {
+  background-color: var(--surface-container-lowest);
+  min-height: 300px;
+  justify-content: flex-end;
+}

@@ -1,0 +1,186 @@
+.section {
+  padding: 5rem 0;
+  background-color: var(--surface-container-low);
+}
+
+.container {
+  max-width: 1536px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.heading {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.025em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Base card ── */
+.card {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Importation (image card, light) ── */
+.importCard {
+  min-height: 280px;
+  background-color: var(--surface-container-lowest);
+  justify-content: flex-end;
+}
+
+.importCardImg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.importCardImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.18;
+  transition: opacity 0.3s;
+}
+
+.card:hover .importCardImg img {
+  opacity: 0.28;
+}
+
+.cardBody {
+  position: relative;
+  z-index: 1;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cardIcon {
+  font-size: 2rem !important;
+  color: var(--primary);
+}
+
+.cardIconWhite {
+  font-size: 2rem !important;
+  color: white;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.cardTitleWhite {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.cardDesc {
+  font-size: 0.875rem;
+  color: var(--on-surface-variant);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.cardDescWhite {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Distribution (light) ── */
+.distributionCard {
+  background-color: var(--surface-container-lowest);
+  padding: 1.75rem;
+  gap: 1rem;
+  min-height: 280px;
+}
+
+.checkList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.checkIcon {
+  font-size: 1.1rem !important;
+  color: var(--primary);
+}
+
+/* ── Installation (primary / blue) ── */
+.installCard {
+  background-color: var(--primary);
+  min-height: 280px;
+}
+
+/* ── Maintenance (light, metrics) ── */
+.maintenanceCard {
+  background-color: var(--surface-container-lowest);
+  padding: 1.75rem;
+  gap: 1.25rem;
+  min-height: 280px;
+}
+
+.metrics {
+  display: flex;
+  gap: 2rem;
+  padding-top: 0.5rem;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.metricValue {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.metricLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--secondary);
+}

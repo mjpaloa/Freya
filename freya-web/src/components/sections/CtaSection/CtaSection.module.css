@@ -1,0 +1,88 @@
+.section {
+  padding: 6rem 2rem;
+}
+
+.container {
+  max-width: 1536px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ctaBox {
+  position: relative;
+  background-color: var(--primary);
+  border-radius: 3rem; /* rounded-[3rem] */
+  overflow: hidden;
+  padding: 3rem;
+  text-align: center;
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .ctaBox {
+    padding: 6rem;
+  }
+}
+
+.bgPattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  mix-blend-mode: overlay;
+}
+
+.patternImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 3.75rem; /* text-6xl */
+  }
+}
+
+.description {
+  font-size: 1.125rem;
+  color: #dbeafe; /* text-blue-100 */
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btnWrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.btnCta {
+  background-color: white;
+  color: var(--primary);
+  padding: 1.25rem 2.5rem;
+  border-radius: 0.75rem; /* rounded-xl */
+  font-weight: 700;
+  font-size: 1.125rem;
+  transition: transform 0.2s;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
+}
+
+.btnCta:hover {
+  transform: scale(1.05);
+}

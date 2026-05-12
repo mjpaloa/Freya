@@ -1,0 +1,38 @@
+/* Typography Base Setup */
+body {
+  font-family: var(--font-body);
+  color: var(--on-surface);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--surface);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headline);
+  color: var(--on-surface);
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+p {
+  color: var(--gray-500);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+.text-center { text-align: center; }
+.text-primary { color: var(--primary); }
+.text-gray { color: var(--gray-500); }
+.font-bold { font-weight: 700; }
+.font-medium { font-weight: 500; }
