@@ -55,7 +55,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
 }
 
@@ -142,17 +142,11 @@
 
 @media (max-width: 768px) {
   .filterBar {
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding: 0 0.25rem 0.5rem;
-    margin: 0 -0.25rem 2rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .filterBar::-webkit-scrollbar {
-    display: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding: 0;
+    margin: 0 0 2rem;
   }
 
   .filterBtn {
@@ -172,4 +166,3 @@
     font-size: 0.8125rem;
   }
 }
-

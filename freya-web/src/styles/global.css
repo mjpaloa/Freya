@@ -19,6 +19,13 @@
   padding-right: 2rem;
 }
 
+@media (max-width: 640px) {
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
 main {
   padding-top: var(--header-height);
 }

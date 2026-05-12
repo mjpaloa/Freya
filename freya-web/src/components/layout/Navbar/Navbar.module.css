@@ -4,10 +4,9 @@
   z-index: 100;
   width: 100%;
   height: var(--header-height);
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--surface);
+  border-bottom: 1px solid var(--outline);
+  box-shadow: 0 8px 24px rgba(11, 28, 48, 0.06);
 }
 
 .navContainer {
@@ -74,12 +73,10 @@
     top: 100%;
     left: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: var(--surface);
     padding: 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--outline);
+    box-shadow: 0 14px 28px rgba(11, 28, 48, 0.08);
   }
 
   .desktopQuoteBtn {
@@ -157,10 +154,12 @@
   display: none;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  border: none;
+  background: var(--surface-container);
+  border: 1px solid var(--outline);
   cursor: pointer;
   color: var(--on-surface);
+  width: 44px;
+  height: 44px;
 }
 
 @media (max-width: 1023px) {

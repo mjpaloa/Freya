@@ -13,15 +13,6 @@ export default function VendorSection() {
           </div>
           
           <div className={styles.grid}>
-            <div className={`${styles.card} ${styles.cardDark}`}>
-              <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop" alt="Machine" className={styles.cardImage} style={{ filter: 'grayscale(1) brightness(0.5)' }} />
-              <div className={styles.cardBody}>
-                <h3>Pre-Owned Equipment</h3>
-                <p>Buy or sell certified pre-owned clinical equipment with the FREYA quality guarantee.</p>
-                <a href="#" className={styles.link}>View More</a>
-              </div>
-            </div>
-            
             <div className={styles.card}>
               <div className={styles.cardBody}>
                 <h3>Technical Academy</h3>

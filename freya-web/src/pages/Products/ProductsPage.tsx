@@ -4,8 +4,9 @@ export default function ProductsPage() {
   return (
     <main>
       <section style={{
-        padding: '5rem 2rem 2rem',
+        padding: 'clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2rem) 2rem',
         textAlign: 'center',
+        width: '100%',
         maxWidth: 'var(--container-max)',
         margin: '0 auto',
       }}>
