@@ -1,0 +1,416 @@
+.product-detail-page {
+  background: white;
+  min-height: 100vh;
+  padding-top: var(--header-height);
+}
+
+.product-hero-section {
+  background: #f8fafc;
+  padding: 4rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 3rem;
+  transition: all 0.2s;
+}
+
+.back-link:hover {
+  transform: translateX(-5px);
+  color: var(--primary);
+}
+
+.product-main-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.product-visual {
+  background: white;
+  border-radius: 2rem;
+  padding: 3rem;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+}
+
+.product-image-container img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.product-category-tag {
+  display: inline-block;
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+  padding: 0.5rem 1rem;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.product-intro h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--secondary);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.product-summary {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #475569;
+  margin-bottom: 2.5rem;
+}
+
+.product-actions {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.inquire-btn {
+  padding: 1rem 2.5rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.inquire-btn:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.2);
+}
+
+.brochure-btn {
+  padding: 1rem 2.5rem;
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.brochure-btn:hover {
+  background: #f1f5f9;
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+.product-details-content {
+  padding: 5rem 0;
+}
+
+.details-full-width {
+  width: 100%;
+}
+
+.detail-section {
+  margin-bottom: 4rem;
+}
+
+.detail-section h3 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--secondary);
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.detail-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+.specs-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.specs-list li {
+  display: flex;
+  gap: 1rem;
+  font-size: 1.1rem;
+  color: #334155;
+  background: #f8fafc;
+  padding: 1.25rem;
+  border-radius: 1rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  margin-top: 0.6rem;
+  flex-shrink: 0;
+}
+
+.usage-content {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #334155;
+  white-space: pre-wrap;
+}
+
+/* ── Inquiry Modal Popup ── */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.inquiry-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 28, 48, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: overlayFadeIn 0.3s ease forwards;
+}
+
+.inquiry-modal {
+  background: white;
+  border-radius: 1.75rem;
+  padding: 2.5rem 3rem;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+  animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.modal-close-btn:hover {
+  background: #e2e8f0;
+  color: var(--secondary);
+  transform: rotate(90deg);
+}
+
+.modal-header {
+  margin-bottom: 2rem;
+}
+
+.modal-badge {
+  display: inline-block;
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+  padding: 0.35rem 0.75rem;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+.modal-header h2 {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--secondary);
+  margin-bottom: 0.4rem;
+}
+
+.modal-header p {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.modal-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.modal-form-group label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--secondary);
+}
+
+.modal-form-group input {
+  padding: 0.8rem 1rem;
+  border-radius: 0.625rem;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--secondary);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.modal-form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.1);
+}
+
+.modal-readonly-input {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  cursor: not-allowed;
+}
+
+.modal-policy-checkbox {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  margin-top: 0.25rem;
+}
+
+.modal-policy-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.15rem;
+  accent-color: var(--primary);
+  flex-shrink: 0;
+}
+
+.modal-policy-checkbox label {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+.modal-submit-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 0.875rem;
+  font-weight: 800;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 0.5rem;
+}
+
+.modal-submit-btn:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.3);
+}
+
+@media (max-width: 1024px) {
+  .product-main-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .product-visual {
+    order: 2;
+  }
+  
+  .product-intro {
+    order: 1;
+  }
+
+  .specs-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .product-intro h1 {
+    font-size: 2.5rem;
+  }
+  
+  .product-actions {
+    flex-direction: column;
+  }
+  
+  .inquire-btn, .brochure-btn {
+    width: 100%;
+  }
+
+  .inquiry-modal {
+    padding: 2rem 1.5rem;
+    border-radius: 1.25rem;
+  }
+
+  .modal-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+

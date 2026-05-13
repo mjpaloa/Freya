@@ -6,7 +6,8 @@ import {
   Users,
   UserCircle,
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Newspaper
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Sidebar.css';
@@ -22,6 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const navItems = [
     { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/products', icon: Package, label: 'Products' },
+    { path: '/news', icon: Newspaper, label: 'News Feed' },
     { path: '/users', icon: Users, label: 'User Management' },
     { path: '/profile', icon: UserCircle, label: 'My Profile' },
   ];

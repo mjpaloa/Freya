@@ -23,6 +23,7 @@ export interface Product {
   type: string;
   info?: string;
   image_url?: string;
+  brochure_url?: string;
   created_at: string;
 }
 
@@ -35,12 +36,14 @@ const Products: React.FC = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [viewingProduct, setViewingProduct] = useState<Product | null>(null);
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
-
+  const [isUploading, setIsUploading] = useState(false);
+ 
   // --- UPDATED FORM STATE (Separated Contexts) ---
   const [formData, setFormData] = useState({
     name: '',
     type: '',
     image_url: '',
+    brochure_url: '',
     short_desc: '',
     tech_specs: '',
     usage_purpose: ''
@@ -75,20 +78,19 @@ const Products: React.FC = () => {
     if (product) {
       setEditingProduct(product);
 
-      // I-format ang info string pabalik sa 3 sections para sa Edit Mode
       const infoText = product.info || '';
       setFormData({
         name: product.name,
         type: product.type,
         image_url: product.image_url || '',
-        // Simple parsing logic (Split by our markers)
+        brochure_url: product.brochure_url || '',
         short_desc: infoText.split('[TECHNICAL SPECS]')[0]?.replace('[DESCRIPTION]', '').trim() || infoText,
         tech_specs: infoText.split('[TECHNICAL SPECS]')[1]?.split('[USAGE]')[0]?.trim() || '',
         usage_purpose: infoText.split('[USAGE]')[1]?.trim() || ''
       });
     } else {
       setEditingProduct(null);
-      setFormData({ name: '', type: '', image_url: '', short_desc: '', tech_specs: '', usage_purpose: '' });
+      setFormData({ name: '', type: '', image_url: '', brochure_url: '', short_desc: '', tech_specs: '', usage_purpose: '' });
     }
     setIsModalOpen(true);
   };
@@ -96,7 +98,6 @@ const Products: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // --- LOGIC: Combine the 3 contexts into ONE info string ---
     const combinedInfo = `
 [DESCRIPTION]
 ${formData.short_desc}
@@ -112,7 +113,8 @@ ${formData.usage_purpose}
       name: formData.name,
       type: formData.type,
       image_url: formData.image_url,
-      info: combinedInfo // This goes to your single 'info' column in DB
+      brochure_url: formData.brochure_url,
+      info: combinedInfo
     };
 
     try {
@@ -267,6 +269,42 @@ ${formData.usage_purpose}
                     <label>Image URL</label>
                     <input type="text" value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} />
                   </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Product Brochure (PDF)</label>
+                  <div className="file-upload-wrapper">
+                    <input 
+                      type="file" 
+                      accept=".pdf" 
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        
+                        const uploadFormData = new FormData();
+                        uploadFormData.append('brochure', file);
+                        
+                        try {
+                          setIsUploading(true);
+                          const response = await api.post('/upload/brochure', uploadFormData, {
+                            headers: { 'Content-Type': 'multipart/form-data' }
+                          });
+                          setFormData({ ...formData, brochure_url: response.data.url });
+                          alert('Brochure uploaded successfully!');
+                        } catch (error) {
+                          console.error('Upload failed:', error);
+                          alert('Failed to upload brochure. Please check your connection.');
+                        } finally {
+                          setIsUploading(false);
+                        }
+                      }} 
+                    />
+                    {isUploading && <span className="upload-loader"><Loader2 className="spinner" size={16} /> Uploading...</span>}
+                    {formData.brochure_url && <span className="upload-success">✓ File linked</span>}
+                  </div>
+                  {formData.brochure_url && (
+                    <p className="file-hint">Current: {formData.brochure_url.split('/').pop()}</p>
+                  )}
                 </div>
 
                 {/* THE 3 CONTEXT FIELDS */}

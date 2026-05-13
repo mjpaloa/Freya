@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Package,
@@ -7,30 +8,37 @@ import {
   Calendar,
   PlusCircle,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  Newspaper,
+  Plus
 } from 'lucide-react';
 import api from '../services/api';
 import '../styles/Dashboard.css';
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalProducts: 0,
     totalUsers: 0,
+    totalNews: 0,
     addedThisMonth: 0,
     growth: 12.5
   });
+  const [recentNews, setRecentNews] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [productsRes, usersRes] = await Promise.all([
+        const [productsRes, usersRes, newsRes] = await Promise.all([
           api.get('/products'),
-          api.get('/users')
+          api.get('/users'),
+          api.get('/news')
         ]);
 
         const products = productsRes.data;
         const users = usersRes.data;
+        const news = newsRes.data;
 
         // Calculate products added this month
         const now = new Date();
@@ -40,9 +48,12 @@ const Dashboard: React.FC = () => {
         setStats({
           totalProducts: products.length,
           totalUsers: users.length,
+          totalNews: news.length,
           addedThisMonth: thisMonthProducts.length,
           growth: 14.2
         });
+
+        setRecentNews(news.slice(0, 3));
       } catch (error) {
         console.error('Failed to fetch stats', error);
       } finally {
@@ -63,27 +74,27 @@ const Dashboard: React.FC = () => {
       isPositive: true
     },
     {
+      label: 'News Articles',
+      value: stats.totalNews,
+      icon: Newspaper,
+      color: 'var(--accent)',
+      trend: '+2.1%',
+      isPositive: true
+    },
+    {
       label: 'Total Users',
       value: stats.totalUsers,
       icon: Users,
       color: 'var(--secondary)',
-      trend: '+2.1%',
+      trend: '+1.5%',
       isPositive: true
     },
     {
       label: 'Added This Month',
       value: stats.addedThisMonth,
       icon: Calendar,
-      color: 'var(--accent)',
-      trend: '+12%',
-      isPositive: true
-    },
-    {
-      label: 'Revenue Growth',
-      value: `${stats.growth}%`,
-      icon: TrendingUp,
       color: 'var(--success)',
-      trend: '+2.4%',
+      trend: '+12%',
       isPositive: true
     },
   ];
@@ -95,9 +106,9 @@ const Dashboard: React.FC = () => {
           <h1>Welcome Back, Freya</h1>
           <p>Here's what's happening with your store today.</p>
         </div>
-        <button className="btn-primary">
+        <button className="btn-primary" onClick={() => navigate('/news')}>
           <PlusCircle size={20} />
-          <span>New Report</span>
+          <span>New Article</span>
         </button>
       </header>
 
@@ -128,26 +139,28 @@ const Dashboard: React.FC = () => {
       <div className="dashboard-grid">
         <div className="glass-card main-chart-card">
           <div className="card-header">
-            <h3>Inventory Overview</h3>
-            <select className="glass-select">
-              <option>Last 30 Days</option>
-              <option>Last 6 Months</option>
-              <option>Last Year</option>
-            </select>
+            <h3>Recent News Feed</h3>
+            <button className="text-btn" onClick={() => navigate('/news')}>View All</button>
           </div>
-          <div className="chart-placeholder">
-            {/* Real charts would go here, using a placeholder visualization for now */}
-            <div className="visual-report">
-              {[40, 70, 45, 90, 65, 80, 50, 60].map((height, i) => (
-                <motion.div
-                  key={i}
-                  className="bar"
-                  initial={{ height: 0 }}
-                  animate={{ height: `${height}%` }}
-                  transition={{ delay: 0.5 + (i * 0.1), duration: 1 }}
-                />
-              ))}
-            </div>
+          <div className="recent-list">
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : recentNews.length > 0 ? (
+              recentNews.map((news) => (
+                <div key={news.id} className="recent-item">
+                  <div className="item-icon-small">
+                    <Newspaper size={18} />
+                  </div>
+                  <div className="item-details">
+                    <h4>{news.title}</h4>
+                    <span>{news.published_date} • {news.category}</span>
+                  </div>
+                  <button className="icon-btn" onClick={() => navigate('/news')}><Plus size={16} /></button>
+                </div>
+              ))
+            ) : (
+              <p className="empty-state">No news articles yet.</p>
+            )}
           </div>
         </div>
 
@@ -176,5 +189,6 @@ const Dashboard: React.FC = () => {
     </div>
   );
 };
+
 
 export default Dashboard;

@@ -2,8 +2,10 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import HomePage from '../pages/Home/HomePage';
 import ProductsPage from '../pages/Products/ProductsPage';
+import ProductDetailPage from '../pages/Products/ProductDetailPage';
 import ServicesPage from '../pages/Services/ServicesPage';
 import NewsPage from '../pages/News/NewsPage';
+import NewsDetailPage from '../pages/News/NewsDetailPage';
 import AboutPage from '../pages/About/AboutPage';
 import ContactPage from '../pages/Contact/ContactPage';
 
@@ -18,7 +20,16 @@ const router = createBrowserRouter([
       },
       {
         path: 'products',
-        element: <ProductsPage />,
+        children: [
+          {
+            index: true,
+            element: <ProductsPage />,
+          },
+          {
+            path: ':id',
+            element: <ProductDetailPage />,
+          },
+        ],
       },
       {
         path: 'services',
@@ -26,7 +37,16 @@ const router = createBrowserRouter([
       },
       {
         path: 'news',
-        element: <NewsPage />,
+        children: [
+          {
+            index: true,
+            element: <NewsPage />,
+          },
+          {
+            path: ':id',
+            element: <NewsDetailPage />,
+          },
+        ],
       },
       {
         path: 'about',

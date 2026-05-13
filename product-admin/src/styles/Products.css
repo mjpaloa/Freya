@@ -502,6 +502,52 @@ th.actions-col {
   outline: none;
 }
 
+.file-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed var(--glass-border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.file-upload-wrapper:hover {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.file-upload-wrapper input[type="file"] {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.upload-loader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.upload-success {
+  color: var(--success);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.file-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -642,6 +688,21 @@ th.actions-col {
   font-weight: 600;
   color: var(--text-main);
   font-size: 0.95rem;
+}
+
+.source-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.source-link:hover {
+  color: white;
+  text-decoration: underline;
+  transform: translateX(2px);
 }
 
 .status-active {

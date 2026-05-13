@@ -1,7 +1,26 @@
 import React from 'react';
-import { trendingNews, categories } from '../data';
+import { trendingNews } from '../data';
+import type { NewsArticle } from '../data';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  articles?: NewsArticle[];
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ articles = [] }) => {
+  // Derive categories dynamically from the actual articles in the database
+  const dynamicCategories = React.useMemo(() => {
+    const counts: Record<string, number> = {};
+    
+    articles.forEach(article => {
+      const cat = article.category || 'Uncategorized';
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+
+    return Object.entries(counts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [articles]);
+
   return (
     <aside className="news-sidebar">
       {/* Search Widget */}
@@ -19,17 +38,19 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Categories Widget */}
-      <div className="sidebar-widget">
-        <h4>Topic Categories</h4>
-        <ul className="category-list">
-          {categories.map((cat, index) => (
-            <li key={index} className="category-item">
-              <span>{cat.name}</span>
-              <span className="category-count">{cat.count}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {dynamicCategories.length > 0 && (
+        <div className="sidebar-widget">
+          <h4>Topic Categories</h4>
+          <ul className="category-list">
+            {dynamicCategories.map((cat, index) => (
+              <li key={index} className="category-item">
+                <span>{cat.name}</span>
+                <span className="category-count">{cat.count}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Newsletter Widget - Orange Theme */}
       <div className="newsletter-widget">
@@ -48,20 +69,22 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Trending Widget */}
-      <div className="sidebar-widget">
-        <h4>Trending Now</h4>
-        <div className="trending-list">
-          {trendingNews.map((news) => (
-            <div key={news.id} className="trending-item">
-              <div className="trending-rank">{news.rank}</div>
-              <div className="trending-content">
-                <h5>{news.title}</h5>
-                <span className="trending-category">{news.category}</span>
+      {trendingNews.length > 0 && (
+        <div className="sidebar-widget">
+          <h4>Trending Now</h4>
+          <div className="trending-list">
+            {trendingNews.map((news) => (
+              <div key={news.id} className="trending-item">
+                <div className="trending-rank">{news.rank}</div>
+                <div className="trending-content">
+                  <h5>{news.title}</h5>
+                  <span className="trending-category">{news.category}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </aside>
   );
 };

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // Hardcoded direct connection to your live Vercel backend server
-  baseURL: 'https://freya-server-orcin.vercel.app/api',
+  // Use environment variable or fallback to local/Vercel
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'application/json',
   },

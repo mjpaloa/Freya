@@ -27,6 +27,7 @@ export interface Product {
   type: string;
   info?: string;
   image_url?: string;
+  brochure_url?: string;
   created_at: string;
 }
 
@@ -35,6 +36,7 @@ export interface CreateProductDTO {
   type: string;
   info?: string;
   image_url?: string;
+  brochure_url?: string;
 }
 
 export interface UpdateProductDTO {
@@ -42,4 +44,37 @@ export interface UpdateProductDTO {
   type?: string;
   info?: string;
   image_url?: string;
+  brochure_url?: string;
+}
+
+export interface NewsArticle {
+  id: string;
+  category: string;
+  title: string;
+  excerpt: string;
+  published_date: string;
+  image_url?: string;
+  featured: boolean;
+  article_url?: string;
+  created_at: string;
+}
+
+export interface CreateNewsArticleDTO {
+  category: string;
+  title: string;
+  excerpt: string;
+  published_date: string;
+  image_url?: string;
+  featured?: boolean;
+  article_url?: string;
+}
+
+export interface UpdateNewsArticleDTO {
+  category?: string;
+  title?: string;
+  excerpt?: string;
+  published_date?: string;
+  image_url?: string;
+  featured?: boolean;
+  article_url?: string;
 }
