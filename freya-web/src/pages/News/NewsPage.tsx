@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { newsArticles as staticNewsArticles } from './data';
 import type { NewsArticle } from './data';
 import { fetchNewsArticles } from '../../services/newsService';
-import FeaturedPost from './components/FeaturedPost';
+import FeaturedCarousel from './components/FeaturedCarousel';
 import NewsCard from './components/NewsCard';
 import Sidebar from './components/Sidebar';
 import './NewsPage.css';
@@ -28,8 +28,15 @@ const NewsPage: React.FC = () => {
     loadNews();
   }, []);
 
-  const featuredArticle = articles.find(a => a.featured) || articles[0];
-  const otherArticles = articles.filter(a => a.id !== featuredArticle?.id);
+  // Filter featured articles for the top section
+  const featuredArticles = articles.filter(a => a.featured);
+  
+  // If no articles are explicitly marked featured, use the first one
+  const displayFeatured = featuredArticles.length > 0 ? featuredArticles : (articles.length > 0 ? [articles[0]!] : []);
+  
+  // Keep all articles in the list below (as per user request "same as before")
+  const otherArticles = articles;
+
 
   return (
     <div className="news-page">
@@ -52,7 +59,7 @@ const NewsPage: React.FC = () => {
               <div className="loading-state">Loading latest insights...</div>
             ) : (
               <>
-                {featuredArticle && <FeaturedPost article={featuredArticle} />}
+                {displayFeatured.length > 0 && <FeaturedCarousel articles={displayFeatured} />}
                 
                 <div className="news-grid">
                   {otherArticles.map(article => (
@@ -62,6 +69,7 @@ const NewsPage: React.FC = () => {
               </>
             )}
           </main>
+
 
           {/* Sidebar Column */}
           <Sidebar articles={articles} />

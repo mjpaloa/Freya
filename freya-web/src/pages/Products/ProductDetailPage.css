@@ -393,24 +393,50 @@
 
 @media (max-width: 640px) {
   .product-intro h1 {
-    font-size: 2.5rem;
+    font-size: 2rem; /* Smaller title for mobile */
+    line-height: 1.2;
+  }
+
+  .product-summary {
+    font-size: 1rem;
+    margin-bottom: 2rem;
   }
   
   .product-actions {
     flex-direction: column;
+    gap: 1rem;
   }
   
   .inquire-btn, .brochure-btn {
     width: 100%;
+    padding: 0.875rem 1.5rem;
   }
 
   .inquiry-modal {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.25rem; /* Tightened padding */
     border-radius: 1.25rem;
+  }
+
+  .modal-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.5rem; /* Better wrapping on mobile */
   }
 
   .modal-form-row {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .modal-form {
+    gap: 1rem;
+  }
+
+  .modal-submit-btn {
+    padding: 0.875rem 1.5rem;
   }
 }
+
 
