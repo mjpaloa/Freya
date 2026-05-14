@@ -4,7 +4,6 @@ import {
   Trash2, 
   Mail,
   Calendar,
-  Shield,
   Loader2
 } from 'lucide-react';
 import api from '../services/api';
@@ -94,7 +93,7 @@ const Users: React.FC = () => {
               <div className="col-actions">Actions</div>
             </div>
             <div className="products-list">
-              {filteredUsers.map((user, index) => (
+              {filteredUsers.map((user) => (
                 <div key={user.id} className="product-item-card glass-panel">
                   <div className="col-photo">
                     <div className="product-img-circle">

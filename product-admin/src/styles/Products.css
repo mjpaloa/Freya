@@ -173,6 +173,7 @@
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   padding-right: 1.5rem;
@@ -263,6 +264,7 @@
     text-align: center;
     padding-right: 0;
     -webkit-line-clamp: 4;
+    line-clamp: 4;
   }
 
   .col-date,
@@ -377,6 +379,7 @@
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -476,6 +479,8 @@
   content: "";
   flex: 1;
   height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
 
 .form-group input,
 .form-group textarea {
