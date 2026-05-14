@@ -142,7 +142,8 @@ ${formData.usage_purpose}
   };
 
   return (
-    <div className="products-page animate-fade-in">
+    <>
+      <div className="products-page animate-fade-in">
       <header className="page-header">
         <div>
           <h1>Inventory Management</h1>
@@ -179,51 +180,58 @@ ${formData.usage_purpose}
             <p>Fetching database records...</p>
           </div>
         ) : viewMode === 'table' ? (
-          <div className="glass-panel table-container">
-            <table className="products-table">
-              <thead>
-                <tr>
-                  <th className="id-col">Id</th>
-                  <th className="photo-col">Photo</th>
-                  <th className="name-col">Product Name</th>
-                  <th className="type-col">Product Type</th>
-                  <th className="info-col">Details</th>
-                  <th className="date-col"> Date Added</th>
-                  <th className="actions-col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredProducts.map((product, index) => (
-                  <tr key={product.id}>
-                    <td className="index-column">{index + 1}</td>
-                    <td>
-                      <div className="product-img small">
-                        {product.image_url ? <img src={product.image_url} alt="" /> : <ImageIcon size={18} />}
-                      </div>
-                    </td>
-                    <td className="name-col"><span className="product-name">{product.name}</span></td>
-                    <td className="type-col"><span className="badge">{product.type}</span></td>
-                    <td className="info-col">
-                      <div className="info-cell">{product.info || 'No details'}</div>
-                    </td>
-                    <td className="date-col">
-                      <div className="date-wrapper">
-                        <span>{new Date(product.created_at).toLocaleDateString()}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="action-buttons">
-                        <button className="btn-action view" onClick={() => setViewingProduct(product)}><Eye size={16} /></button>
-                        <button className="btn-action edit" onClick={() => handleOpenModal(product)}><Edit3 size={16} /></button>
-                        <button className="btn-action delete" onClick={() => handleDelete(product.id)}><Trash2 size={16} /></button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="modern-list-container">
+            <div className="list-header-row">
+              <div className="col-photo">Photo</div>
+              <div className="col-name">Product Name</div>
+              <div className="col-type">Category</div>
+              <div className="col-info">Short Details</div>
+              <div className="col-date">Added</div>
+              <div className="col-actions">Actions</div>
+            </div>
+            <div className="products-list">
+              {filteredProducts.map((product, index) => (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  key={product.id} 
+                  className="product-item-card glass-panel"
+                >
+                  <div className="col-photo">
+                    <div className="product-img-circle">
+                      {product.image_url ? <img src={product.image_url} alt="" /> : <ImageIcon size={20} />}
+                    </div>
+                  </div>
+                  <div className="col-name">
+                    <span className="product-name-text">{product.name}</span>
+                    <span className="product-id-tag">ID: {product.id.slice(0, 8)}</span>
+                  </div>
+                  <div className="col-type">
+                    <span className="category-pill">{product.type}</span>
+                  </div>
+                  <div className="col-info">
+                    <p className="info-preview">{product.info || 'No details'}</p>
+                  </div>
+                  <div className="col-date">
+                    <div className="date-badge">
+                      <Calendar size={14} />
+                      <span>{new Date(product.created_at).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                  <div className="col-actions">
+                    <div className="action-row">
+                      <button className="action-btn view" title="View Details" onClick={() => setViewingProduct(product)}><Eye size={16} /></button>
+                      <button className="action-btn edit" title="Edit Product" onClick={() => handleOpenModal(product)}><Edit3 size={16} /></button>
+                      <button className="action-btn delete" title="Delete" onClick={() => handleDelete(product.id)}><Trash2 size={16} /></button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         ) : (
+
           <div className="products-grid">
             {filteredProducts.map((product, index) => (
               <motion.div layout key={product.id} className="product-card glass-panel">
@@ -243,130 +251,140 @@ ${formData.usage_purpose}
           </div>
         )}
       </div>
-
-      {/* --- ADD / EDIT MODAL --- */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <div className="modal-overlay">
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="modal-content glass-panel">
-              <div className="modal-header">
-                <h3>{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
-                <button className="close-btn" onClick={() => setIsModalOpen(false)}><X size={20} /></button>
+    </div>
+    {/* Modals are outside to prevent height issues */}
+    <AnimatePresence>
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: 20 }} 
+            className="modal-content glass-panel modern-modal"
+          >
+            <div className="modal-header">
+              <div>
+                <span className="modal-badge">Product Inventory</span>
+                <h3>{editingProduct ? 'Update Product Details' : 'Register New Product'}</h3>
               </div>
+              <button className="close-btn" onClick={() => setIsModalOpen(false)}><X size={20} /></button>
+            </div>
 
-              <form onSubmit={handleSubmit} className="product-form">
+            <form onSubmit={handleSubmit} className="product-form modern-form">
+              <div className="form-section">
                 <div className="form-group">
                   <label>Product Name</label>
-                  <input type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+                  <input type="text" placeholder="e.g. MedScan Pro X1" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                 </div>
 
-                <div className="form-row">
+                <div className="modern-form-row">
                   <div className="form-group">
-                    <label>Product Category / Type</label>
-                    <input type="text" required value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value })} />
+                    <label>Category / Type</label>
+                    <input type="text" placeholder="e.g. Diagnostic Imaging" required value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value })} />
                   </div>
                   <div className="form-group">
-                    <label>Image URL</label>
-                    <input type="text" value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} />
+                    <label>Image URL (Direct Link)</label>
+                    <input type="text" placeholder="https://..." value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} />
                   </div>
                 </div>
 
                 <div className="form-group">
-                  <label>Product Brochure (PDF)</label>
-                  <div className="file-upload-wrapper">
+                  <label>Product Brochure (Technical PDF)</label>
+                  <div className="file-upload-wrapper" style={{ background: 'rgba(255,255,255,0.02)', padding: '15px', borderRadius: '14px', border: '1px dashed var(--glass-border)' }}>
                     <input 
                       type="file" 
                       accept=".pdf" 
                       onChange={async (e) => {
                         const file = e.target.files?.[0];
                         if (!file) return;
-                        
                         const uploadFormData = new FormData();
                         uploadFormData.append('brochure', file);
-                        
                         try {
                           setIsUploading(true);
                           const response = await api.post('/upload/brochure', uploadFormData, {
                             headers: { 'Content-Type': 'multipart/form-data' }
                           });
                           setFormData({ ...formData, brochure_url: response.data.url });
-                          alert('Brochure uploaded successfully!');
                         } catch (error) {
                           console.error('Upload failed:', error);
-                          alert('Failed to upload brochure. Please check your connection.');
                         } finally {
                           setIsUploading(false);
                         }
                       }} 
                     />
-                    {isUploading && <span className="upload-loader"><Loader2 className="spinner" size={16} /> Uploading...</span>}
-                    {formData.brochure_url && <span className="upload-success">✓ File linked</span>}
-                  </div>
-                  {formData.brochure_url && (
-                    <p className="file-hint">Current: {formData.brochure_url.split('/').pop()}</p>
-                  )}
-                </div>
-
-                {/* THE 3 CONTEXT FIELDS */}
-                <div className="form-group">
-                  <label style={{ color: 'var(--primary)', fontSize: '0.75rem' }}>SECTION 1: INFO / DESCRIPTION</label>
-                  <textarea rows={2} placeholder="Brief overview..." value={formData.short_desc} onChange={(e) => setFormData({ ...formData, short_desc: e.target.value })} />
-                </div>
-
-                <div className="form-group">
-                  <label style={{ color: 'var(--primary)', fontSize: '0.75rem' }}>SECTION 2: TECHNICAL SPECS</label>
-                  <textarea rows={2} placeholder="Dimensions, Power, Material..." value={formData.tech_specs} onChange={(e) => setFormData({ ...formData, tech_specs: e.target.value })} />
-                </div>
-
-                <div className="form-group">
-                  <label style={{ color: 'var(--primary)', fontSize: '0.75rem' }}>SECTION 3: USAGE & PURPOSE</label>
-                  <textarea rows={2} placeholder="What is it for? How to use?" value={formData.usage_purpose} onChange={(e) => setFormData({ ...formData, usage_purpose: e.target.value })} />
-                </div>
-
-                <div className="modal-actions">
-                  <button type="button" className="btn-secondary" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                  <button type="submit" className="btn-primary">{editingProduct ? 'Update Product' : 'Create Product'}</button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* --- DETAIL MODAL --- */}
-      <AnimatePresence>
-        {viewingProduct && (
-          <div className="modal-overlay" onClick={() => setViewingProduct(null)}>
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="detail-modal glass-panel" onClick={e => e.stopPropagation()}>
-              <div className="detail-hero">
-                {viewingProduct.image_url ? <img src={viewingProduct.image_url} alt="" /> : <div className="detail-hero-placeholder"><ImageIcon size={60} /></div>}
-                <button className="detail-close" onClick={() => setViewingProduct(null)}><X size={24} /></button>
-                <div className="detail-hero-overlay">
-                  <span className="badge">{viewingProduct.type}</span>
-                  <h2>{viewingProduct.name}</h2>
-                </div>
-              </div>
-              <div className="detail-content">
-                <div className="detail-section">
-                  <label>Full Product Information</label>
-                  <p style={{ whiteSpace: 'pre-wrap' }}>{viewingProduct.info || 'No detailed information available.'}</p>
-                </div>
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <div className="item-icon"><Calendar size={18} /></div>
-                    <div className="item-info"><label>Date Added</label><span>{new Date(viewingProduct.created_at).toLocaleDateString()}</span></div>
-                  </div>
-                  <div className="detail-item">
-                    <div className="item-icon"><Tag size={18} /></div>
-                    <div className="item-info"><label>Status</label><span className="status-active">Active</span></div>
+                    {isUploading && <span className="upload-loader"><Loader2 className="spinner" size={16} /></span>}
+                    {formData.brochure_url && <span className="upload-success" style={{ color: 'var(--success)', fontWeight: 600 }}>✓ PDF Linked</span>}
                   </div>
                 </div>
               </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </div>
+
+              <div className="form-divider">Technical Specifications</div>
+
+              <div className="grid-2">
+                <div className="form-group">
+                  <label>Brief Description</label>
+                  <textarea rows={3} placeholder="General overview of the product..." value={formData.short_desc} onChange={(e) => setFormData({ ...formData, short_desc: e.target.value })} />
+                </div>
+
+                <div className="form-group">
+                  <label>Technical Specs</label>
+                  <textarea rows={3} placeholder="Dimensions, Power, Frequency..." value={formData.tech_specs} onChange={(e) => setFormData({ ...formData, tech_specs: e.target.value })} />
+                </div>
+              </div>
+
+              <div className="form-divider">Clinical Application</div>
+
+              <div className="form-group">
+                <label>Usage & Clinical Purpose</label>
+                <textarea rows={2} placeholder="What clinical problems does this solve?" value={formData.usage_purpose} onChange={(e) => setFormData({ ...formData, usage_purpose: e.target.value })} />
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-secondary" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                <button type="submit" className="btn-primary">
+                  {editingProduct ? 'Update Product Details' : 'Register Product'}
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+
+
+    <AnimatePresence>
+      {viewingProduct && (
+        <div className="modal-overlay" onClick={() => setViewingProduct(null)}>
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="detail-modal glass-panel" onClick={e => e.stopPropagation()}>
+            <div className="detail-hero">
+              {viewingProduct.image_url ? <img src={viewingProduct.image_url} alt="" /> : <div className="detail-hero-placeholder"><ImageIcon size={60} /></div>}
+              <button className="detail-close" onClick={() => setViewingProduct(null)}><X size={24} /></button>
+              <div className="detail-hero-overlay">
+                <span className="badge">{viewingProduct.type}</span>
+                <h2>{viewingProduct.name}</h2>
+              </div>
+            </div>
+            <div className="detail-content">
+              <div className="detail-section">
+                <label>Full Product Information</label>
+                <p style={{ whiteSpace: 'pre-wrap' }}>{viewingProduct.info || 'No detailed information available.'}</p>
+              </div>
+              <div className="detail-grid">
+                <div className="detail-item">
+                  <div className="item-icon"><Calendar size={18} /></div>
+                  <div className="item-info"><label>Date Added</label><span>{new Date(viewingProduct.created_at).toLocaleDateString()}</span></div>
+                </div>
+                <div className="detail-item">
+                  <div className="item-icon"><Tag size={18} /></div>
+                  <div className="item-info"><label>Status</label><span className="status-active">Active</span></div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+    </>
   );
 };
 

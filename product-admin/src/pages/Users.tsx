@@ -8,7 +8,7 @@ import {
   Loader2
 } from 'lucide-react';
 import api from '../services/api';
-import '../styles/Users.css';
+import '../styles/Products.css';
 
 interface User {
   id: string;
@@ -77,67 +77,65 @@ const Users: React.FC = () => {
         </div>
       </div>
 
-      <div className="glass-panel table-container">
+      <div className="modern-list-container">
         {isLoading ? (
-          <div className="table-loading">
+          <div className="glass-panel loading-container">
             <Loader2 className="spinner" size={40} />
             <p>Loading user directory...</p>
           </div>
         ) : (
-          <table className="users-table">
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Email</th>
-                <th>Joined Date</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((user) => (
-                <tr key={user.id}>
-                  <td>
-                    <div className="user-cell">
-                      <div className="user-avatar">
-                        {user.avatar_url ? (
-                          <img src={user.avatar_url} alt={user.full_name} />
-                        ) : (
-                          <div className="avatar-placeholder">{user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}</div>
-                        )}
-                      </div>
-                      <span className="user-name">{user.full_name || 'No Name'}</span>
+          <>
+            <div className="list-header-row">
+              <div className="col-photo">User</div>
+              <div className="col-name">Full Name</div>
+              <div className="col-type">Email Address</div>
+              <div className="col-info">Joined Date</div>
+              <div className="col-date">Role</div>
+              <div className="col-actions">Actions</div>
+            </div>
+            <div className="products-list">
+              {filteredUsers.map((user, index) => (
+                <div key={user.id} className="product-item-card glass-panel">
+                  <div className="col-photo">
+                    <div className="product-img-circle">
+                      {user.avatar_url ? (
+                        <img src={user.avatar_url} alt={user.full_name} />
+                      ) : (
+                        <div className="avatar-placeholder">{user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}</div>
+                      )}
                     </div>
-                  </td>
-                  <td>
-                    <div className="email-cell">
-                      <Mail size={16} className="cell-icon" />
+                  </div>
+                  <div className="col-name">
+                    <span className="product-name-text">{user.full_name || 'No Name'}</span>
+                    <span className="product-id-tag">ID: {user.id.slice(0, 8)}</span>
+                  </div>
+                  <div className="col-type">
+                    <div className="email-link" style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                      <Mail size={14} style={{ marginRight: '6px', verticalAlign: 'middle' }} />
                       <span>{user.email}</span>
                     </div>
-                  </td>
-                  <td>
-                    <div className="date-cell">
-                      <Calendar size={16} className="cell-icon" />
+                  </div>
+                  <div className="col-info">
+                    <div className="date-badge">
+                      <Calendar size={14} />
                       <span>{new Date(user.created_at).toLocaleDateString()}</span>
                     </div>
-                  </td>
-                  <td>
-                    <div className="role-badge">
-                      <Shield size={14} />
-                      <span>{user.role || 'Admin'}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <button className="btn-action delete" onClick={() => handleDelete(user.id)}>
+                  </div>
+                  <div className="col-date">
+                    <span className="category-pill">{user.role || 'Admin'}</span>
+                  </div>
+                  <div className="col-actions">
+                    <button className="action-btn delete" title="Remove User" onClick={() => handleDelete(user.id)}>
                       <Trash2 size={16} />
                     </button>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         )}
       </div>
+
     </div>
   );
 };

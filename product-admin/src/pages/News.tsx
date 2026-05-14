@@ -131,7 +131,8 @@ const News: React.FC = () => {
   };
 
   return (
-    <div className="products-page animate-fade-in">
+    <>
+      <div className="products-page animate-fade-in">
       <header className="page-header">
         <div>
           <h1>News & Updates</h1>
@@ -168,47 +169,55 @@ const News: React.FC = () => {
             <p>Fetching news records...</p>
           </div>
         ) : viewMode === 'table' ? (
-          <div className="glass-panel table-container">
-            <table className="products-table">
-              <thead>
-                <tr>
-                  <th className="id-col">Id</th>
-                  <th className="photo-col">Banner</th>
-                  <th className="name-col">Title</th>
-                  <th className="type-col">Category</th>
-                  <th className="info-col">Excerpt</th>
-                  <th className="date-col">Featured</th>
-                  <th className="actions-col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredArticles.map((article, index) => (
-                  <tr key={article.id}>
-                    <td className="index-column">{index + 1}</td>
-                    <td>
-                      <div className="product-img small">
-                        {article.image_url ? <img src={article.image_url} alt="" /> : <Newspaper size={18} />}
-                      </div>
-                    </td>
-                    <td className="name-col"><span className="product-name">{article.title}</span></td>
-                    <td className="type-col"><span className="badge">{article.category}</span></td>
-                    <td className="info-col">
-                      <div className="info-cell">{article.excerpt}</div>
-                    </td>
-                    <td className="date-col">
-                       {article.featured ? <CheckCircle2 size={18} color="var(--primary)" /> : <Circle size={18} opacity={0.3} />}
-                    </td>
-                    <td>
-                      <div className="action-buttons">
-                        <button className="btn-action view" onClick={() => setViewingArticle(article)}><Eye size={16} /></button>
-                        <button className="btn-action edit" onClick={() => handleOpenModal(article)}><Edit3 size={16} /></button>
-                        <button className="btn-action delete" onClick={() => handleDelete(article.id)}><Trash2 size={16} /></button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="modern-list-container">
+            <div className="list-header-row">
+              <div className="col-photo">Banner</div>
+              <div className="col-name">Article Title</div>
+              <div className="col-type">Category</div>
+              <div className="col-info">Short Summary</div>
+              <div className="col-date">Featured</div>
+              <div className="col-actions">Actions</div>
+            </div>
+            <div className="products-list">
+              {filteredArticles.map((article, index) => (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  key={article.id} 
+                  className="product-item-card glass-panel"
+                >
+                  <div className="col-photo">
+                    <div className="product-img-circle">
+                      {article.image_url ? <img src={article.image_url} alt="" /> : <Newspaper size={20} />}
+                    </div>
+                  </div>
+                  <div className="col-name">
+                    <span className="product-name-text">{article.title}</span>
+                    <span className="product-id-tag">Published: {article.published_date}</span>
+                  </div>
+                  <div className="col-type">
+                    <span className="category-pill">{article.category}</span>
+                  </div>
+                  <div className="col-info">
+                    <p className="info-preview">{article.excerpt}</p>
+                  </div>
+                  <div className="col-date">
+                    <div className="date-badge">
+                      {article.featured ? <CheckCircle2 size={16} color="var(--primary)" /> : <Circle size={16} opacity={0.3} />}
+                      <span style={{ marginLeft: '4px' }}>{article.featured ? 'Yes' : 'No'}</span>
+                    </div>
+                  </div>
+                  <div className="col-actions">
+                    <div className="action-row">
+                      <button className="action-btn view" title="View Details" onClick={() => setViewingArticle(article)}><Eye size={16} /></button>
+                      <button className="action-btn edit" title="Edit Article" onClick={() => handleOpenModal(article)}><Edit3 size={16} /></button>
+                      <button className="action-btn delete" title="Delete" onClick={() => handleDelete(article.id)}><Trash2 size={16} /></button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="products-grid">
@@ -231,93 +240,107 @@ const News: React.FC = () => {
           </div>
         )}
       </div>
-
-      {/* --- ADD / EDIT MODAL --- */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <div className="modal-overlay">
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="modal-content glass-panel" style={{ maxWidth: '800px' }}>
-              <div className="modal-header">
-                <h3>{editingArticle ? 'Edit Article' : 'Add New Article'}</h3>
-                <button className="close-btn" onClick={() => setIsModalOpen(false)}><X size={20} /></button>
+    </div>
+    
+    {/* Modals are outside to prevent height issues */}
+    <AnimatePresence>
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: 20 }} 
+            className="modal-content glass-panel modern-modal"
+          >
+            <div className="modal-header">
+              <div>
+                <span className="modal-badge">Article Editor</span>
+                <h3>{editingArticle ? 'Update News Article' : 'Compose New Article'}</h3>
               </div>
+              <button className="close-btn" onClick={() => setIsModalOpen(false)}><X size={20} /></button>
+            </div>
 
-              <form onSubmit={handleSubmit} className="product-form">
+            <form onSubmit={handleSubmit} className="product-form modern-form">
+              <div className="form-section">
                 <div className="form-group">
                   <label>Article Title</label>
-                  <input type="text" required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+                  <input type="text" placeholder="e.g. New Breakthrough in Medical Technology" required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
                 </div>
 
-                <div className="form-row">
+                <div className="modern-form-row">
                   <div className="form-group">
                     <label>Category</label>
-                    <input type="text" required value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} />
+                    <input type="text" placeholder="e.g. Healthcare Innovation" required value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} />
                   </div>
                   <div className="form-group">
-                    <label>Image URL</label>
-                    <input type="text" value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} />
+                    <label>Banner Image URL</label>
+                    <input type="text" placeholder="https://..." value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} />
                   </div>
                 </div>
 
-                <div className="form-row">
-                   <div className="form-group">
+                <div className="modern-form-row">
+                  <div className="form-group">
                     <label>Published Date</label>
                     <input type="text" value={formData.published_date} onChange={(e) => setFormData({ ...formData, published_date: e.target.value })} />
                   </div>
                   <div className="form-group">
-                    <label>Article URL / Link (Optional)</label>
+                    <label>Source / Link (Optional)</label>
                     <input type="text" value={formData.article_url} onChange={(e) => setFormData({ ...formData, article_url: e.target.value })} placeholder="https://..." />
                   </div>
                 </div>
 
-                <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
-                    <input type="checkbox" id="featured" checked={formData.featured} onChange={(e) => setFormData({ ...formData, featured: e.target.checked })} />
-                    <label htmlFor="featured">Feature this article on main page</label>
-                </div>
-
-                <div className="form-group">
-                  <label>Excerpt (Short Summary)</label>
-                  <textarea rows={4} required value={formData.excerpt} onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })} />
-                </div>
-
-                <div className="modal-actions">
-                  <button type="button" className="btn-secondary" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                  <button type="submit" className="btn-primary">{editingArticle ? 'Update Article' : 'Create Article'}</button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* --- DETAIL MODAL --- */}
-      <AnimatePresence>
-        {viewingArticle && (
-          <div className="modal-overlay" onClick={() => setViewingArticle(null)}>
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="detail-modal glass-panel" style={{ maxWidth: '700px' }} onClick={e => e.stopPropagation()}>
-              <div className="detail-hero">
-                {viewingArticle.image_url ? <img src={viewingArticle.image_url} alt="" /> : <div className="detail-hero-placeholder"><Newspaper size={60} /></div>}
-                <button className="detail-close" onClick={() => setViewingArticle(null)}><X size={24} /></button>
-                <div className="detail-hero-overlay">
-                  <span className="badge">{viewingArticle.category}</span>
-                  <h2>{viewingArticle.title}</h2>
+                <div className="checkbox-group">
+                  <input type="checkbox" id="featured" checked={formData.featured} onChange={(e) => setFormData({ ...formData, featured: e.target.checked })} />
+                  <label htmlFor="featured">Feature this article on main page carousel</label>
                 </div>
               </div>
-              <div className="detail-content">
-                <div className="detail-section">
-                  <label>Excerpt / Summary</label>
-                  <p style={{ whiteSpace: 'pre-wrap' }}>{viewingArticle.excerpt}</p>
+
+              <div className="form-divider">Content Summary</div>
+
+              <div className="form-group">
+                <label>Excerpt (Short Summary)</label>
+                <textarea rows={4} placeholder="Brief summary of the article..." required value={formData.excerpt} onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })} />
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-secondary" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                <button type="submit" className="btn-primary">
+                  {editingArticle ? 'Update News Article' : 'Publish Article'}
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+
+    <AnimatePresence>
+      {viewingArticle && (
+        <div className="modal-overlay" onClick={() => setViewingArticle(null)}>
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="detail-modal glass-panel" style={{ maxWidth: '700px' }} onClick={e => e.stopPropagation()}>
+            <div className="detail-hero">
+              {viewingArticle.image_url ? <img src={viewingArticle.image_url} alt="" /> : <div className="detail-hero-placeholder"><Newspaper size={60} /></div>}
+              <button className="detail-close" onClick={() => setViewingArticle(null)}><X size={24} /></button>
+              <div className="detail-hero-overlay">
+                <span className="badge">{viewingArticle.category}</span>
+                <h2>{viewingArticle.title}</h2>
+              </div>
+            </div>
+            <div className="detail-content">
+              <div className="detail-section">
+                <label>Excerpt / Summary</label>
+                <p style={{ whiteSpace: 'pre-wrap' }}>{viewingArticle.excerpt}</p>
+              </div>
+              <div className="detail-grid">
+                <div className="detail-item">
+                  <div className="item-icon"><Calendar size={18} /></div>
+                  <div className="item-info"><label>Published</label><span>{viewingArticle.published_date}</span></div>
                 </div>
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <div className="item-icon"><Calendar size={18} /></div>
-                    <div className="item-info"><label>Published</label><span>{viewingArticle.published_date}</span></div>
-                  </div>
-                  <div className="detail-item">
-                    <div className="item-icon"><Tag size={18} /></div>
-                    <div className="item-info"><label>Status</label><span className={viewingArticle.featured ? "status-active" : ""}>{viewingArticle.featured ? "Featured" : "Standard"}</span></div>
-                  </div>
-                  {viewingArticle.article_url && viewingArticle.article_url.trim() !== '' && (
+                <div className="detail-item">
+                  <div className="item-icon"><Tag size={18} /></div>
+                  <div className="item-info"><label>Status</label><span className={viewingArticle.featured ? "status-active" : ""}>{viewingArticle.featured ? "Featured" : "Standard"}</span></div>
+                </div>
+                {viewingArticle.article_url && viewingArticle.article_url.trim() !== '' && (
                     <div className="detail-item">
                       <div className="item-icon"><ImageIcon size={18} /></div>
                       <div className="item-info">
@@ -339,7 +362,7 @@ const News: React.FC = () => {
           </div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 };
 
