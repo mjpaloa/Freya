@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { fetchNewsArticleById } from '../../services/newsService';
 import type { NewsArticle } from '../../services/newsService';
 import Sidebar from './components/Sidebar';
@@ -7,8 +7,8 @@ import './NewsPage.css';
 
 const NewsDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [article, setArticle] = useState<NewsArticle | null>(null);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
