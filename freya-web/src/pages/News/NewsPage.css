@@ -636,28 +636,37 @@
 
   .news-content-layout {
     margin-top: 10px !important;
-    padding: 0 5px !important; /* Extra breathing room */
+    padding: 0 5px !important;
+    gap: 35px !important;
   }
 
   .featured-details h2 {
-    font-size: 1.6rem !important; /* Slightly smaller but bold */
+    font-size: 1.6rem !important;
     line-height: 1.25 !important;
     margin-bottom: 0.75rem !important;
   }
 
   .featured-details p {
     font-size: 0.95rem !important;
-    line-height: 1.6 !important; /* More space between lines for readability */
+    line-height: 1.6 !important;
     color: #475569 !important;
     margin-bottom: 1.5rem !important;
   }
-
   .read-more-link {
     font-size: 0.9rem !important;
     font-weight: 600 !important;
   }
 
+  .featured-carousel-v2 {
+    margin-bottom: 40px !important;
+  }
+
+  .carousel-image-container {
+    margin-bottom: 1.25rem !important;
+  }
+
   .news-grid {
+    grid-template-columns: 1fr !important;
     gap: 35px !important;
   }
 
