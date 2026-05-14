@@ -20,11 +20,14 @@ const ProductDetailPage: React.FC = () => {
     if (hasTriggered.current || modalDismissed) return;
     const scrolled = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    if (docHeight > 0 && scrolled / docHeight >= 0.35) {
+    
+    // Trigger when scrolled 50% of the page OR at least 600px down
+    if (docHeight > 0 && (scrolled / docHeight >= 0.5 || scrolled > 600)) {
       setShowModal(true);
       hasTriggered.current = true;
     }
   }, [modalDismissed]);
+
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
