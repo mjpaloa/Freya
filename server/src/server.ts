@@ -21,21 +21,24 @@ app.use(helmet());
 // CORS configuration
 const corsOptions = {
   origin: isProduction 
-    ? [process.env.FRONTEND_URL || ''] // Add your production frontend URL to .env
-    : true, // Allow all in development
+    ? (process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : true) 
+    : true, 
   credentials: true,
 };
 app.use(cors(corsOptions));
 
-// Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: { error: 'Too many requests, please try again later.' },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-app.use('/api/', limiter);
+// Rate Limiting (Disabled in production for now to avoid serverless storage issues)
+if (!isProduction) {
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: { error: 'Too many requests, please try again later.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  app.use('/api/', limiter);
+}
+
 
 // Optimization & Logging
 app.use(compression());
