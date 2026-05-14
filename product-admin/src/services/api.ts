@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   // Use environment variable or fallback to local/Vercel
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://freya-server-mu.vercel.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
