@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './VendorSection.module.css';
 
 export default function VendorSection() {
@@ -5,22 +6,24 @@ export default function VendorSection() {
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.backgroundText}>Partnership</div>
-        
+
         <div className={styles.content}>
           <div className={styles.header}>
             <h2>Become a<br />Partner</h2>
-            <button className={styles.link}>Register Now →</button>
+            <Link to="/contact" className={styles.link}>Inquire for Partnership →</Link>
           </div>
-          
+
+
           <div className={styles.grid}>
             <div className={styles.card}>
               <div className={styles.cardBody}>
                 <h3>Technical Academy</h3>
                 <p>Train your clinical staff on the latest diagnostic and imaging technologies.</p>
-                <a href="#" className={styles.link}>Learn More</a>
+                <Link to="/contact" className={styles.link}>Learn More</Link>
+
               </div>
             </div>
-            
+
             <div className={`${styles.card} ${styles.cardRed}`}>
               <h2>FREYA PLUS</h2>
             </div>

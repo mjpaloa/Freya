@@ -4,6 +4,8 @@ import SectorsGrid from '../../components/sections/SectorsGrid/SectorsGrid';
 import ProductHighlight from '../../components/sections/ProductHighlight/ProductHighlight';
 import FutureCta from '../../components/sections/FutureCta/FutureCta';
 import VendorSection from '../../components/sections/VendorSection/VendorSection';
+import PartnersSection from '../../components/sections/PartnersSection/PartnersSection';
+
 
 export default function HomePage() {
   return (
@@ -13,7 +15,9 @@ export default function HomePage() {
       <SectorsGrid />
       <ProductHighlight />
       <FutureCta />
+      <PartnersSection />
       <VendorSection />
+
     </main>
   );
 }
