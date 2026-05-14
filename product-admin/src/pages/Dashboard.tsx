@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import {
   Package,
   Users,
-  TrendingUp,
   Calendar,
   PlusCircle,
   ArrowUpRight,
@@ -12,6 +11,7 @@ import {
   Newspaper,
   Plus
 } from 'lucide-react';
+
 import api from '../services/api';
 import '../styles/Dashboard.css';
 
