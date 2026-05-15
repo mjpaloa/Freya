@@ -42,6 +42,7 @@ const InquiryManagement: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'technical' | 'sales'>('all');
+  const [statusFilter, setStatusFilter] = useState<'active' | 'closed'>('active');
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -109,7 +110,11 @@ const InquiryManagement: React.FC = () => {
     
     const matchesType = filterType === 'all' || iq.type === filterType;
     
-    return matchesSearch && matchesType;
+    const matchesStatus = statusFilter === 'active' 
+      ? (iq.status === 'pending' || iq.status === 'responded')
+      : iq.status === 'closed';
+    
+    return matchesSearch && matchesType && matchesStatus;
   });
 
   const paginatedInquiries = filteredInquiries.slice(
@@ -128,16 +133,34 @@ const InquiryManagement: React.FC = () => {
         </header>
 
         <div className="table-controls">
-          <div className="search-box glass-panel">
-            <Search size={20} className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search inquiries by name, email, or content..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div className="status-tabs glass-panel" style={{ display: 'flex', marginBottom: '1.5rem', padding: '4px', width: 'fit-content' }}>
+            <button 
+              className={`toggle-btn ${statusFilter === 'active' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('active')}
+              style={{ width: '150px', padding: '8px' }}
+            >
+              Active Inquiries
+            </button>
+            <button 
+              className={`toggle-btn ${statusFilter === 'closed' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('closed')}
+              style={{ width: '150px', padding: '8px' }}
+            >
+              Closed / Archive
+            </button>
           </div>
-          <div className="view-actions">
+
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div className="search-box glass-panel" style={{ flex: 1, minWidth: '300px' }}>
+              <Search size={20} className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search inquiries..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            
             <div className="toggle-group glass-panel" style={{ padding: '4px' }}>
                <button 
                  className={`toggle-btn ${filterType === 'all' ? 'active' : ''}`} 
