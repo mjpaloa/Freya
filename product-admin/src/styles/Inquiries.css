@@ -37,6 +37,18 @@
   border-color: rgba(139, 92, 246, 0.2);
 }
 
+.category-pill.sales {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.category-pill.partnership {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
 .inquiry-subject-preview {
   font-size: 0.9rem;
   color: var(--text-main);
@@ -74,6 +86,96 @@
 .status-indicator.closed {
   color: var(--success);
   background: rgba(16, 185, 129, 0.1);
+}
+
+/* New Header & Filter Layout */
+.inquiry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.header-title-section h1 {
+  margin: 0;
+  font-size: 2.2rem;
+}
+
+.header-title-section p {
+  margin: 0.5rem 0 0 0;
+  color: var(--text-muted);
+}
+
+.status-tabs-wrapper {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+}
+
+.status-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.status-tab-btn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.table-controls {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 300px;
+}
+
+.filter-pills {
+  display: flex;
+  padding: 6px;
+  gap: 4px;
+  border-radius: 14px;
+}
+
+.filter-pill {
+  padding: 8px 20px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-pill.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.filter-pill:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* Detail Modal Enhancements */
@@ -259,3 +361,8 @@
     width: 100%;
   }
 }
+
+/* Custom Scrollbar for the modal */
+.inquiry-detail::-webkit-scrollbar { width: 8px; }
+.inquiry-detail::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); border-radius: 0 24px 24px 0; }
+.inquiry-detail::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }

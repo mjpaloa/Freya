@@ -19,7 +19,7 @@ import '../styles/Inquiries.css';
 
 interface Inquiry {
   id: string;
-  type: 'technical' | 'sales';
+  type: 'technical' | 'sales' | 'partnership';
   full_name?: string;
   first_name?: string;
   last_name?: string;
@@ -41,7 +41,7 @@ const InquiryManagement: React.FC = () => {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'technical' | 'sales'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'technical' | 'sales' | 'partnership'>('all');
   const [statusFilter, setStatusFilter] = useState<'active' | 'closed'>('active');
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -127,63 +127,66 @@ const InquiryManagement: React.FC = () => {
       <div className="inquiries-page animate-fade-in">
         <header className="page-header">
           <div>
+        <div className="inquiry-header">
+          <div className="header-title-section">
             <h1>Customer Inquiries</h1>
-            <p>Monitor and respond to technical support and sales requests.</p>
+            <p>Monitor and respond to technical support, sales, and partnership requests.</p>
           </div>
-        </header>
+          
+          <div className="status-tabs-wrapper">
+            <button 
+              className={`status-tab-btn ${statusFilter === 'active' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('active')}
+            >
+              <Clock size={16} />
+              Active
+            </button>
+            <button 
+              className={`status-tab-btn ${statusFilter === 'closed' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('closed')}
+            >
+              <CheckCircle2 size={16} />
+              Closed
+            </button>
+          </div>
+        </div>
 
         <div className="table-controls">
-          <div className="status-tabs glass-panel" style={{ display: 'flex', marginBottom: '1.5rem', padding: '4px', width: 'fit-content' }}>
-            <button
-              className={`toggle-btn ${statusFilter === 'active' ? 'active' : ''}`}
-              onClick={() => setStatusFilter('active')}
-              style={{ width: '150px', padding: '8px' }}
-            >
-              Active Inquiries
-            </button>
-            <button
-              className={`toggle-btn ${statusFilter === 'closed' ? 'active' : ''}`}
-              onClick={() => setStatusFilter('closed')}
-              style={{ width: '150px', padding: '8px' }}
-            >
-              Closed / Archive
-            </button>
+          <div className="search-box glass-panel">
+            <Search size={20} className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search by name, email, or message..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
-            <div className="search-box glass-panel" style={{ flex: 1, minWidth: '300px' }}>
-              <Search size={20} className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search inquiries..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-
-            <div className="toggle-group glass-panel" style={{ padding: '4px' }}>
-              <button
-                className={`toggle-btn ${filterType === 'all' ? 'active' : ''}`}
-                onClick={() => setFilterType('all')}
-                style={{ width: 'auto', padding: '0 15px', fontSize: '0.85rem' }}
-              >
-                All
-              </button>
-              <button
-                className={`toggle-btn ${filterType === 'technical' ? 'active' : ''}`}
-                onClick={() => setFilterType('technical')}
-                style={{ width: 'auto', padding: '0 15px', fontSize: '0.85rem' }}
-              >
-                Technical
-              </button>
-              <button
-                className={`toggle-btn ${filterType === 'sales' ? 'active' : ''}`}
-                onClick={() => setFilterType('sales')}
-                style={{ width: 'auto', padding: '0 15px', fontSize: '0.85rem' }}
-              >
-                Product
-              </button>
-            </div>
+          <div className="filter-pills glass-panel">
+            <button
+              className={`filter-pill ${filterType === 'all' ? 'active' : ''}`}
+              onClick={() => setFilterType('all')}
+            >
+              All
+            </button>
+            <button
+              className={`filter-pill ${filterType === 'technical' ? 'active' : ''}`}
+              onClick={() => setFilterType('technical')}
+            >
+              Technical
+            </button>
+            <button
+              className={`filter-pill ${filterType === 'sales' ? 'active' : ''}`}
+              onClick={() => setFilterType('sales')}
+            >
+              Product
+            </button>
+            <button
+              className={`filter-pill ${filterType === 'partnership' ? 'active' : ''}`}
+              onClick={() => setFilterType('partnership')}
+            >
+              Partnership
+            </button>
           </div>
         </div>
 
@@ -210,7 +213,11 @@ const InquiryManagement: React.FC = () => {
                     </div>
                     <div className="col-type">
                       <span className={`category-pill ${iq.type}`}>
-                        {iq.type === 'technical' ? 'Technical Inquiry' : 'Product Inquiry'}
+                        {iq.type === 'technical' 
+                          ? 'Technical Inquiry' 
+                          : iq.type === 'partnership' 
+                            ? 'Partnership Inquiry' 
+                            : 'Product Inquiry'}
                       </span>
                     </div>
                     <div className="col-info">
@@ -262,12 +269,16 @@ const InquiryManagement: React.FC = () => {
               className="detail-modal inquiry-detail glass-panel"
               onClick={e => e.stopPropagation()}
             >
-              <div className="detail-header-strip" style={{ background: selectedInquiry.type === 'technical' ? 'var(--accent)' : 'var(--primary)' }}></div>
+              <div className="detail-header-strip" style={{ background: selectedInquiry.type === 'technical' ? 'var(--accent)' : selectedInquiry.type === 'partnership' ? '#f59e0b' : 'var(--primary)' }}></div>
               <div className="detail-body">
                 <div className="detail-top">
                   <div>
                     <span className={`badge ${selectedInquiry.type}`}>
-                      {selectedInquiry.type === 'technical' ? 'Technical Support' : 'Product Inquiry'}
+                      {selectedInquiry.type === 'technical' 
+                        ? 'Technical Support' 
+                        : selectedInquiry.type === 'partnership' 
+                          ? 'Partnership Inquiry' 
+                          : 'Product Inquiry'}
                     </span>
                     <h2>{selectedInquiry.type === 'sales' ? `${selectedInquiry.first_name} ${selectedInquiry.last_name}` : selectedInquiry.full_name}</h2>
                     <p className="email-row"><Mail size={16} /> {selectedInquiry.email}</p>

@@ -6,13 +6,15 @@ export default function InquiryForm() {
     fullName: '',
     email: '',
     facilityId: '',
+    type: 'technical' as 'technical' | 'partnership',
     subject: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,15 +24,15 @@ export default function InquiryForm() {
     setIsSubmitting(true);
     try {
       await submitInquiry({
-        type: 'technical',
+        type: formData.type,
         full_name: formData.fullName,
         email: formData.email,
-        facility_id: formData.facilityId,
+        facility_id: formData.type === 'technical' ? formData.facilityId : 'N/A',
         subject: formData.subject,
         message: formData.message
       });
-      alert('Your inquiry has been submitted. Our team will respond within 12 hours.');
-      setFormData({ fullName: '', email: '', facilityId: '', subject: '', message: '' });
+      alert('Your inquiry has been submitted. Our team will respond shortly.');
+      setFormData({ fullName: '', email: '', facilityId: '', type: 'technical', subject: '', message: '' });
     } catch (error) {
       alert('Failed to submit inquiry. Please try again later.');
     } finally {
@@ -40,19 +42,34 @@ export default function InquiryForm() {
 
   return (
     <div className="form-card">
-      <h2>Technical Inquiry</h2>
+      <h2>General & Technical Inquiries</h2>
       <p className="desc">
-        Our clinical specialists respond to all technical and maintenance inquiries within 12 hours.
+        Select the type of inquiry below. Our team responds to all requests within 12-24 hours.
       </p>
 
       <form className="contact-form" onSubmit={handleSubmit}>
+        <div className="form-group full-width">
+          <label htmlFor="type">Inquiry Type</label>
+          <select
+            id="type"
+            name="type"
+            required
+            value={formData.type}
+            onChange={handleChange}
+            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', background: '#fff' }}
+          >
+            <option value="technical">Technical Support / Maintenance</option>
+            <option value="partnership">Business Partnership / Collaboration</option>
+          </select>
+        </div>
+
         <div className="form-group">
           <label htmlFor="fullName">Full Name</label>
           <input
             type="text"
             id="fullName"
             name="fullName"
-            placeholder="Dr. Elena Santos"
+            placeholder="e.g. Juan Dela Cruz"
             required
             value={formData.fullName}
             onChange={handleChange}
@@ -65,42 +82,40 @@ export default function InquiryForm() {
             type="email"
             id="email"
             name="email"
-            placeholder="doctor@facility.com"
+            placeholder="name@email.com"
             required
             value={formData.email}
             onChange={handleChange}
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="facilityId">Facility ID</label>
-          <input
-            type="text"
-            id="facilityId"
-            name="facilityId"
-            placeholder="MED-992-00"
-            required
-            value={formData.facilityId}
-            onChange={handleChange}
-          />
-        </div>
+        {formData.type === 'technical' && (
+          <div className="form-group">
+            <label htmlFor="facilityId">Facility ID</label>
+            <input
+              type="text"
+              id="facilityId"
+              name="facilityId"
+              placeholder="MED-000-00"
+              required
+              value={formData.facilityId}
+              onChange={handleChange}
+            />
+          </div>
+        )}
 
         <div className="form-group full-width">
-          <label htmlFor="subject">Subject of Inquiry</label>
-          <select
+          <label htmlFor="subject">Subject</label>
+          <input
+            type="text"
             id="subject"
             name="subject"
+            placeholder={formData.type === 'technical' ? "e.g. Equipment Maintenance" : "e.g. Distribution Partnership"}
             required
             value={formData.subject}
             onChange={handleChange}
-          >
-            <option value="">Select a subject...</option>
-            <option value="Technical Support">Technical Support</option>
-            <option value="Equipment Maintenance">Equipment Maintenance</option>
-            <option value="Software/System Issue">Software/System Issue</option>
-            <option value="Warranty Claim">Warranty Claim</option>
-            <option value="Other">Other</option>
-          </select>
+            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
+          />
         </div>
 
         <div className="form-group full-width">
@@ -108,7 +123,7 @@ export default function InquiryForm() {
           <textarea
             id="message"
             name="message"
-            placeholder="Please describe your requirements or technical issue in detail."
+            placeholder="Please describe your requirements in detail."
             required
             value={formData.message}
             onChange={handleChange}
@@ -116,7 +131,7 @@ export default function InquiryForm() {
         </div>
 
         <button type="submit" className="submit-btn" disabled={isSubmitting}>
-          {isSubmitting ? 'Sending...' : 'Send Secure Message'}
+          {isSubmitting ? 'Sending...' : 'Submit Inquiry'}
         </button>
       </form>
     </div>
