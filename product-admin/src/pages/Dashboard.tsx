@@ -9,7 +9,8 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Newspaper,
-  Plus
+  Plus,
+  Mail
 } from 'lucide-react';
 
 import api from '../services/api';
@@ -25,20 +26,23 @@ const Dashboard: React.FC = () => {
     growth: 12.5
   });
   const [recentNews, setRecentNews] = useState<any[]>([]);
+  const [recentInquiries, setRecentInquiries] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [productsRes, usersRes, newsRes] = await Promise.all([
+        const [productsRes, usersRes, newsRes, inquiriesRes] = await Promise.all([
           api.get('/products'),
           api.get('/users'),
-          api.get('/news')
+          api.get('/news'),
+          api.get('/inquiries')
         ]);
 
         const products = productsRes.data;
         const users = usersRes.data;
         const news = newsRes.data;
+        const inquiries = inquiriesRes.data;
 
         // Calculate products added this month
         const now = new Date();
@@ -54,6 +58,7 @@ const Dashboard: React.FC = () => {
         });
 
         setRecentNews(news.slice(0, 3));
+        setRecentInquiries(inquiries.slice(0, 4));
       } catch (error) {
         console.error('Failed to fetch stats', error);
       } finally {
@@ -104,7 +109,7 @@ const Dashboard: React.FC = () => {
       <header className="page-header">
         <div>
           <h1>Welcome Back, Freya</h1>
-          <p>Here's what's happening with your store today.</p>
+          <p>Here's what's happening with your store ngayon.</p>
         </div>
         <button className="btn-primary" onClick={() => navigate('/news')}>
           <PlusCircle size={20} />
@@ -153,7 +158,7 @@ const Dashboard: React.FC = () => {
                   </div>
                   <div className="item-details">
                     <h4>{news.title}</h4>
-                    <span>{news.published_date} • {news.category}</span>
+                    <span>{new Date(news.published_date).toLocaleDateString()} • {news.category}</span>
                   </div>
                   <button className="icon-btn" onClick={() => navigate('/news')}><Plus size={16} /></button>
                 </div>
@@ -166,23 +171,28 @@ const Dashboard: React.FC = () => {
 
         <div className="glass-card recent-activity">
           <div className="card-header">
-            <h3>Inventory Growth</h3>
+            <h3>Recent Customer Inquiries</h3>
+            <button className="text-btn" onClick={() => navigate('/inquiries')}>View All</button>
           </div>
-          <div className="circular-report">
-            <div className="circle-bg">
-              <div className="circle-fill" style={{ '--percent': '75' } as any}></div>
-              <div className="circle-text">
-                <span className="percent">75%</span>
-                <span className="label">Monthly Goal</span>
-              </div>
-            </div>
-            <div className="report-details">
-              <p><strong>{stats.addedThisMonth}</strong> products added this month</p>
-              <div className="progress-bar">
-                <div className="progress-fill" style={{ width: '75%' }}></div>
-              </div>
-              <p className="subtext">Aiming for 100 new products by month end</p>
-            </div>
+          <div className="recent-list">
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : recentInquiries.length > 0 ? (
+              recentInquiries.map((iq) => (
+                <div key={iq.id} className="recent-item" onClick={() => navigate('/inquiries')} style={{ cursor: 'pointer' }}>
+                  <div className={`item-icon-small ${iq.type}`} style={{ backgroundColor: iq.type === 'technical' ? 'var(--accent)20' : iq.type === 'partnership' ? '#f59e0b20' : 'var(--primary)20', color: iq.type === 'technical' ? 'var(--accent)' : iq.type === 'partnership' ? '#f59e0b' : 'var(--primary)' }}>
+                    <Mail size={18} />
+                  </div>
+                  <div className="item-details">
+                    <h4>{iq.type === 'sales' ? `${iq.first_name} ${iq.last_name}` : iq.full_name}</h4>
+                    <span>{iq.type === 'technical' ? iq.subject : iq.type === 'partnership' ? 'Partnership Request' : iq.product_interest}</span>
+                  </div>
+                  <div className={`status-dot ${iq.status}`} style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: iq.status === 'pending' ? '#ef4444' : '#10b981' }}></div>
+                </div>
+              ))
+            ) : (
+              <p className="empty-state">No recent inquiries.</p>
+            )}
           </div>
         </div>
       </div>
