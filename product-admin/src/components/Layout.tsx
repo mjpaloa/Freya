@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
-import { Loader2 } from 'lucide-react';
+import Loader from './Loader';
 import '../styles/Layout.css';
 
 const Layout: React.FC = () => {
@@ -13,7 +13,7 @@ const Layout: React.FC = () => {
   if (isLoading) {
     return (
       <div className="loading-screen">
-        <Loader2 className="spinner" size={48} color="var(--primary)" />
+        <Loader />
       </div>
     );
   }

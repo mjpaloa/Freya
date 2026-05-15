@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  Trash2, 
+import {
+  Search,
+  Trash2,
   Mail,
-  Calendar,
-  Loader2
+  Calendar
 } from 'lucide-react';
+import Loader from '../components/Loader';
+import Pagination from '../components/Pagination';
 import api from '../services/api';
 import '../styles/Products.css';
 
@@ -22,6 +23,8 @@ const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -50,9 +53,14 @@ const Users: React.FC = () => {
     }
   };
 
-  const filteredUsers = users.filter(user => 
+  const filteredUsers = users.filter(user =>
     user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (user.full_name && user.full_name.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   return (
@@ -67,9 +75,9 @@ const Users: React.FC = () => {
       <div className="table-controls">
         <div className="search-box glass-panel">
           <Search size={20} className="search-icon" />
-          <input 
-            type="text" 
-            placeholder="Search users by name or email..." 
+          <input
+            type="text"
+            placeholder="Search users by name or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -79,8 +87,7 @@ const Users: React.FC = () => {
       <div className="modern-list-container">
         {isLoading ? (
           <div className="glass-panel loading-container">
-            <Loader2 className="spinner" size={40} />
-            <p>Loading user directory...</p>
+            <Loader />
           </div>
         ) : (
           <>
@@ -93,7 +100,7 @@ const Users: React.FC = () => {
               <div className="col-actions">Actions</div>
             </div>
             <div className="products-list">
-              {filteredUsers.map((user) => (
+              {paginatedUsers.map((user) => (
                 <div key={user.id} className="product-item-card glass-panel">
                   <div className="col-photo">
                     <div className="product-img-circle">
@@ -134,7 +141,13 @@ const Users: React.FC = () => {
           </>
         )}
       </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalItems={filteredUsers.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        onItemsPerPageChange={setItemsPerPage}
+      />
     </div>
   );
 };

@@ -17,9 +17,9 @@ import '../styles/Profile.css';
 const Profile: React.FC = () => {
   const { user, updateUser } = useAuth();
   const [formData, setFormData] = useState({
-    full_name: user?.full_name || '',
+    full_name: user?.name || '',
     email: user?.email || '',
-    avatar_url: user?.avatar_url || '',
+    avatar_url: user?.avatar || '',
   });
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -30,6 +30,19 @@ const Profile: React.FC = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+  const [imgError, setImgError] = useState(false);
+
+  // Sync with Auth state
+  React.useEffect(() => {
+    if (user) {
+      setFormData({
+        full_name: user.name || '',
+        email: user.email || '',
+        avatar_url: user.avatar || '',
+      });
+      setImgError(false);
+    }
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,24 +50,47 @@ const Profile: React.FC = () => {
     setIsSuccess(false);
 
     try {
-      updateUser({
-        full_name: formData.full_name,
-        avatar_url: formData.avatar_url,
-      });
-
-      try {
-        await api.put(`/users/profile`, {
-          full_name: formData.full_name,
-          avatar_url: formData.avatar_url
+      if (user?.id) {
+        await api.put(`/users/${user.id}`, {
+          name: formData.full_name,
+          avatar: formData.avatar_url
         });
-      } catch (apiError) {
-        console.warn('Backend update failed, but local profile updated:', apiError);
-      }
 
-      setIsSuccess(true);
-      setTimeout(() => setIsSuccess(false), 3000);
+        updateUser({
+          name: formData.full_name,
+          avatar: formData.avatar_url,
+        });
+
+        setIsSuccess(true);
+        setTimeout(() => setIsSuccess(false), 3000);
+      }
     } catch (error) {
       console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const uploadData = new FormData();
+    uploadData.append('image', file); // Matches server expectation
+
+    setIsLoading(true);
+    try {
+      const response = await api.post('/upload/image', uploadData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      const newUrl = response.data.url;
+      setFormData({ ...formData, avatar_url: newUrl });
+      setImgError(false);
+    } catch (error: any) {
+      console.error('Upload failed:', error);
+      const message = error.response?.data?.error || error.response?.data?.message || 'Please check your connection.';
+      alert(`Failed to upload image: ${message}`);
     } finally {
       setIsLoading(false);
     }
@@ -106,14 +142,21 @@ const Profile: React.FC = () => {
             <div className="profile-cover"></div>
             <div className="profile-avatar-container">
               <div className="profile-avatar">
-                {formData.avatar_url ? (
-                  <img src={formData.avatar_url} alt="Profile" />
+                {formData.avatar_url && !imgError ? (
+                  <img 
+                    src={formData.avatar_url} 
+                    alt="Profile" 
+                    onError={() => setImgError(true)}
+                  />
                 ) : (
-                  <div className="avatar-placeholder">{formData.full_name.charAt(0)}</div>
+                  <div className="avatar-placeholder">
+                    {formData.full_name ? formData.full_name.charAt(0).toUpperCase() : <User size={40} />}
+                  </div>
                 )}
-                <button className="change-avatar">
+                <label className="change-avatar">
                   <Camera size={18} />
-                </button>
+                  <input type="file" hidden accept="image/*" onChange={handleAvatarUpload} />
+                </label>
               </div>
             </div>
             <div className="profile-info-stat">

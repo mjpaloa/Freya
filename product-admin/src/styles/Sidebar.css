@@ -4,12 +4,13 @@
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--surface-border);
-  position: sticky;
+  position: relative;
   top: 0;
   z-index: 50;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .sidebar.collapsed {
