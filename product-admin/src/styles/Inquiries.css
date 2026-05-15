@@ -88,6 +88,20 @@
   background: rgba(16, 185, 129, 0.1);
 }
 
+.inquiry-card .col-name,
+.inquiry-card .col-info,
+.inquiry-card .col-actions {
+  min-width: 0;
+}
+
+.inquiry-card .product-id-tag {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* New Header & Filter Layout */
 .inquiry-header {
   display: flex;
@@ -359,6 +373,138 @@
   .modal-footer-actions button,
   .modal-footer-actions a {
     width: 100%;
+  }
+
+  .inquiry-header {
+    align-items: stretch;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .header-title-section h1 {
+    font-size: 1.7rem;
+  }
+
+  .status-tabs-wrapper {
+    width: 100%;
+  }
+
+  .status-tab-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+  }
+
+  .table-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .search-box {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .filter-pills {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .filter-pill {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 0;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-tabs-wrapper {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .status-tab-btn {
+    width: 100%;
+  }
+
+  .filter-pill {
+    flex-basis: 100%;
+  }
+
+  .inquiry-card.product-item-card {
+    grid-template-columns: 64px minmax(0, 1fr);
+    grid-template-areas:
+      "photo name"
+      "photo email"
+      "type type"
+      "info info"
+      "date actions";
+    padding: 1rem;
+    gap: 0.45rem 0.7rem;
+    align-items: center;
+  }
+
+  .inquiry-card .col-photo {
+    grid-area: photo;
+    align-self: start;
+  }
+
+  .inquiry-card .col-name {
+    grid-area: name;
+  }
+
+  .inquiry-card .product-id-tag {
+    grid-area: email;
+    white-space: nowrap;
+  }
+
+  .inquiry-card .col-type {
+    grid-area: type;
+    margin-top: 0.35rem;
+  }
+
+  .inquiry-card .col-info {
+    grid-area: info;
+    margin-bottom: 0.25rem;
+  }
+
+  .inquiry-card .col-date {
+    grid-area: date;
+    margin-top: 0.4rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    justify-content: flex-start;
+  }
+
+  .inquiry-card .col-actions {
+    grid-area: actions;
+    margin-top: 0.4rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    justify-content: flex-end;
+  }
+
+  .inquiry-card .status-indicator {
+    width: fit-content;
+    max-width: 100%;
+    justify-self: end;
+  }
+
+  .inquiry-card .product-name-text {
+    font-size: 0.98rem;
+    line-height: 1.25;
+  }
+
+  .inquiry-card .product-id-tag {
+    font-size: 0.7rem;
+  }
+
+  .inquiry-card .status-indicator {
+    font-size: 0.7rem;
+    gap: 6px;
+    padding: 5px 10px;
   }
 }
 

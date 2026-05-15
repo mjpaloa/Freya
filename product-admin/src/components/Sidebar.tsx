@@ -33,7 +33,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   ];
 
   return (
-    <aside className={`sidebar glass-panel ${!isOpen ? 'collapsed' : ''}`}>
+    <aside
+      className={`sidebar glass-panel ${!isOpen ? 'collapsed' : ''}`}
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className="sidebar-header">
         <div className="sidebar-brand">
           <img src={logoImg} alt="Logo" className="sidebar-logo-img" />
@@ -52,6 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             key={item.path}
             to={item.path}
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+            onClick={() => onClose?.()}
           >
             <item.icon size={20} />
             <span>{item.label}</span>
@@ -61,7 +65,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       </nav>
 
       <div className="sidebar-footer">
-        <button className="nav-link logout" onClick={logout}>
+        <button
+          className="nav-link logout"
+          onClick={() => {
+            onClose?.();
+            logout();
+          }}
+        >
           <LogOut size={20} />
           <span>Sign Out</span>
         </button>

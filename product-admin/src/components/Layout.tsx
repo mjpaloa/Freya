@@ -10,14 +10,18 @@ import { ChevronUp } from 'lucide-react';
 
 const Layout: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 1024);
+  const getIsMobile = () => window.innerWidth <= 1024;
+  const [isMobile, setIsMobile] = useState(getIsMobile);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(!getIsMobile());
   const [showScrollTop, setShowScrollTop] = useState(false);
   const location = useLocation();
   const mainContentRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 1024) {
+      const mobile = getIsMobile();
+      setIsMobile(mobile);
+      if (mobile) {
         setIsSidebarOpen(false);
       } else {
         setIsSidebarOpen(true);
@@ -45,14 +49,17 @@ const Layout: React.FC = () => {
     return () => mainContent.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close sidebar on mobile when navigating
+  // Scroll to top on navigation
   useEffect(() => {
-    if (window.innerWidth <= 1024) {
-      setIsSidebarOpen(false);
-    }
-    // Scroll to top on navigation
     mainContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [location.pathname]);
+  }, [location.pathname, isMobile]);
+
+  useEffect(() => {
+    document.body.style.overflow = isMobile && isSidebarOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobile, isSidebarOpen]);
 
   const scrollToTop = () => {
     mainContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
@@ -72,23 +79,28 @@ const Layout: React.FC = () => {
 
   return (
     <div className={`app-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      {isSidebarOpen && window.innerWidth <= 1024 && (
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+      {isMobile && isSidebarOpen && (
         <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
       )}
       <div className="content-wrapper">
-        <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
+        <Navbar onMenuClick={() => setIsSidebarOpen((prev) => !prev)} />
         <main className="main-content" ref={mainContentRef}>
           <Outlet />
           
           {/* Back to Top Button */}
-          <button 
-            className={`scroll-to-top ${showScrollTop ? 'visible' : ''}`}
-            onClick={scrollToTop}
-            aria-label="Back to Top"
-          >
-            <ChevronUp size={24} />
-          </button>
+          {!isMobile && (
+            <button 
+              className={`scroll-to-top ${showScrollTop ? 'visible' : ''}`}
+              onClick={scrollToTop}
+              aria-label="Back to Top"
+            >
+              <ChevronUp size={24} />
+            </button>
+          )}
         </main>
       </div>
     </div>
