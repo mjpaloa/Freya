@@ -6,9 +6,10 @@ export default function InquiryForm() {
     fullName: '',
     email: '',
     facilityId: '',
-    type: 'technical' as 'technical' | 'partnership',
     subject: '',
-    message: ''
+    message: '',
+    company: '',
+    jobTitle: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -22,17 +23,23 @@ export default function InquiryForm() {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
+    
+    // Auto-detect type based on subject
+    const inquiryType = formData.subject === 'Business Partnership' ? 'partnership' : 'technical';
+
     try {
       await submitInquiry({
-        type: formData.type,
+        type: inquiryType,
         full_name: formData.fullName,
         email: formData.email,
-        facility_id: formData.type === 'technical' ? formData.facilityId : 'N/A',
+        facility_id: inquiryType === 'technical' ? formData.facilityId : 'N/A',
         subject: formData.subject,
-        message: formData.message
+        message: formData.message,
+        company_hospital: formData.company,
+        job_title: formData.jobTitle
       });
       alert('Your inquiry has been submitted. Our team will respond shortly.');
-      setFormData({ fullName: '', email: '', facilityId: '', type: 'technical', subject: '', message: '' });
+      setFormData({ fullName: '', email: '', facilityId: '', subject: '', message: '', company: '', jobTitle: '' });
     } catch (error) {
       alert('Failed to submit inquiry. Please try again later.');
     } finally {
@@ -42,27 +49,12 @@ export default function InquiryForm() {
 
   return (
     <div className="form-card">
-      <h2>General & Technical Inquiries</h2>
+      <h2>Contact Freya Medical</h2>
       <p className="desc">
-        Select the type of inquiry below. Our team responds to all requests within 12-24 hours.
+        For technical support, equipment maintenance, or business partnership inquiries.
       </p>
 
       <form className="contact-form" onSubmit={handleSubmit}>
-        <div className="form-group full-width">
-          <label htmlFor="type">Inquiry Type</label>
-          <select
-            id="type"
-            name="type"
-            required
-            value={formData.type}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', background: '#fff' }}
-          >
-            <option value="technical">Technical Support / Maintenance</option>
-            <option value="partnership">Business Partnership / Collaboration</option>
-          </select>
-        </div>
-
         <div className="form-group">
           <label htmlFor="fullName">Full Name</label>
           <input
@@ -89,34 +81,70 @@ export default function InquiryForm() {
           />
         </div>
 
-        {formData.type === 'technical' && (
-          <div className="form-group">
-            <label htmlFor="facilityId">Facility ID</label>
+        <div className="form-group full-width">
+          <label htmlFor="subject">Subject of Inquiry</label>
+          <select
+            id="subject"
+            name="subject"
+            required
+            value={formData.subject}
+            onChange={handleChange}
+          >
+            <option value="">Select a subject...</option>
+            <option value="Technical Support">Technical Support</option>
+            <option value="Equipment Maintenance">Equipment Maintenance</option>
+            <option value="Software/System Issue">Software/System Issue</option>
+            <option value="Warranty Claim">Warranty Claim</option>
+            <option value="Business Partnership">Business Partnership / Collaboration</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        {formData.subject === 'Business Partnership' && (
+          <div className="modal-form-row" style={{ display: 'flex', gap: '1rem', width: '100%', marginBottom: '1.5rem' }}>
+            <div className="form-group" style={{ flex: 1 }}>
+              <label htmlFor="company">Company Name *</label>
+              <input
+                type="text"
+                id="company"
+                name="company"
+                placeholder="e.g. MedSupply Co."
+                required
+                value={(formData as any).company || ''}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+            </div>
+            <div className="form-group" style={{ flex: 1 }}>
+              <label htmlFor="jobTitle">Job Title *</label>
+              <input
+                type="text"
+                id="jobTitle"
+                name="jobTitle"
+                placeholder="e.g. Purchasing Manager"
+                required
+                value={(formData as any).jobTitle || ''}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+            </div>
+          </div>
+        )}
+
+        {formData.subject !== 'Business Partnership' && formData.subject !== '' && (
+          <div className="form-group full-width" style={{ marginBottom: '1.5rem' }}>
+            <label htmlFor="facilityId">Facility ID (Optional - for technical requests)</label>
             <input
               type="text"
               id="facilityId"
               name="facilityId"
-              placeholder="MED-000-00"
-              required
+              placeholder="e.g. MED-000-00"
               value={formData.facilityId}
               onChange={handleChange}
+              style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
             />
           </div>
         )}
-
-        <div className="form-group full-width">
-          <label htmlFor="subject">Subject</label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            placeholder={formData.type === 'technical' ? "e.g. Equipment Maintenance" : "e.g. Distribution Partnership"}
-            required
-            value={formData.subject}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
-          />
-        </div>
 
         <div className="form-group full-width">
           <label htmlFor="message">Your Message</label>
