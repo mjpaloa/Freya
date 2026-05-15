@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Mail, 
-  Tag, 
-  Calendar, 
-  MessageSquare, 
-  Search, 
-  CheckCircle2, 
-  Clock, 
-  ExternalLink, 
-  Phone 
+import {
+  Mail,
+  Tag,
+  Calendar,
+  MessageSquare,
+  Search,
+  CheckCircle2,
+  Clock,
+  ExternalLink,
+  Phone
 } from 'lucide-react';
 import Loader from '../components/Loader';
 import Pagination from '../components/Pagination';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../services/api';
-import '../styles/Products.css'; 
+import '../styles/Products.css';
 import '../styles/Inquiries.css';
 
 interface Inquiry {
@@ -79,7 +79,7 @@ const InquiryManagement: React.FC = () => {
 
   const handleSendReply = async () => {
     if (!selectedInquiry || !replyMessage.trim()) return;
-    
+
     setIsSending(true);
     try {
       await api.post(`/inquiries/${selectedInquiry.id}/reply`, {
@@ -87,7 +87,7 @@ const InquiryManagement: React.FC = () => {
         subject: selectedInquiry.type === 'technical' ? selectedInquiry.subject : `Product Inquiry: ${selectedInquiry.product_interest}`,
         message: replyMessage
       });
-      
+
       // Update local state to responded
       setInquiries(inquiries.map(iq => iq.id === selectedInquiry.id ? { ...iq, status: 'responded' } : iq));
       setSelectedInquiry({ ...selectedInquiry, status: 'responded' });
@@ -102,18 +102,18 @@ const InquiryManagement: React.FC = () => {
   };
 
   const filteredInquiries = inquiries.filter(iq => {
-    const matchesSearch = 
+    const matchesSearch =
       (iq.full_name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
       (iq.email?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
       (iq.subject?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
       (iq.message?.toLowerCase() || '').includes(searchTerm.toLowerCase());
-    
+
     const matchesType = filterType === 'all' || iq.type === filterType;
-    
-    const matchesStatus = statusFilter === 'active' 
+
+    const matchesStatus = statusFilter === 'active'
       ? (iq.status === 'pending' || iq.status === 'responded')
       : iq.status === 'closed';
-    
+
     return matchesSearch && matchesType && matchesStatus;
   });
 
@@ -134,14 +134,14 @@ const InquiryManagement: React.FC = () => {
 
         <div className="table-controls">
           <div className="status-tabs glass-panel" style={{ display: 'flex', marginBottom: '1.5rem', padding: '4px', width: 'fit-content' }}>
-            <button 
+            <button
               className={`toggle-btn ${statusFilter === 'active' ? 'active' : ''}`}
               onClick={() => setStatusFilter('active')}
               style={{ width: '150px', padding: '8px' }}
             >
               Active Inquiries
             </button>
-            <button 
+            <button
               className={`toggle-btn ${statusFilter === 'closed' ? 'active' : ''}`}
               onClick={() => setStatusFilter('closed')}
               style={{ width: '150px', padding: '8px' }}
@@ -160,29 +160,29 @@ const InquiryManagement: React.FC = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            
+
             <div className="toggle-group glass-panel" style={{ padding: '4px' }}>
-               <button 
-                 className={`toggle-btn ${filterType === 'all' ? 'active' : ''}`} 
-                 onClick={() => setFilterType('all')}
-                 style={{ width: 'auto', padding: '0 15px', fontSize: '0.85rem' }}
-               >
-                 All
-               </button>
-               <button 
-                 className={`toggle-btn ${filterType === 'technical' ? 'active' : ''}`} 
-                 onClick={() => setFilterType('technical')}
-                 style={{ width: 'auto', padding: '0 15px', fontSize: '0.85rem' }}
-               >
-                 Technical
-               </button>
-               <button 
-                 className={`toggle-btn ${filterType === 'sales' ? 'active' : ''}`} 
-                 onClick={() => setFilterType('sales')}
-                 style={{ width: 'auto', padding: '0 15px', fontSize: '0.85rem' }}
-               >
-                 Product
-               </button>
+              <button
+                className={`toggle-btn ${filterType === 'all' ? 'active' : ''}`}
+                onClick={() => setFilterType('all')}
+                style={{ width: 'auto', padding: '0 15px', fontSize: '0.85rem' }}
+              >
+                All
+              </button>
+              <button
+                className={`toggle-btn ${filterType === 'technical' ? 'active' : ''}`}
+                onClick={() => setFilterType('technical')}
+                style={{ width: 'auto', padding: '0 15px', fontSize: '0.85rem' }}
+              >
+                Technical
+              </button>
+              <button
+                className={`toggle-btn ${filterType === 'sales' ? 'active' : ''}`}
+                onClick={() => setFilterType('sales')}
+                style={{ width: 'auto', padding: '0 15px', fontSize: '0.85rem' }}
+              >
+                Product
+              </button>
             </div>
           </div>
         </div>
@@ -209,9 +209,9 @@ const InquiryManagement: React.FC = () => {
                       <span className="product-id-tag">{iq.email}</span>
                     </div>
                     <div className="col-type">
-                       <span className={`category-pill ${iq.type}`}>
-                         {iq.type === 'technical' ? 'Technical Inquiry' : 'Product Inquiry'}
-                       </span>
+                      <span className={`category-pill ${iq.type}`}>
+                        {iq.type === 'technical' ? 'Technical Inquiry' : 'Product Inquiry'}
+                      </span>
                     </div>
                     <div className="col-info">
                       <div className="inquiry-subject-preview">
@@ -255,108 +255,108 @@ const InquiryManagement: React.FC = () => {
       <AnimatePresence>
         {selectedInquiry && (
           <div className="modal-overlay" onClick={() => setSelectedInquiry(null)}>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="detail-modal inquiry-detail glass-panel" 
+              className="detail-modal inquiry-detail glass-panel"
               onClick={e => e.stopPropagation()}
             >
-               <div className="detail-header-strip" style={{ background: selectedInquiry.type === 'technical' ? 'var(--accent)' : 'var(--primary)' }}></div>
-               <div className="detail-body">
-                  <div className="detail-top">
-                    <div>
-                      <span className={`badge ${selectedInquiry.type}`}>
-                        {selectedInquiry.type === 'technical' ? 'Technical Support' : 'Product Inquiry'}
-                      </span>
-                      <h2>{selectedInquiry.type === 'sales' ? `${selectedInquiry.first_name} ${selectedInquiry.last_name}` : selectedInquiry.full_name}</h2>
-                      <p className="email-row"><Mail size={16} /> {selectedInquiry.email}</p>
-                      {selectedInquiry.contact_number && (
-                        <p className="email-row"><Phone size={16} /> {selectedInquiry.contact_number}</p>
-                      )}
-                    </div>
-                    <div className="status-selector">
-                      <label>Inquiry Status</label>
-                      <select 
-                        value={selectedInquiry.status}
-                        onChange={(e) => handleUpdateStatus(selectedInquiry.id, e.target.value)}
-                        className="glass-select"
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="responded">Responded</option>
-                        <option value="closed">Closed</option>
-                      </select>
-                    </div>
+              <div className="detail-header-strip" style={{ background: selectedInquiry.type === 'technical' ? 'var(--accent)' : 'var(--primary)' }}></div>
+              <div className="detail-body">
+                <div className="detail-top">
+                  <div>
+                    <span className={`badge ${selectedInquiry.type}`}>
+                      {selectedInquiry.type === 'technical' ? 'Technical Support' : 'Product Inquiry'}
+                    </span>
+                    <h2>{selectedInquiry.type === 'sales' ? `${selectedInquiry.first_name} ${selectedInquiry.last_name}` : selectedInquiry.full_name}</h2>
+                    <p className="email-row"><Mail size={16} /> {selectedInquiry.email}</p>
+                    {selectedInquiry.contact_number && (
+                      <p className="email-row"><Phone size={16} /> {selectedInquiry.contact_number}</p>
+                    )}
                   </div>
+                  <div className="status-selector">
+                    <label>Inquiry Status</label>
+                    <select
+                      value={selectedInquiry.status}
+                      onChange={(e) => handleUpdateStatus(selectedInquiry.id, e.target.value)}
+                      className="glass-select"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="responded">Responded</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                  </div>
+                </div>
 
-                  <div className="detail-grid-3">
-                     {selectedInquiry.type === 'technical' ? (
-                       <>
-                         <div className="detail-info-item">
-                           <label>Facility ID</label>
-                           <span>{selectedInquiry.facility_id || 'N/A'}</span>
-                         </div>
-                         <div className="detail-info-item">
-                           <label>Subject</label>
-                           <span>{selectedInquiry.subject}</span>
-                         </div>
-                       </>
-                     ) : (
-                       <>
-                         <div className="detail-info-item">
-                           <label>Company / Hospital</label>
-                           <span>{selectedInquiry.company_hospital}</span>
-                         </div>
-                         <div className="detail-info-item">
-                           <label>Job Title</label>
-                           <span>{selectedInquiry.job_title}</span>
-                         </div>
-                         <div className="detail-info-item">
-                           <label>Product Interest</label>
-                           <span>{selectedInquiry.product_interest}</span>
-                         </div>
-                       </>
-                     )}
-                  </div>
+                <div className="detail-grid-3">
+                  {selectedInquiry.type === 'technical' ? (
+                    <>
+                      <div className="detail-info-item">
+                        <label>Facility ID</label>
+                        <span>{selectedInquiry.facility_id || 'N/A'}</span>
+                      </div>
+                      <div className="detail-info-item">
+                        <label>Subject</label>
+                        <span>{selectedInquiry.subject}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="detail-info-item">
+                        <label>Company / Hospital</label>
+                        <span>{selectedInquiry.company_hospital}</span>
+                      </div>
+                      <div className="detail-info-item">
+                        <label>Job Title</label>
+                        <span>{selectedInquiry.job_title}</span>
+                      </div>
+                      <div className="detail-info-item">
+                        <label>Product Interest</label>
+                        <span>{selectedInquiry.product_interest}</span>
+                      </div>
+                    </>
+                  )}
+                </div>
 
-                  <div className="message-container">
-                     <label>Inquiry Message</label>
-                     <div className="message-content">
-                       {selectedInquiry.message || 'No message provided.'}
-                     </div>
+                <div className="message-container">
+                  <label>Inquiry Message</label>
+                  <div className="message-content">
+                    {selectedInquiry.message || 'No message provided.'}
                   </div>
+                </div>
 
-                  <div className="reply-section" style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--glass-border)' }}>
-                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', marginBottom: '12px' }}>
-                       Send Official Reply via Email
-                     </label>
-                     <textarea 
-                        className="glass-input"
-                        placeholder="Type your reply to the customer here..."
-                        style={{ width: '100%', minHeight: '150px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '15px', color: 'white', resize: 'vertical' }}
-                        value={replyMessage}
-                        onChange={(e) => setReplyMessage(e.target.value)}
-                     ></textarea>
-                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-                        <button 
-                          className="btn-primary" 
-                          onClick={handleSendReply} 
-                          disabled={isSending || !replyMessage.trim()}
-                          style={{ padding: '10px 25px' }}
-                        >
-                          {isSending ? 'Sending...' : 'Send Official Reply'}
-                        </button>
-                     </div>
+                <div className="reply-section" style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--glass-border)' }}>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', marginBottom: '12px' }}>
+                    Send Official Reply via Email
+                  </label>
+                  <textarea
+                    className="glass-input"
+                    placeholder="Type your reply to the customer here..."
+                    style={{ width: '100%', minHeight: '150px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '15px', color: 'white', resize: 'vertical' }}
+                    value={replyMessage}
+                    onChange={(e) => setReplyMessage(e.target.value)}
+                  ></textarea>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                    <button
+                      className="btn-primary"
+                      onClick={handleSendReply}
+                      disabled={isSending || !replyMessage.trim()}
+                      style={{ padding: '10px 25px' }}
+                    >
+                      {isSending ? 'Sending...' : 'Send Official Reply'}
+                    </button>
                   </div>
+                </div>
 
-                  <div className="modal-footer-actions">
-                     <button className="btn-secondary" onClick={() => setSelectedInquiry(null)}>Close View</button>
-                     <a href={`mailto:${selectedInquiry.email}?subject=Re: ${selectedInquiry.type === 'technical' ? selectedInquiry.subject : 'Product Inquiry'}`} className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '12px', border: '1px solid var(--glass-border)', fontSize: '0.9rem' }}>
-                       <ExternalLink size={18} />
-                       Open in Mail App
-                     </a>
-                  </div>
-               </div>
+                <div className="modal-footer-actions">
+                  <button className="btn-secondary" onClick={() => setSelectedInquiry(null)}>Close View</button>
+                  <a href={`mailto:${selectedInquiry.email}?subject=Re: ${selectedInquiry.type === 'technical' ? selectedInquiry.subject : 'Product Inquiry'}`} className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '12px', border: '1px solid var(--glass-border)', fontSize: '0.9rem' }}>
+                    <ExternalLink size={18} />
+                    Open in Mail App
+                  </a>
+                </div>
+              </div>
             </motion.div>
           </div>
         )}
