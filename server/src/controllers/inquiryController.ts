@@ -4,30 +4,48 @@ import { sendInquiryEmail } from '../services/emailService';
 
 export const createInquiry = async (req: Request, res: Response) => {
   try {
-    const inquiryData = req.body;
+    const body = req.body;
+
+    // Map frontend camelCase to database snake_case
+    const dbData = {
+      type: body.type,
+      full_name: body.full_name || body.fullName,
+      first_name: body.first_name || body.firstName,
+      last_name: body.last_name || body.lastName,
+      email: body.email,
+      contact_number: body.contact_number || body.phone || body.contactNumber,
+      facility_id: body.facility_id || body.facilityId,
+      subject: body.subject,
+      message: body.message,
+      job_title: body.job_title || body.jobTitle,
+      clinical_specialty: body.clinical_specialty || body.specialty || body.clinicalSpecialty,
+      company_hospital: body.company_hospital || body.hospital || body.companyHospital,
+      product_interest: body.product_interest || body.productInterest,
+      marketing_consent: body.marketing_consent !== undefined ? body.marketing_consent : body.agreed,
+      status: 'pending'
+    };
 
     // 1. Save to Database (Supabase)
     const { data, error } = await supabase
       .from('inquiries')
-      .insert([inquiryData])
+      .insert([dbData])
       .select();
 
     if (error) {
       console.error('Database Error:', error);
-      return res.status(500).json({ error: 'Failed to save inquiry record.' });
+      return res.status(500).json({ error: 'Failed to save inquiry record.', details: error.message });
     }
 
     // 2. Send Email Notification
-    // We don't want to block the response if email fails, but we should log it
-    sendInquiryEmail(inquiryData).catch(err => console.error('Delayed Email Error:', err));
+    sendInquiryEmail(dbData).catch(err => console.error('Delayed Email Error:', err));
 
     return res.status(201).json({
       message: 'Inquiry submitted successfully.',
       data: data[0]
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Server Error:', error);
-    return res.status(500).json({ error: 'Internal server error.' });
+    return res.status(500).json({ error: 'Internal server error.', details: error.message });
   }
 };
 

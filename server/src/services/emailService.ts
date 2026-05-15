@@ -10,6 +10,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Verify connection configuration
+if (!process.env.EMAIL_USER || !process.env.EMAIL_APP_PASSWORD) {
+  console.warn('WARNING: EMAIL_USER or EMAIL_APP_PASSWORD is not set. Emails will not be sent.');
+}
+
 export const sendInquiryEmail = async (inquiry: any) => {
   const isTechnical = inquiry.type === 'technical';
   const recipient = 'michaeljoshuabpaloa@adssu.edu.ph';
