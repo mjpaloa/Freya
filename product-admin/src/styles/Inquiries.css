@@ -79,9 +79,30 @@
 /* Detail Modal Enhancements */
 .inquiry-detail {
   max-width: 700px !important;
+  max-height: 90vh !important;
   padding: 0 !important;
-  overflow: hidden;
+  overflow-y: auto !important;
   border-radius: 24px !important;
+  position: relative;
+}
+
+/* Custom Scrollbar for the modal */
+.inquiry-detail::-webkit-scrollbar {
+  width: 8px;
+}
+
+.inquiry-detail::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0 24px 24px 0;
+}
+
+.inquiry-detail::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.inquiry-detail::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .detail-header-strip {
