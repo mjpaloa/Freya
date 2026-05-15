@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createInquiry, getInquiries, updateInquiryStatus } from '../controllers/inquiryController';
+import { createInquiry, getInquiries, updateInquiryStatus, sendReply } from '../controllers/inquiryController';
 
 const router = Router();
 
@@ -9,5 +9,6 @@ router.post('/', createInquiry);
 // Admin-only endpoints (TODO: Add auth middleware)
 router.get('/', getInquiries);
 router.patch('/:id/status', updateInquiryStatus);
+router.post('/:id/reply', sendReply);
 
 export default router;

@@ -67,3 +67,34 @@ export const sendInquiryEmail = async (inquiry: any) => {
     return false;
   }
 };
+
+export const sendReplyEmail = async (to: string, subject: string, message: string) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: to,
+    subject: `Re: ${subject}`,
+    html: `
+      <div style="font-family: sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+        <h2 style="color: #6366f1;">Freya Medical Support</h2>
+        <p style="font-size: 1.1rem;">Hello,</p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+        <br>
+        <hr style="border: 0; border-top: 1px solid #eee;">
+        <p style="font-size: 0.85rem; color: #777;">
+          Thank you for reaching out to us. If you have any further questions, feel free to reply to this email.
+        </p>
+        <p style="font-size: 0.85rem; color: #777; font-weight: bold;">
+          Freya Medical Team
+        </p>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return true;
+  } catch (error) {
+    console.error('Error sending reply email:', error);
+    return false;
+  }
+};

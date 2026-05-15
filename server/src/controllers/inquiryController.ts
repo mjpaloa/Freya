@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { supabase } from '../config/supabase';
-import { sendInquiryEmail } from '../services/emailService';
+import { sendInquiryEmail, sendReplyEmail } from '../services/emailService';
 
 export const createInquiry = async (req: Request, res: Response) => {
   try {
@@ -82,5 +82,34 @@ export const updateInquiryStatus = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error updating inquiry:', error);
     return res.status(500).json({ error: 'Failed to update inquiry.' });
+  }
+};
+
+export const sendReply = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { message, subject, to } = req.body;
+
+  if (!message || !to) {
+    return res.status(400).json({ error: 'Message and recipient email are required.' });
+  }
+
+  try {
+    // 1. Send the email
+    const success = await sendReplyEmail(to, subject || 'Inquiry Update', message);
+
+    if (!success) {
+      return res.status(500).json({ error: 'Failed to send email reply via Gmail.' });
+    }
+
+    // 2. Automatically update status to 'responded'
+    await supabase
+      .from('inquiries')
+      .update({ status: 'responded' })
+      .eq('id', id);
+
+    return res.status(200).json({ message: 'Reply sent successfully and status updated.' });
+  } catch (error: any) {
+    console.error('Error sending reply:', error);
+    return res.status(500).json({ error: 'Internal server error.', details: error.message });
   }
 };
