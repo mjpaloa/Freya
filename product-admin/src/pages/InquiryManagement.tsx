@@ -88,7 +88,6 @@ const InquiryManagement: React.FC = () => {
         message: replyMessage
       });
 
-      // Update local state to responded
       setInquiries(inquiries.map(iq => iq.id === selectedInquiry.id ? { ...iq, status: 'responded' } : iq));
       setSelectedInquiry({ ...selectedInquiry, status: 'responded' });
       setReplyMessage('');
@@ -125,8 +124,6 @@ const InquiryManagement: React.FC = () => {
   return (
     <>
       <div className="inquiries-page animate-fade-in">
-        <header className="page-header">
-          <div>
         <div className="inquiry-header">
           <div className="header-title-section">
             <h1>Customer Inquiries</h1>
@@ -163,30 +160,15 @@ const InquiryManagement: React.FC = () => {
           </div>
 
           <div className="filter-pills glass-panel">
-            <button
-              className={`filter-pill ${filterType === 'all' ? 'active' : ''}`}
-              onClick={() => setFilterType('all')}
-            >
-              All
-            </button>
-            <button
-              className={`filter-pill ${filterType === 'technical' ? 'active' : ''}`}
-              onClick={() => setFilterType('technical')}
-            >
-              Technical
-            </button>
-            <button
-              className={`filter-pill ${filterType === 'sales' ? 'active' : ''}`}
-              onClick={() => setFilterType('sales')}
-            >
-              Product
-            </button>
-            <button
-              className={`filter-pill ${filterType === 'partnership' ? 'active' : ''}`}
-              onClick={() => setFilterType('partnership')}
-            >
-              Partnership
-            </button>
+            {['all', 'technical', 'sales', 'partnership'].map((type) => (
+              <button
+                key={type}
+                className={`filter-pill ${filterType === type ? 'active' : ''}`}
+                onClick={() => setFilterType(type as any)}
+              >
+                {type === 'sales' ? 'Product' : type.charAt(0).toUpperCase() + type.slice(1)}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -213,16 +195,12 @@ const InquiryManagement: React.FC = () => {
                     </div>
                     <div className="col-type">
                       <span className={`category-pill ${iq.type}`}>
-                        {iq.type === 'technical' 
-                          ? 'Technical Inquiry' 
-                          : iq.type === 'partnership' 
-                            ? 'Partnership Inquiry' 
-                            : 'Product Inquiry'}
+                        {iq.type === 'technical' ? 'Technical Support' : iq.type === 'partnership' ? 'Partnership' : 'Product Inquiry'}
                       </span>
                     </div>
                     <div className="col-info">
                       <div className="inquiry-subject-preview">
-                        {iq.type === 'technical' ? iq.subject : `Interest: ${iq.product_interest}`}
+                        {iq.type === 'sales' ? `Interest: ${iq.product_interest}` : iq.subject}
                       </div>
                     </div>
                     <div className="col-date">
@@ -258,7 +236,6 @@ const InquiryManagement: React.FC = () => {
         />
       </div>
 
-      {/* Inquiry Detail Modal */}
       <AnimatePresence>
         {selectedInquiry && (
           <div className="modal-overlay" onClick={() => setSelectedInquiry(null)}>
@@ -274,11 +251,7 @@ const InquiryManagement: React.FC = () => {
                 <div className="detail-top">
                   <div>
                     <span className={`badge ${selectedInquiry.type}`}>
-                      {selectedInquiry.type === 'technical' 
-                        ? 'Technical Support' 
-                        : selectedInquiry.type === 'partnership' 
-                          ? 'Partnership Inquiry' 
-                          : 'Product Inquiry'}
+                      {selectedInquiry.type === 'technical' ? 'Technical Support' : selectedInquiry.type === 'partnership' ? 'Partnership' : 'Product Inquiry'}
                     </span>
                     <h2>{selectedInquiry.type === 'sales' ? `${selectedInquiry.first_name} ${selectedInquiry.last_name}` : selectedInquiry.full_name}</h2>
                     <p className="email-row"><Mail size={16} /> {selectedInquiry.email}</p>
@@ -287,7 +260,7 @@ const InquiryManagement: React.FC = () => {
                     )}
                   </div>
                   <div className="status-selector">
-                    <label>Inquiry Status</label>
+                    <label>Status</label>
                     <select
                       value={selectedInquiry.status}
                       onChange={(e) => handleUpdateStatus(selectedInquiry.id, e.target.value)}
@@ -303,69 +276,42 @@ const InquiryManagement: React.FC = () => {
                 <div className="detail-grid-3">
                   {selectedInquiry.type === 'technical' ? (
                     <>
-                      <div className="detail-info-item">
-                        <label>Facility ID</label>
-                        <span>{selectedInquiry.facility_id || 'N/A'}</span>
-                      </div>
-                      <div className="detail-info-item">
-                        <label>Subject</label>
-                        <span>{selectedInquiry.subject}</span>
-                      </div>
+                      <div className="detail-info-item"><label>Facility ID</label><span>{selectedInquiry.facility_id || 'N/A'}</span></div>
+                      <div className="detail-info-item"><label>Subject</label><span>{selectedInquiry.subject}</span></div>
                     </>
                   ) : (
                     <>
-                      <div className="detail-info-item">
-                        <label>Company / Hospital</label>
-                        <span>{selectedInquiry.company_hospital}</span>
-                      </div>
-                      <div className="detail-info-item">
-                        <label>Job Title</label>
-                        <span>{selectedInquiry.job_title}</span>
-                      </div>
-                      <div className="detail-info-item">
-                        <label>Product Interest</label>
-                        <span>{selectedInquiry.product_interest}</span>
-                      </div>
+                      <div className="detail-info-item"><label>Company</label><span>{selectedInquiry.company_hospital}</span></div>
+                      <div className="detail-info-item"><label>Job Title</label><span>{selectedInquiry.job_title}</span></div>
+                      {selectedInquiry.type === 'sales' && <div className="detail-info-item"><label>Interest</label><span>{selectedInquiry.product_interest}</span></div>}
                     </>
                   )}
                 </div>
 
                 <div className="message-container">
-                  <label>Inquiry Message</label>
-                  <div className="message-content">
-                    {selectedInquiry.message || 'No message provided.'}
-                  </div>
+                  <label>Message</label>
+                  <div className="message-content">{selectedInquiry.message}</div>
                 </div>
 
                 <div className="reply-section" style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--glass-border)' }}>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', marginBottom: '12px' }}>
-                    Send Official Reply via Email
-                  </label>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', marginBottom: '12px' }}>Send Official Reply</label>
                   <textarea
                     className="glass-input"
-                    placeholder="Type your reply to the customer here..."
-                    style={{ width: '100%', minHeight: '150px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '15px', color: 'white', resize: 'vertical' }}
+                    placeholder="Type your reply..."
+                    style={{ width: '100%', minHeight: '120px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '15px', color: 'white' }}
                     value={replyMessage}
                     onChange={(e) => setReplyMessage(e.target.value)}
-                  ></textarea>
+                  />
                   <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-                    <button
-                      className="btn-primary"
-                      onClick={handleSendReply}
-                      disabled={isSending || !replyMessage.trim()}
-                      style={{ padding: '10px 25px' }}
-                    >
-                      {isSending ? 'Sending...' : 'Send Official Reply'}
+                    <button className="btn-primary" onClick={handleSendReply} disabled={isSending || !replyMessage.trim()}>
+                      {isSending ? 'Sending...' : 'Send Reply'}
                     </button>
                   </div>
                 </div>
 
                 <div className="modal-footer-actions">
-                  <button className="btn-secondary" onClick={() => setSelectedInquiry(null)}>Close View</button>
-                  <a href={`mailto:${selectedInquiry.email}?subject=Re: ${selectedInquiry.type === 'technical' ? selectedInquiry.subject : 'Product Inquiry'}`} className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '12px', border: '1px solid var(--glass-border)', fontSize: '0.9rem' }}>
-                    <ExternalLink size={18} />
-                    Open in Mail App
-                  </a>
+                  <button className="btn-secondary" onClick={() => setSelectedInquiry(null)}>Close</button>
+                  <a href={`mailto:${selectedInquiry.email}`} className="btn-outline">Open Mail App</a>
                 </div>
               </div>
             </motion.div>
@@ -374,7 +320,6 @@ const InquiryManagement: React.FC = () => {
       </AnimatePresence>
     </>
   );
-
 };
 
 export default InquiryManagement;
