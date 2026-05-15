@@ -24,7 +24,18 @@ export interface SalesInquiryData {
   marketing_consent: boolean;
 }
 
-export const submitInquiry = async (data: TechnicalInquiryData | SalesInquiryData) => {
+export interface PartnershipInquiryData {
+  type: 'partnership';
+  full_name: string;
+  email: string;
+  subject: string;
+  message: string;
+  company_hospital: string;
+  job_title: string;
+  facility_id?: string;
+}
+
+export const submitInquiry = async (data: TechnicalInquiryData | SalesInquiryData | PartnershipInquiryData) => {
   try {
     const response = await axios.post(`${API_URL}/inquiries`, data);
     return response.data;
