@@ -17,7 +17,7 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_APP_PASSWORD) {
 
 export const sendInquiryEmail = async (inquiry: any) => {
   const isTechnical = inquiry.type === 'technical';
-  const recipient = 'michaeljoshuabpaloa@adssu.edu.ph';
+  const recipient = process.env.EMAIL_USER || 'michaeljoshuabpaloa@adssu.edu.ph';
 
   let subject = '';
   let html = '';

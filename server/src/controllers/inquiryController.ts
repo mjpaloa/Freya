@@ -37,7 +37,7 @@ export const createInquiry = async (req: Request, res: Response) => {
     }
 
     // 2. Send Email Notification
-    sendInquiryEmail(dbData).catch(err => console.error('Delayed Email Error:', err));
+    await sendInquiryEmail(dbData).catch(err => console.error('Email Notification Error:', err));
 
     return res.status(201).json({
       message: 'Inquiry submitted successfully.',
