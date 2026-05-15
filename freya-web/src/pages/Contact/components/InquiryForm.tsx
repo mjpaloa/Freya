@@ -5,6 +5,7 @@ export default function InquiryForm() {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    phone: '',
     facilityId: '',
     subject: '',
     message: '',
@@ -32,6 +33,7 @@ export default function InquiryForm() {
         type: inquiryType,
         full_name: formData.fullName,
         email: formData.email,
+        contact_number: formData.phone,
         facility_id: inquiryType === 'technical' ? formData.facilityId : 'N/A',
         subject: formData.subject,
         message: formData.message,
@@ -39,7 +41,7 @@ export default function InquiryForm() {
         job_title: formData.jobTitle
       });
       alert('Your inquiry has been submitted. Our team will respond shortly.');
-      setFormData({ fullName: '', email: '', facilityId: '', subject: '', message: '', company: '', jobTitle: '' });
+      setFormData({ fullName: '', email: '', phone: '', facilityId: '', subject: '', message: '', company: '', jobTitle: '' });
     } catch (error) {
       alert('Failed to submit inquiry. Please try again later.');
     } finally {
@@ -69,7 +71,7 @@ export default function InquiryForm() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="email">Email Address</label>
+          <label htmlFor="email">Email Address *</label>
           <input
             type="email"
             id="email"
@@ -77,6 +79,18 @@ export default function InquiryForm() {
             placeholder="name@email.com"
             required
             value={formData.email}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="phone">Contact Number</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="e.g. 0912 345 6789"
+            value={formData.phone}
             onChange={handleChange}
           />
         </div>

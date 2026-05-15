@@ -16,24 +16,45 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_APP_PASSWORD) {
 }
 
 export const sendInquiryEmail = async (inquiry: any) => {
-  const isTechnical = inquiry.type === 'technical';
+  const type = inquiry.type; // 'technical', 'sales', or 'partnership'
   const recipient = process.env.EMAIL_USER || 'michaeljoshuabpaloa@adssu.edu.ph';
-  const customerName = isTechnical ? inquiry.full_name : `${inquiry.first_name} ${inquiry.last_name}`;
+  
+  // Handle names correctly based on type
+  let customerName = '';
+  if (type === 'sales') {
+    customerName = `${inquiry.first_name || ''} ${inquiry.last_name || ''}`.trim();
+  } else {
+    customerName = inquiry.full_name || 'Valued Customer';
+  }
+
   const customerEmail = inquiry.email;
 
-  let subject = `[New Inquiry] ${isTechnical ? 'Technical Support' : 'Product Inquiry'} - ${customerName}`;
+  // Dynamic Title and Header Color
+  let typeTitle = 'Inquiry';
+  let headerColor = '#6b7280'; // Default gray
   
-  const headerColor = isTechnical ? '#6366f1' : '#10b981';
+  if (type === 'technical') {
+    typeTitle = 'Technical Support';
+    headerColor = '#6366f1'; // Indigo
+  } else if (type === 'sales') {
+    typeTitle = 'Product Inquiry';
+    headerColor = '#10b981'; // Emerald
+  } else if (type === 'partnership') {
+    typeTitle = 'Partnership Inquiry';
+    headerColor = '#f59e0b'; // Amber
+  }
+
+  let subject = `[New ${typeTitle}] - ${customerName}`;
   
   const html = `
     <div style="font-family: 'Inter', sans-serif; color: #1f2937; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
       <div style="background-color: ${headerColor}; padding: 24px; text-align: center;">
         <h1 style="color: white; margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Freya Medical</h1>
-        <p style="color: rgba(255,255,255,0.8); margin: 4px 0 0 0; font-size: 14px;">New ${isTechnical ? 'Technical Support' : 'Product Inquiry'} Received</p>
+        <p style="color: rgba(255,255,255,0.8); margin: 4px 0 0 0; font-size: 14px;">New ${typeTitle} Received</p>
       </div>
       
       <div style="padding: 32px; background: white;">
-        <p style="margin-top: 0;">You have received a new inquiry from your website. Here are the details:</p>
+        <p style="margin-top: 0;">You have received a new ${typeTitle.toLowerCase()} from your website. Here are the details:</p>
         
         <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0;">
           <h3 style="margin-top: 0; font-size: 14px; color: #6b7280; text-transform: uppercase; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Customer Information</h3>
@@ -41,7 +62,7 @@ export const sendInquiryEmail = async (inquiry: any) => {
             <tr><td style="width: 120px; color: #6b7280;">Name:</td><td style="font-weight: 600;">${customerName}</td></tr>
             <tr><td style="color: #6b7280;">Email:</td><td style="font-weight: 600;">${customerEmail}</td></tr>
             <tr><td style="color: #6b7280;">Contact:</td><td style="font-weight: 600;">${inquiry.contact_number || 'N/A'}</td></tr>
-            ${!isTechnical ? `
+            ${type !== 'technical' ? `
             <tr><td style="color: #6b7280;">Job Title:</td><td style="font-weight: 600;">${inquiry.job_title || 'N/A'}</td></tr>
             <tr><td style="color: #6b7280;">Company:</td><td style="font-weight: 600;">${inquiry.company_hospital || 'N/A'}</td></tr>
             ` : ''}
@@ -50,8 +71,8 @@ export const sendInquiryEmail = async (inquiry: any) => {
 
         <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0;">
           <h3 style="margin-top: 0; font-size: 14px; color: #6b7280; text-transform: uppercase; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Inquiry Details</h3>
-          <p style="font-size: 14px; margin-bottom: 4px; color: #6b7280;">${isTechnical ? 'Subject:' : 'Product Interest:'}</p>
-          <p style="font-weight: 600; margin-top: 0;">${isTechnical ? inquiry.subject : inquiry.product_interest}</p>
+          <p style="font-size: 14px; margin-bottom: 4px; color: #6b7280;">${type === 'sales' ? 'Product Interest:' : 'Subject:'}</p>
+          <p style="font-weight: 600; margin-top: 0;">${type === 'sales' ? inquiry.product_interest : inquiry.subject}</p>
           
           <p style="font-size: 14px; margin-bottom: 4px; color: #6b7280; margin-top: 16px;">Message:</p>
           <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; font-style: italic; color: #4b5563;">
@@ -77,7 +98,7 @@ export const sendInquiryEmail = async (inquiry: any) => {
   const mailOptions = {
     from: `"Freya Inquiries" <${process.env.EMAIL_USER}>`,
     to: recipient,
-    replyTo: customerEmail, // Important: Replies go directly to the customer
+    replyTo: customerEmail,
     subject: subject,
     html: html,
   };

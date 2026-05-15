@@ -8,7 +8,8 @@ export interface TechnicalInquiryData {
   facility_id: string;
   subject: string;
   message: string;
-  email: string; // Adding email as it's required by the backend
+  email: string;
+  contact_number?: string;
 }
 
 export interface SalesInquiryData {
@@ -32,6 +33,7 @@ export interface PartnershipInquiryData {
   message: string;
   company_hospital: string;
   job_title: string;
+  contact_number?: string;
   facility_id?: string;
 }
 
