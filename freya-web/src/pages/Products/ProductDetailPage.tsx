@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchProductById } from '../../services/productService';
 import type { WebProduct } from '../../services/productService';
+import { submitInquiry } from '../../services/inquiryService';
 import './ProductDetailPage.css';
 
 const ProductDetailPage: React.FC = () => {
@@ -10,6 +11,7 @@ const ProductDetailPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [modalDismissed, setModalDismissed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '', lastName: '', email: '', phone: '',
     jobTitle: '', specialty: '', hospital: '', agreed: false,
@@ -60,10 +62,35 @@ const ProductDetailPage: React.FC = () => {
     setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Thank you! Our sales team will contact you shortly.');
-    closeModal();
+    if (isSubmitting || !product) return;
+
+    setIsSubmitting(true);
+    try {
+      await submitInquiry({
+        type: 'sales',
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        contact_number: formData.phone,
+        job_title: formData.jobTitle,
+        clinical_specialty: formData.specialty,
+        company_hospital: formData.hospital,
+        product_interest: product.name,
+        marketing_consent: formData.agreed
+      });
+      alert('Thank you! Our sales team will contact you shortly.');
+      setFormData({
+        firstName: '', lastName: '', email: '', phone: '',
+        jobTitle: '', specialty: '', hospital: '', agreed: false,
+      });
+      closeModal();
+    } catch (error) {
+      alert('Failed to submit inquiry. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -224,7 +251,9 @@ const ProductDetailPage: React.FC = () => {
                 </label>
               </div>
 
-              <button type="submit" className="modal-submit-btn">Submit Inquiry</button>
+              <button type="submit" className="modal-submit-btn" disabled={isSubmitting}>
+                {isSubmitting ? 'Sending...' : 'Submit Inquiry'}
+              </button>
             </form>
           </div>
         </div>

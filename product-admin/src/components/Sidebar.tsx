@@ -7,7 +7,9 @@ import {
   UserCircle,
   LogOut,
   ChevronRight,
-  Newspaper
+  Newspaper,
+  MessageSquare,
+  X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Sidebar.css';
@@ -15,15 +17,17 @@ import logoImg from '../assets/logo/logo.png';
 
 interface SidebarProps {
   isOpen: boolean;
+  onClose?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { logout } = useAuth();
 
   const navItems = [
     { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/products', icon: Package, label: 'Products' },
     { path: '/news', icon: Newspaper, label: 'News Feed' },
+    { path: '/inquiries', icon: MessageSquare, label: 'Inquiries' },
     { path: '/users', icon: Users, label: 'User Management' },
     { path: '/profile', icon: UserCircle, label: 'My Profile' },
   ];
@@ -34,6 +38,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         <div className="sidebar-brand">
           <img src={logoImg} alt="Logo" className="sidebar-logo-img" />
         </div>
+        {onClose && (
+          <button className="mobile-close-btn" onClick={onClose}>
+            <X size={20} />
+          </button>
+        )}
       </div>
 
 
