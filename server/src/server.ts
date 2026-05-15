@@ -19,10 +19,34 @@ const isProduction = process.env.NODE_ENV === 'production';
 app.use(helmet());
 
 // CORS configuration
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'https://freya-admin.vercel.app',
+  'https://freya-product-admin.vercel.app',
+].filter((origin): origin is string => Boolean(origin));
+
+const isLocalOrigin = (origin: string) =>
+  /^http:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?$/.test(origin);
+
 const corsOptions = {
-  origin: isProduction 
-    ? (process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : true) 
-    : true, 
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    if (!isProduction || isLocalOrigin(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`Not allowed by CORS: ${origin}`));
+  },
   credentials: true,
 };
 app.use(cors(corsOptions));

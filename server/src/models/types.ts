@@ -1,24 +1,31 @@
 export interface User {
   id: string;
   name: string;
+  full_name?: string;
   email: string;
   password?: string;
   avatar?: string;
+  avatar_url?: string;
   created_at: string;
+  role?: string;
 }
 
 export interface CreateUserDTO {
   name: string;
+  full_name?: string;
   email: string;
   password?: string;
   avatar?: string;
+  avatar_url?: string;
 }
 
 export interface UpdateUserDTO {
   name?: string;
+  full_name?: string;
   email?: string;
   password?: string;
   avatar?: string;
+  avatar_url?: string;
 }
 
 export interface Product {

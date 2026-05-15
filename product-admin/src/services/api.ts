@@ -1,8 +1,12 @@
 import axios from 'axios';
 
+const remoteApiUrl = 'https://freya-server-mu.vercel.app/api';
+const envApiUrl = import.meta.env.VITE_API_URL?.trim();
+const baseURL = envApiUrl || remoteApiUrl;
+
 const api = axios.create({
-  // Use environment variable or fallback to local/Vercel
-  baseURL: import.meta.env.VITE_API_URL || 'https://freya-server-mu.vercel.app/api',
+  // Use the hosted API by default.
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },

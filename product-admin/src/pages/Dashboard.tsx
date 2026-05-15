@@ -5,11 +5,9 @@ import {
   Package,
   Users,
   Calendar,
-  PlusCircle,
   ArrowUpRight,
   ArrowDownRight,
   Newspaper,
-  Plus,
   Mail
 } from 'lucide-react';
 
@@ -111,10 +109,6 @@ const Dashboard: React.FC = () => {
           <h1>Welcome Back, Freya</h1>
           <p>Here's what's happening with your store ngayon.</p>
         </div>
-        <button className="btn-primary" onClick={() => navigate('/news')}>
-          <PlusCircle size={20} />
-          <span>New Article</span>
-        </button>
       </header>
 
       <div className="stats-grid">
@@ -152,7 +146,7 @@ const Dashboard: React.FC = () => {
               <p>Loading...</p>
             ) : recentNews.length > 0 ? (
               recentNews.map((news) => (
-                <div key={news.id} className="recent-item">
+                <div key={news.id} className="recent-item" onClick={() => navigate('/news')} style={{ cursor: 'pointer' }}>
                   <div className="item-icon-small">
                     <Newspaper size={18} />
                   </div>
@@ -160,7 +154,6 @@ const Dashboard: React.FC = () => {
                     <h4>{news.title}</h4>
                     <span>{new Date(news.published_date).toLocaleDateString()} • {news.category}</span>
                   </div>
-                  <button className="icon-btn" onClick={() => navigate('/news')}><Plus size={16} /></button>
                 </div>
               ))
             ) : (
