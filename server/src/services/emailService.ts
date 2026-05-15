@@ -62,10 +62,12 @@ export const sendInquiryEmail = async (inquiry: any) => {
             <tr><td style="width: 120px; color: #6b7280;">Name:</td><td style="font-weight: 600;">${customerName}</td></tr>
             <tr><td style="color: #6b7280;">Email:</td><td style="font-weight: 600;">${customerEmail}</td></tr>
             <tr><td style="color: #6b7280;">Contact:</td><td style="font-weight: 600;">${inquiry.contact_number || 'N/A'}</td></tr>
-            ${type !== 'technical' ? `
+            ${type === 'technical' ? `
+            <tr><td style="color: #6b7280;">Facility ID:</td><td style="font-weight: 600;">${inquiry.facility_id || 'N/A'}</td></tr>
+            ` : `
             <tr><td style="color: #6b7280;">Job Title:</td><td style="font-weight: 600;">${inquiry.job_title || 'N/A'}</td></tr>
             <tr><td style="color: #6b7280;">Company:</td><td style="font-weight: 600;">${inquiry.company_hospital || 'N/A'}</td></tr>
-            ` : ''}
+            `}
           </table>
         </div>
 
