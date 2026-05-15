@@ -81,6 +81,7 @@ const Layout: React.FC = () => {
     <div className={`app-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
       <Sidebar
         isOpen={isSidebarOpen}
+        isMobile={isMobile}
         onClose={() => setIsSidebarOpen(false)}
       />
       {isMobile && isSidebarOpen && (

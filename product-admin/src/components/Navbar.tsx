@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Search, Bell, UserCircle } from 'lucide-react';
+import { Menu, Bell, UserCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
@@ -37,10 +37,6 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
         <button className="menu-toggle" onClick={onMenuClick}>
           <Menu size={24} />
         </button>
-        <div className="navbar-search">
-          <Search size={18} className="search-icon" />
-          <input type="text" placeholder="Search..." />
-        </div>
       </div>
       
       <div className="navbar-right">

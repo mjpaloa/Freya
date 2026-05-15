@@ -17,10 +17,11 @@ import logoImg from '../assets/logo/logo.png';
 
 interface SidebarProps {
   isOpen: boolean;
+  isMobile: boolean;
   onClose?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, isMobile, onClose }) => {
   const { logout } = useAuth();
 
   const navItems = [
@@ -55,7 +56,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             key={item.path}
             to={item.path}
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-            onClick={() => onClose?.()}
+            onClick={() => {
+              if (isMobile) {
+                onClose?.();
+              }
+            }}
           >
             <item.icon size={20} />
             <span>{item.label}</span>
@@ -68,7 +73,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         <button
           className="nav-link logout"
           onClick={() => {
-            onClose?.();
+            if (isMobile) {
+              onClose?.();
+            }
             logout();
           }}
         >
