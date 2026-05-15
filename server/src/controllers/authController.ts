@@ -10,5 +10,14 @@ export const authController = {
       message: 'Login successful',
       ...result
     });
+  }),
+
+  changePassword: asyncHandler(async (req: Request, res: Response) => {
+    const { current_password, new_password } = req.body;
+    // @ts-ignore - user added by middleware
+    const userId = req.user.id;
+    
+    await authService.changePassword(userId, current_password, new_password);
+    res.json({ message: 'Password changed successfully' });
   })
 };

@@ -29,15 +29,15 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
         <div className="nav-divider"></div>
         <div className="nav-profile">
           <div className="nav-avatar">
-            {user?.avatar_url ? (
-              <img src={user.avatar_url} alt="Profile" className="avatar-img" />
+            {user?.avatar ? (
+              <img src={user.avatar} alt="Profile" className="avatar-img" />
             ) : (
               <UserCircle size={20} />
             )}
           </div>
           <div className="nav-profile-info">
             <span className="nav-role">Admin</span>
-            <span className="nav-name">{user?.full_name || 'User'}</span>
+            <span className="nav-name">{user?.name || 'User'}</span>
           </div>
         </div>
       </div>

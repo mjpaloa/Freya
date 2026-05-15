@@ -43,5 +43,44 @@ export const authService = {
       user: userWithoutPassword,
       token
     };
+  },
+
+  async changePassword(userId: string, currentPassword?: string, newPassword?: string) {
+    if (!currentPassword || !newPassword) {
+      throw new Error('Current and new passwords are required');
+    }
+
+    // Find user
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (error || !user) {
+      throw new Error('User not found');
+    }
+
+    // Compare current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      throw new Error('Incorrect current password');
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update password
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ password: hashedNewPassword })
+      .eq('id', userId);
+
+    if (updateError) {
+      throw new Error('Failed to update password');
+    }
+
+    return true;
   }
 };
