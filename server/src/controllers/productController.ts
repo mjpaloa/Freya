@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { productService } from '../services/productService';
-import { userService } from '../services/userService';
+import { inquiryService } from '../services/inquiryService';
 import { sendProductBroadcast } from '../services/emailService';
 import { asyncHandler } from '../utils/asyncHandler';
 
@@ -22,18 +22,17 @@ export const productController = {
   create: asyncHandler(async (req: Request, res: Response) => {
     const product = await productService.create(req.body);
     
-    // Broadcast to all users
+    // Broadcast to all people who inquired
     try {
-      const users = await userService.getAll();
-      const userEmails = users.map(u => u.email).filter(Boolean) as string[];
-      if (userEmails.length > 0) {
+      const emails = await inquiryService.getAllUniqueEmails();
+      if (emails.length > 0) {
         // Run in background to not block response
-        sendProductBroadcast(product, userEmails).catch(err => {
+        sendProductBroadcast(product, emails).catch(err => {
           console.error('Failed to broadcast product email:', err);
         });
       }
     } catch (error) {
-      console.error('Error fetching users for broadcast:', error);
+      console.error('Error fetching inquiry emails for broadcast:', error);
     }
 
     res.status(201).json({ 
