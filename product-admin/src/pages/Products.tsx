@@ -346,7 +346,6 @@ ${formData.usage_purpose}
                             // 1. Generate unique path
                             const fileExt = file.name.split('.').pop();
                             const fileName = `${Math.random().toString(36).slice(2)}_${Date.now()}.${fileExt}`;
-                            const filePath = `brochures/${fileName}`;
 
                             // 2. Upload directly to Supabase Storage
                             const { error: uploadError } = await supabase.storage
