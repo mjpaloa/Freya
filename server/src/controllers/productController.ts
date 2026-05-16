@@ -13,8 +13,8 @@ export const productController = {
   getById: asyncHandler(async (req: Request, res: Response) => {
     const product = await productService.getById(req.params.id as string);
     if (!product) {
-       res.status(404).json({ error: 'Product not found' });
-       return;
+      res.status(404).json({ error: 'Product not found' });
+      return;
     }
     res.json(product);
   }),
@@ -44,9 +44,9 @@ export const productController = {
 
   update: asyncHandler(async (req: Request, res: Response) => {
     const product = await productService.update(req.params.id as string, req.body);
-    res.json({ 
-      message: 'Product updated successfully', 
-      data: product 
+    res.json({
+      message: 'Product updated successfully',
+      data: product
     });
   }),
 

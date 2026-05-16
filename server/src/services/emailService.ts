@@ -186,8 +186,8 @@ export const sendProductBroadcast = async (product: any, recipients: string[]) =
 
   const { logoAttachment, logoMarkup } = resolveLogoAsset();
   const safeName = escapeHtml(product.name);
-  const safeDescription = escapeHtml(product.description || 'Discover our newest addition to our medical catalog.');
-  const safePrice = product.price ? `₱${Number(product.price).toLocaleString()}` : '';
+  const safeInfo = escapeHtml(product.info || 'Discover our newest addition to our medical catalog.');
+  const safeType = escapeHtml(product.type || '');
   const productImage = product.image_url || '';
 
   const html = renderEmailShell(`
@@ -205,11 +205,10 @@ export const sendProductBroadcast = async (product: any, recipients: string[]) =
     </tr>
     <tr>
       <td style="padding: 48px 32px; text-align: center;">
-        <span style="display: inline-block; padding: 6px 12px; background-color: #e0e7ff; color: #4338ca; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">New Arrival</span>
+        <span style="display: inline-block; padding: 6px 12px; background-color: #e0e7ff; color: #4338ca; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">${safeType || 'New Arrival'}</span>
         <h1 style="margin: 0 0 16px 0; font-size: 32px; color: #1e293b; font-weight: 800; letter-spacing: -1px;">${safeName}</h1>
-        ${safePrice ? `<p style="margin: 0 0 24px 0; font-size: 24px; color: #6366f1; font-weight: 700;">${safePrice}</p>` : ''}
         <p style="margin: 0 0 32px 0; font-size: 16px; color: #64748b; line-height: 1.6; max-width: 480px; margin-left: auto; margin-right: auto;">
-          ${safeDescription}
+          ${safeInfo}
         </p>
         <a href="${WEBSITE_URL}products" style="display: inline-block; padding: 16px 32px; background-color: #6366f1; color: #ffffff; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 16px; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);">View on Website</a>
       </td>
@@ -233,6 +232,7 @@ export const sendProductBroadcast = async (product: any, recipients: string[]) =
 
   const mailOptions = {
     from: `"Freya Medical" <${process.env.EMAIL_USER}>`,
+    to: process.env.EMAIL_USER,
     bcc: recipients.join(','),
     subject: `🚀 New Product: ${safeName} is now available!`,
     html: html,
@@ -240,7 +240,9 @@ export const sendProductBroadcast = async (product: any, recipients: string[]) =
   };
 
   try {
+    console.log(`Attempting to broadcast product update to ${recipients.length} recipients...`);
     await transporter.sendMail(mailOptions);
+    console.log('Product broadcast sent successfully.');
     return true;
   } catch (error) {
     console.error('Error sending product broadcast:', error);
@@ -253,7 +255,8 @@ export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
 
   const { logoAttachment, logoMarkup } = resolveLogoAsset();
   const safeTitle = escapeHtml(news.title);
-  const safeSubtitle = escapeHtml(news.subtitle || 'Stay updated with the latest from Freya Medical.');
+  const safeCategory = escapeHtml(news.category || 'Latest News');
+  const safeExcerpt = escapeHtml(news.excerpt || 'Stay updated with the latest from Freya Medical.');
   const newsImage = news.image_url || '';
 
   const html = renderEmailShell(`
@@ -266,9 +269,9 @@ export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
     <!-- News Header -->
     <tr>
       <td style="padding: 48px 32px; background-color: #f8fafc;">
-        <span style="display: inline-block; padding: 4px 8px; background-color: #fef3c7; color: #d97706; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Latest News</span>
+        <span style="display: inline-block; padding: 4px 8px; background-color: #fef3c7; color: #d97706; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">${safeCategory}</span>
         <h1 style="margin: 0 0 12px 0; font-size: 28px; color: #1e293b; font-weight: 800; line-height: 1.2;">${safeTitle}</h1>
-        <p style="margin: 0; font-size: 16px; color: #64748b; line-height: 1.5;">${safeSubtitle}</p>
+        <p style="margin: 0; font-size: 16px; color: #64748b; line-height: 1.5;">${safeExcerpt}</p>
       </td>
     </tr>
     <!-- Image -->
@@ -283,7 +286,7 @@ export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
     <tr>
       <td style="padding: 48px 32px; text-align: left;">
         <div style="font-size: 16px; color: #334155; line-height: 1.8;">
-          ${escapeHtml(news.content).substring(0, 300)}...
+          ${safeExcerpt}
         </div>
         <div style="margin-top: 40px; text-align: center;">
           <a href="${WEBSITE_URL}news" style="display: inline-block; padding: 14px 28px; background-color: #1e293b; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px;">Read Full Story</a>
@@ -294,6 +297,7 @@ export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
 
   const mailOptions = {
     from: `"Freya Updates" <${process.env.EMAIL_USER}>`,
+    to: process.env.EMAIL_USER,
     bcc: recipients.join(','),
     subject: `📰 Fresh News: ${safeTitle}`,
     html: html,
@@ -301,7 +305,9 @@ export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
   };
 
   try {
+    console.log(`Attempting to broadcast news update to ${recipients.length} recipients...`);
     await transporter.sendMail(mailOptions);
+    console.log('News broadcast sent successfully.');
     return true;
   } catch (error) {
     console.error('Error sending news broadcast:', error);
@@ -352,5 +358,3 @@ export const sendReplyEmail = async (to: string, subject: string, message: strin
     return false;
   }
 };
-
-

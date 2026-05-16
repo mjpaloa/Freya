@@ -13,8 +13,8 @@ export const newsController = {
   getById: asyncHandler(async (req: Request, res: Response) => {
     const article = await newsService.getById(req.params.id as string);
     if (!article) {
-       res.status(404).json({ error: 'Article not found' });
-       return;
+      res.status(404).json({ error: 'Article not found' });
+      return;
     }
     res.json(article);
   }),
@@ -44,9 +44,9 @@ export const newsController = {
 
   update: asyncHandler(async (req: Request, res: Response) => {
     const article = await newsService.update(req.params.id as string, req.body);
-    res.json({ 
-      message: 'Article updated successfully', 
-      data: article 
+    res.json({
+      message: 'Article updated successfully',
+      data: article
     });
   }),
 
