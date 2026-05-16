@@ -26,31 +26,14 @@ const escapeHtml = (value: unknown) => {
 };
 
 const resolveLogoAsset = () => {
-  const logoCandidates = [
-    // Most likely location relative to this file (src/services/emailService.ts)
-    path.resolve(__dirname, '../assets/logo1.png'),
-    // Alternative locations
-    path.resolve(process.cwd(), 'src/assets/logo1.png'),
-    path.resolve(process.cwd(), 'server/src/assets/logo1.png'),
-    path.resolve(process.cwd(), 'assets/logo1.png'),
-  ];
-
-  const logoPath = logoCandidates.find((candidate) => fs.existsSync(candidate));
-  
-  if (logoPath) {
-    console.log('Logo found at:', logoPath);
-  } else {
-    console.error('CRITICAL: Logo NOT found in any of these locations:', logoCandidates);
-  }
-
-  const logoAttachment = logoPath
+  // Still include the logo attachment in case we want to use it elsewhere
+  const logoPath = path.resolve(__dirname, '../assets/logo1.png');
+  const logoAttachment = fs.existsSync(logoPath)
     ? [{ filename: 'logo1.png', path: logoPath, cid: 'freya-logo' }]
     : [];
   
-  // Use a generic placeholder if logo is missing, but prioritize the image
-  const logoMarkup = logoPath
-    ? `<img src="cid:freya-logo" alt="Freya Medical" style="display:block;height:60px;width:auto;margin:0 auto;filter:brightness(0) invert(1);" />`
-    : '<div style="height:60px;"></div>';
+  // Back to professional text branding as requested
+  const logoMarkup = '<span style="font-size:26px;font-weight:900;color:#ffffff;letter-spacing:1px;text-transform:uppercase;">Freya Medical</span>';
 
   return { logoAttachment, logoMarkup };
 };
