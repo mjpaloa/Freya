@@ -1,4 +1,6 @@
 import nodemailer from 'nodemailer';
+import fs from 'fs';
+import path from 'path';
 
 // Configure the email transporter
 // NOTE: You need to set these in your .env file
@@ -116,47 +118,65 @@ export const sendInquiryEmail = async (inquiry: any) => {
 };
 
 export const sendReplyEmail = async (to: string, subject: string, message: string) => {
+  const logoCandidates = [
+    path.resolve(process.cwd(), '../freya-web/public/logo1.png'),
+    path.resolve(process.cwd(), '../../freya-web/public/logo1.png'),
+  ];
+
+  const logoPath = logoCandidates.find((candidate) => fs.existsSync(candidate));
+  const logoAttachment = logoPath
+    ? [{
+        filename: 'logo1.png',
+        path: logoPath,
+        cid: 'freya-logo',
+      }]
+    : [];
+
   const mailOptions = {
     from: `"Freya Medical Support" <${process.env.EMAIL_USER}>`,
     to: to,
     subject: `Re: ${subject}`,
     html: `
-      <div style="font-family: 'Inter', sans-serif; color: #1f2937; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
-        <div style="background-color: #6366f1; padding: 32px; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 24px;">Freya Medical</h1>
-          <p style="color: rgba(255,255,255,0.8); margin-top: 8px;">Official Response</p>
+      <div style="font-family: Arial, Helvetica, sans-serif; color: #1f2937; line-height: 1.7; max-width: 640px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; background: #ffffff;">
+        <div style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); padding: 28px 32px; text-align: center;">
+          <img src="cid:freya-logo" alt="Freya Medical" style="max-width: 160px; width: 100%; height: auto; display: inline-block; margin-bottom: 14px;" />
+          <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;">Official Response</p>
         </div>
         
-        <div style="padding: 40px; background: white;">
-          <p style="font-size: 16px;">Hello,</p>
-          <div style="margin: 24px 0; font-size: 16px; color: #374151; white-space: pre-line;">
+        <div style="padding: 36px 40px; background: #ffffff;">
+          <p style="font-size: 16px; margin-top: 0; color: #111827;">Hello,</p>
+          <div style="margin: 20px 0 28px 0; font-size: 15px; color: #374151; white-space: pre-line;">
             ${message}
           </div>
-          <br>
-          <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 32px 0;">
-          <p style="font-size: 14px; color: #6b7280; margin-bottom: 12px;">
-            Thank you for reaching out to us.
-          </p>
-          <p style="font-size: 14px; color: #4b5563; margin: 0 0 8px 0;">
-            You may contact us at <strong>283629227</strong>.
-          </p>
+
+          <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 14px; padding: 24px; margin: 30px 0;">
+            <p style="margin: 0 0 10px 0; font-size: 14px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;">Contact Us</p>
+            <p style="margin: 0 0 8px 0; font-size: 15px; color: #111827;">
+              Thank you for reaching out to us. We truly appreciate the opportunity to assist you.
+            </p>
+            <p style="margin: 0 0 8px 0; font-size: 15px; color: #374151;">
+              For faster assistance, you may contact us at <strong>283629227</strong>.
+            </p>
+            <p style="margin: 0; font-size: 15px; color: #374151;">
+              You may also message us on our Facebook page:
+              <a href="https://www.facebook.com/freyatradinginc" target="_blank" rel="noopener noreferrer" style="color: #4f46e5; font-weight: 700; text-decoration: none;">
+                Freya Trading Incorporated
+              </a>
+            </p>
+          </div>
+
           <p style="font-size: 14px; color: #4b5563; margin: 0;">
-            Or message us on our Facebook page:
-            <a href="https://www.facebook.com/freyatradinginc" target="_blank" rel="noopener noreferrer" style="color: #6366f1; font-weight: 700; text-decoration: none;">
-              Freya Trading Incorporated
-            </a>
-          </p>
-          <p style="font-size: 14px; color: #4b5563; font-weight: 700; margin-top: 16px;">
             Best regards,<br>
-            Freya Medical Support Team
+            <strong>Freya Medical Support Team</strong>
           </p>
         </div>
         
-        <div style="background-color: #f9fafb; padding: 24px; text-align: center; font-size: 12px; color: #9ca3af;">
+        <div style="background-color: #f9fafb; padding: 18px 24px; text-align: center; font-size: 12px; color: #9ca3af;">
           <p>&copy; 2026 Freya Medical. Building a healthier future.</p>
         </div>
       </div>
     `,
+    attachments: logoAttachment,
   };
 
   try {
