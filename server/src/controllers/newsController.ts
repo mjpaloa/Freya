@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
 import { newsService } from '../services/newsService';
+import { userService } from '../services/userService';
+import { sendNewsBroadcast } from '../services/emailService';
 import { asyncHandler } from '../utils/asyncHandler';
 
 export const newsController = {
@@ -19,8 +21,23 @@ export const newsController = {
 
   create: asyncHandler(async (req: Request, res: Response) => {
     const article = await newsService.create(req.body);
+    
+    // Broadcast to all users
+    try {
+      const users = await userService.getAll();
+      const userEmails = users.map(u => u.email).filter(Boolean) as string[];
+      if (userEmails.length > 0) {
+        // Run in background to not block response
+        sendNewsBroadcast(article, userEmails).catch(err => {
+          console.error('Failed to broadcast news email:', err);
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching users for broadcast:', error);
+    }
+
     res.status(201).json({ 
-      message: 'Article created successfully', 
+      message: 'Article created successfully and broadcast started', 
       data: article 
     });
   }),
