@@ -256,13 +256,18 @@ export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
 
   try {
     const transporter = getTransporter();
-    if (!transporter) return false;
-    console.log(`[BROADCAST] Sending news update to ${recipients.length} users...`);
+    if (!transporter) {
+      console.error('[CRITICAL] No email transporter available for news broadcast.');
+      return false;
+    }
+    console.log(`[BROADCAST] Triggering news update: "${safeTitle}"`);
+    console.log(`[BROADCAST] Target recipients: ${recipients.length} users`);
+    
     await transporter.sendMail(mailOptions);
-    console.log('[SUCCESS] News broadcast completed.');
+    console.log('[SUCCESS] News broadcast sent successfully to all recipients.');
     return true;
   } catch (error) {
-    console.error('[ERROR] News broadcast failed:', error);
+    console.error('[ERROR] News broadcast failed to deliver:', error);
     return false;
   }
 };

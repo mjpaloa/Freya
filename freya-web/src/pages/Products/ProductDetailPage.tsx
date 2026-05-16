@@ -152,17 +152,36 @@ const ProductDetailPage: React.FC = () => {
       <div className="product-details-content">
         <div className="container">
           <div className="details-full-width">
-            {product.features && product.features.length > 0 && (
+            {((product.features && product.features.length > 0) || (product.categorizedSpecs && product.categorizedSpecs.length > 0)) && (
               <section className="detail-section">
                 <h3>Technical Specifications</h3>
-                <ul className="specs-list">
-                  {product.features.map((feature, i) => (
-                    <li key={i}>
-                      <span className="dot"></span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+                
+                {product.categorizedSpecs ? (
+                  <div className="categorized-specs">
+                    {product.categorizedSpecs.map((section, idx) => (
+                      <div key={idx} className="spec-category">
+                        <h4 style={{ color: '#111827', fontSize: '1.1rem', margin: '1.5rem 0 1rem', fontWeight: '700' }}>{section.title}</h4>
+                        <ul className="specs-list">
+                          {section.items.map((item, i) => (
+                            <li key={i}>
+                              <span className="dot"></span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <ul className="specs-list">
+                    {product.features.map((feature, i) => (
+                      <li key={i}>
+                        <span className="dot"></span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </section>
             )}
 

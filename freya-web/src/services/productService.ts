@@ -19,6 +19,7 @@ export interface WebProduct {
   description: string;
   image: string;
   features: string[];
+  categorizedSpecs?: { title: string, items: string[] }[];
   usage?: string;
   brochure_url?: string;
 }
@@ -35,6 +36,7 @@ export const fetchProducts = async (): Promise<WebProduct[]> => {
       // Attempt to extract description, specs, and usage
       let description = infoText;
       let features: string[] = [];
+      let categorizedSpecs: { title: string, items: string[] }[] = [];
       let usage = '';
 
       if (infoText.includes('[DESCRIPTION]')) {
@@ -44,7 +46,21 @@ export const fetchProducts = async (): Promise<WebProduct[]> => {
         usage = specsPart.split('[USAGE]')[1]?.trim() || '';
         
         if (specs) {
-          features = specs.split('\n').map(s => s.trim().replace(/^-/, '').trim()).filter(s => s !== '');
+          const lines = specs.split('\n').map(s => s.trim()).filter(Boolean);
+          let currentSection: { title: string, items: string[] } | null = null;
+          
+          lines.forEach(line => {
+            if (line.startsWith('[SECTION:')) {
+              if (currentSection) categorizedSpecs.push(currentSection);
+              const title = line.replace('[SECTION:', '').replace(']', '').trim();
+              currentSection = { title, items: [] };
+            } else if (currentSection) {
+              currentSection.items.push(line.replace(/^-/, '').trim());
+            } else {
+              features.push(line.replace(/^-/, '').trim());
+            }
+          });
+          if (currentSection) categorizedSpecs.push(currentSection);
         }
       }
 
@@ -55,6 +71,7 @@ export const fetchProducts = async (): Promise<WebProduct[]> => {
         description: description,
         image: sp.image_url || 'https://placehold.co/600x400/0b1c30/ffffff?text=Image+Coming+Soon',
         features: features,
+        categorizedSpecs: categorizedSpecs.length > 0 ? categorizedSpecs : undefined,
         usage: usage,
         brochure_url: sp.brochure_url
       };
@@ -76,6 +93,7 @@ export const fetchProductById = async (id: string): Promise<WebProduct | null> =
     // Attempt to extract description, specs, and usage
     let description = infoText;
     let features: string[] = [];
+    let categorizedSpecs: { title: string, items: string[] }[] = [];
     let usage = '';
 
     if (infoText.includes('[DESCRIPTION]')) {
@@ -85,7 +103,21 @@ export const fetchProductById = async (id: string): Promise<WebProduct | null> =
       usage = specsPart.split('[USAGE]')[1]?.trim() || '';
       
       if (specs) {
-        features = specs.split('\n').map(s => s.trim().replace(/^-/, '').trim()).filter(s => s !== '');
+        const lines = specs.split('\n').map(s => s.trim()).filter(Boolean);
+        let currentSection: { title: string, items: string[] } | null = null;
+        
+        lines.forEach(line => {
+          if (line.startsWith('[SECTION:')) {
+            if (currentSection) categorizedSpecs.push(currentSection);
+            const title = line.replace('[SECTION:', '').replace(']', '').trim();
+            currentSection = { title, items: [] };
+          } else if (currentSection) {
+            currentSection.items.push(line.replace(/^-/, '').trim());
+          } else {
+            features.push(line.replace(/^-/, '').trim());
+          }
+        });
+        if (currentSection) categorizedSpecs.push(currentSection);
       }
     }
 
@@ -96,6 +128,7 @@ export const fetchProductById = async (id: string): Promise<WebProduct | null> =
       description: description,
       image: sp.image_url || 'https://placehold.co/600x400/0b1c30/ffffff?text=Image+Coming+Soon',
       features: features,
+      categorizedSpecs: categorizedSpecs.length > 0 ? categorizedSpecs : undefined,
       usage: usage,
       brochure_url: sp.brochure_url
     };
