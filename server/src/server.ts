@@ -64,12 +64,13 @@ if (!isProduction) {
   app.use('/api/', limiter);
 }
 
-
 // Optimization & Logging
 app.use(compression());
 app.use(morgan(isProduction ? 'combined' : 'dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// Increase payload limits for large brochures
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Basic Route
 app.get('/', (req: Request, res: Response) => {
@@ -95,4 +96,3 @@ if (!isProduction) {
     console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`);
   });
 }
-

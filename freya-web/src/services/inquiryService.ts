@@ -19,7 +19,7 @@ export interface SalesInquiryData {
   email: string;
   contact_number: string;
   job_title: string;
-  clinical_specialty: string;
+  clinical_specialty?: string;
   company_hospital: string;
   product_interest: string;
   marketing_consent: boolean;
