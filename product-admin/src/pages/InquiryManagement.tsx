@@ -297,7 +297,7 @@ const InquiryManagement: React.FC = () => {
                   )}
                 </div>
 
-                {selectedInquiry.type !== 'sales' && (
+                {selectedInquiry.type !== 'sales' && selectedInquiry.message && (
                   <div className="message-container">
                     <label>Message</label>
                     <div className="message-content">{selectedInquiry.message}</div>
