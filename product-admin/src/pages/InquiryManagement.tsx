@@ -138,7 +138,7 @@ const InquiryManagement: React.FC = () => {
       <div className="inquiries-page animate-fade-in">
         <div className="inquiry-header">
           <div className="header-title-section">
-            <h1>Customer Inquiries <span style={{ fontSize: '0.8rem', opacity: 0.5 }}>v2.1</span></h1>
+            <h1>Customer Inquiries</h1>
             <p>Monitor and respond to technical support, sales, and partnership requests.</p>
           </div>
           
