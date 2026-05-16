@@ -13,7 +13,7 @@ const ProductDetailPage: React.FC = () => {
   const [modalDismissed, setModalDismissed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '', lastName: '', email: '', phone: '', agreed: false,
+    firstName: '', lastName: '', email: '', phone: '', hospital: '', jobTitle: '', agreed: false,
   });
   const hasTriggered = useRef(false);
 
@@ -73,12 +73,14 @@ const ProductDetailPage: React.FC = () => {
         last_name: formData.lastName,
         email: formData.email,
         contact_number: formData.phone,
+        company_hospital: formData.hospital,
+        job_title: formData.jobTitle,
         product_interest: product.name,
         marketing_consent: formData.agreed
       });
       alert('Thank you! Our sales team will contact you shortly.');
       setFormData({
-        firstName: '', lastName: '', email: '', phone: '', agreed: false,
+        firstName: '', lastName: '', email: '', phone: '', hospital: '', jobTitle: '', agreed: false,
       });
       closeModal();
     } catch (error) {
@@ -152,36 +154,17 @@ const ProductDetailPage: React.FC = () => {
       <div className="product-details-content">
         <div className="container">
           <div className="details-full-width">
-            {((product.features && product.features.length > 0) || (product.categorizedSpecs && product.categorizedSpecs.length > 0)) && (
+            {product.features && product.features.length > 0 && (
               <section className="detail-section">
                 <h3>Technical Specifications</h3>
-                
-                {product.categorizedSpecs ? (
-                  <div className="categorized-specs">
-                    {product.categorizedSpecs.map((section, idx) => (
-                      <div key={idx} className="spec-category">
-                        <h4 style={{ color: '#111827', fontSize: '1.1rem', margin: '1.5rem 0 1rem', fontWeight: '700' }}>{section.title}</h4>
-                        <ul className="specs-list">
-                          {section.items.map((item, i) => (
-                            <li key={i}>
-                              <span className="dot"></span>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <ul className="specs-list">
-                    {product.features.map((feature, i) => (
-                      <li key={i}>
-                        <span className="dot"></span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <ul className="specs-list">
+                  {product.features.map((feature, i) => (
+                    <li key={i}>
+                      <span className="dot"></span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
               </section>
             )}
 
@@ -234,6 +217,17 @@ const ProductDetailPage: React.FC = () => {
                 <div className="modal-form-group">
                   <label>Contact Number *</label>
                   <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleFormChange} required />
+                </div>
+              </div>
+
+              <div className="modal-form-row">
+                <div className="modal-form-group">
+                  <label>Company Name *</label>
+                  <input type="text" name="hospital" placeholder="e.g. MedSupply Co." value={formData.hospital} onChange={handleFormChange} required />
+                </div>
+                <div className="modal-form-group">
+                  <label>Job Title *</label>
+                  <input type="text" name="jobTitle" placeholder="e.g. Purchase Manager" value={formData.jobTitle} onChange={handleFormChange} required />
                 </div>
               </div>
 

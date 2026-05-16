@@ -9,6 +9,8 @@ export default function InquiryForm() {
     facilityId: '',
     subject: '',
     message: '',
+    company: '',
+    jobTitle: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -37,6 +39,8 @@ export default function InquiryForm() {
                 facility_id: 'N/A',
                 subject: formData.subject,
                 message: formData.message,
+                company_hospital: formData.company,
+                job_title: formData.jobTitle,
               }
             : {
                 type: 'technical',
@@ -49,7 +53,7 @@ export default function InquiryForm() {
               }
       );
       alert('Your inquiry has been submitted. Our team will respond shortly.');
-      setFormData({ fullName: '', email: '', phone: '', facilityId: '', subject: '', message: '' });
+      setFormData({ fullName: '', email: '', phone: '', facilityId: '', subject: '', message: '', company: '', jobTitle: '' });
     } catch (error) {
       alert('Failed to submit inquiry. Please try again later.');
     } finally {
@@ -89,6 +93,36 @@ export default function InquiryForm() {
               placeholder="name@email.com"
               required
               value={formData.email}
+              onChange={handleChange}
+              style={{ width: '100%', padding: '12px 16px', borderRadius: '4px', border: '1px solid #e2e8f0', background: '#f8fafc' }}
+            />
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+          <div className="form-group" style={{ flex: 1, minWidth: '250px' }}>
+            <label htmlFor="company" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#1a1c2e', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.05em' }}>Company Name *</label>
+            <input
+              type="text"
+              id="company"
+              name="company"
+              placeholder="e.g. MedSupply Co."
+              required
+              value={formData.company}
+              onChange={handleChange}
+              style={{ width: '100%', padding: '12px 16px', borderRadius: '4px', border: '1px solid #e2e8f0', background: '#f8fafc' }}
+            />
+          </div>
+
+          <div className="form-group" style={{ flex: 1, minWidth: '250px' }}>
+            <label htmlFor="jobTitle" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#1a1c2e', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.05em' }}>Job Title *</label>
+            <input
+              type="text"
+              id="jobTitle"
+              name="jobTitle"
+              placeholder="e.g. Purchase Manager"
+              required
+              value={formData.jobTitle}
               onChange={handleChange}
               style={{ width: '100%', padding: '12px 16px', borderRadius: '4px', border: '1px solid #e2e8f0', background: '#f8fafc' }}
             />

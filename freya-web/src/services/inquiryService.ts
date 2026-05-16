@@ -18,11 +18,11 @@ export interface SalesInquiryData {
   last_name: string;
   email: string;
   contact_number: string;
+  job_title: string;
+  clinical_specialty: string;
+  company_hospital: string;
   product_interest: string;
   marketing_consent: boolean;
-  job_title?: string;
-  clinical_specialty?: string;
-  company_hospital?: string;
 }
 
 export interface PartnershipInquiryData {
@@ -31,8 +31,8 @@ export interface PartnershipInquiryData {
   email: string;
   subject: string;
   message: string;
-  company_hospital?: string;
-  job_title?: string;
+  company_hospital: string;
+  job_title: string;
   contact_number?: string;
   facility_id?: string;
 }
