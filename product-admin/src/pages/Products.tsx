@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../services/api';
+import { supabase } from '../services/supabaseClient';
 import '../styles/Products.css';
 import '../styles/ProductForm.css';
 
@@ -328,26 +329,42 @@ ${formData.usage_purpose}
                       />
                     </div>
                   </div>
-
                   <div className="pf-field">
                     <label className="pf-label">Product Brochure (PDF)</label>
                     <div className="pf-file-wrapper">
                       <input
                         type="file"
                         accept=".pdf"
+                        disabled={isUploading}
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
-                          const fd = new FormData();
-                          fd.append('brochure', file);
+
                           try {
                             setIsUploading(true);
-                            const res = await api.post('/upload/brochure', fd, {
-                              headers: { 'Content-Type': 'multipart/form-data' },
-                            });
-                            setFormData({ ...formData, brochure_url: res.data.url });
-                          } catch (err) {
+                            
+                            // 1. Generate unique path
+                            const fileExt = file.name.split('.').pop();
+                            const fileName = `${Math.random().toString(36).slice(2)}_${Date.now()}.${fileExt}`;
+                            const filePath = `brochures/${fileName}`;
+
+                            // 2. Upload directly to Supabase Storage
+                            const { error: uploadError } = await supabase.storage
+                              .from('freya-assets') // Make sure this bucket exists and is public
+                              .upload(filePath, file);
+
+                            if (uploadError) throw uploadError;
+
+                            // 3. Get Public URL
+                            const { data: { publicUrl } } = supabase.storage
+                              .from('freya-assets')
+                              .getPublicUrl(filePath);
+
+                            setFormData({ ...formData, brochure_url: publicUrl });
+                            alert('Brochure uploaded successfully!');
+                          } catch (err: any) {
                             console.error('Upload failed:', err);
+                            alert(`Upload failed: ${err.message || 'Unknown error'}`);
                           } finally {
                             setIsUploading(false);
                           }
@@ -355,7 +372,7 @@ ${formData.usage_purpose}
                       />
                       {isUploading && (
                         <span className="pf-upload-loader">
-                          <Loader2 size={14} className="spinner" /> Uploading...
+                          <Loader2 size={14} className="spinner" /> Uploading to Cloud...
                         </span>
                       )}
                       {!isUploading && formData.brochure_url && (
