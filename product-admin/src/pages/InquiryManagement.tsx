@@ -297,10 +297,12 @@ const InquiryManagement: React.FC = () => {
                   )}
                 </div>
 
-                <div className="message-container">
-                  <label>Message</label>
-                  <div className="message-content">{selectedInquiry.message}</div>
-                </div>
+                {selectedInquiry.type !== 'sales' && (
+                  <div className="message-container">
+                    <label>Message</label>
+                    <div className="message-content">{selectedInquiry.message}</div>
+                  </div>
+                )}
 
                 <div className="reply-section" style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--glass-border)' }}>
                   <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', marginBottom: '12px' }}>Send Official Reply</label>
