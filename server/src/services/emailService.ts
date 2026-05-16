@@ -75,9 +75,10 @@ const renderEmailShell = (content: string) => `
 
 const resolveLogoAsset = () => {
   const logoCandidates = [
+    path.resolve(process.cwd(), 'src/assets/logo1.png'),
+    path.resolve(process.cwd(), 'assets/logo1.png'),
     path.resolve(process.cwd(), '../freya-web/public/logo1.png'),
     path.resolve(process.cwd(), '../../freya-web/public/logo1.png'),
-    path.resolve(process.cwd(), 'public/logo1.png'),
   ];
 
   const logoPath = logoCandidates.find((candidate) => fs.existsSync(candidate));
@@ -85,8 +86,8 @@ const resolveLogoAsset = () => {
     ? [{ filename: 'logo1.png', path: logoPath, cid: 'freya-logo' }]
     : [];
   const logoMarkup = logoPath
-    ? '<img src="cid:freya-logo" alt="Freya" style="display: block; height: 32px; width: auto;">'
-    : '<span style="font-size: 24px; font-weight: 800; color: #6366f1; letter-spacing: -1px;">Freya</span>';
+    ? '<img src="cid:freya-logo" alt="Freya" style="display: block; height: 50px; width: auto; margin: 0 auto;">'
+    : '<span style="font-size: 28px; font-weight: 800; color: #6366f1; letter-spacing: -1px; display: block; text-align: center;">Freya</span>';
 
   return { logoAttachment, logoMarkup };
 };
@@ -119,9 +120,9 @@ export const sendInquiryEmail = async (inquiry: any) => {
   const html = renderEmailShell(`
     <!-- Header -->
     <tr>
-      <td style="padding: 32px; background-color: #0f172a; display: flex; align-items: center; justify-content: space-between;">
+      <td style="padding: 40px 32px; background-color: #ffffff; text-align: center; border-bottom: 1px solid #f1f5f9;">
         ${logoMarkup}
-        <span style="color: #94a3b8; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Internal Notification</span>
+        <div style="margin-top: 12px; color: #94a3b8; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Internal Notification</div>
       </td>
     </tr>
     <!-- Hero Section -->
@@ -192,7 +193,7 @@ export const sendProductBroadcast = async (product: any, recipients: string[]) =
   const html = renderEmailShell(`
     <!-- Header -->
     <tr>
-      <td style="padding: 24px 32px; background-color: #ffffff; border-bottom: 1px solid #f1f5f9;">
+      <td style="padding: 40px 32px; background-color: #ffffff; text-align: center; border-bottom: 1px solid #f1f5f9;">
         ${logoMarkup}
       </td>
     </tr>
@@ -258,7 +259,7 @@ export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
   const html = renderEmailShell(`
     <!-- Header -->
     <tr>
-      <td style="padding: 24px 32px; background-color: #ffffff; border-bottom: 1px solid #f1f5f9;">
+      <td style="padding: 40px 32px; background-color: #ffffff; text-align: center; border-bottom: 1px solid #f1f5f9;">
         ${logoMarkup}
       </td>
     </tr>
@@ -316,7 +317,7 @@ export const sendReplyEmail = async (to: string, subject: string, message: strin
   const html = renderEmailShell(`
     <!-- Header -->
     <tr>
-      <td style="padding: 32px; background-color: #ffffff; border-bottom: 1px solid #f1f5f9;">
+      <td style="padding: 40px 32px; background-color: #ffffff; text-align: center; border-bottom: 1px solid #f1f5f9;">
         ${logoMarkup}
       </td>
     </tr>
@@ -351,4 +352,5 @@ export const sendReplyEmail = async (to: string, subject: string, message: strin
     return false;
   }
 };
+
 
