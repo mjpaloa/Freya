@@ -23,6 +23,7 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   'https://freya-admin.vercel.app',
   'https://freya-product-admin.vercel.app',
+  'https://freya-ivory.vercel.app',
 ].filter((origin): origin is string => Boolean(origin));
 
 const isLocalOrigin = (origin: string) =>
