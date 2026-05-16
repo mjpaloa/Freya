@@ -110,6 +110,8 @@ export const sendInquiryEmail = async (inquiry: any) => {
   const safeEmail = escapeHtml(inquiry.email);
   const safeSubject = escapeHtml(type === 'sales' ? inquiry.product_interest : inquiry.subject);
   const safeMessage = escapeHtml(inquiry.message);
+  const safePhone = escapeHtml(inquiry.contact_number || '');
+  const safeFacilityId = escapeHtml(inquiry.facility_id || '');
   const safeEmailUser = escapeHtml(process.env.EMAIL_USER);
 
   const html = renderEmailShell(`
@@ -126,6 +128,8 @@ export const sendInquiryEmail = async (inquiry: any) => {
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr><td style="padding:4px 0;font-size:13px;color:#6b7280;">Name</td><td style="padding:4px 0;font-size:13px;font-weight:700;color:#111827;text-align:right;">${safeName}</td></tr>
             <tr><td style="padding:4px 0;font-size:13px;color:#6b7280;">Email</td><td style="padding:4px 0;font-size:13px;font-weight:700;color:${accentColor};text-align:right;">${safeEmail}</td></tr>
+            ${inquiry.contact_number ? `<tr><td style="padding:4px 0;font-size:13px;color:#6b7280;">Contact</td><td style="padding:4px 0;font-size:13px;font-weight:700;color:#111827;text-align:right;">${safePhone}</td></tr>` : ''}
+            ${inquiry.facility_id && inquiry.facility_id !== 'N/A' ? `<tr><td style="padding:4px 0;font-size:13px;color:#6b7280;">Facility ID</td><td style="padding:4px 0;font-size:13px;font-weight:700;color:#111827;text-align:right;">${safeFacilityId}</td></tr>` : ''}
             <tr><td style="padding:4px 0;font-size:13px;color:#6b7280;">Subject</td><td style="padding:4px 0;font-size:13px;font-weight:700;color:#111827;text-align:right;">${safeSubject}</td></tr>
           </table>
         </div>
