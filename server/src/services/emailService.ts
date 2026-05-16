@@ -181,11 +181,7 @@ export const sendProductBroadcast = async (product: any, recipients: string[]) =
     </div>
     ${productImage ? `<div style="padding:0;"><img src="${productImage}" alt="${safeName}" style="width:100%;height:auto;display:block;" /></div>` : ''}
     <div style="padding:32px;">
-      <p style="margin:0 0 24px;font-size:16px;color:#374151;line-height:1.7;">${safeInfo}</p>
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin-bottom:32px;">
-        <h3 style="margin:0 0 16px;font-size:14px;font-weight:700;color:#1e293b;">Why choose this product?</h3>
-        <p style="margin:0;font-size:14px;color:#64748b;line-height:1.6;">Our medical equipment is sourced from the most reliable manufacturers, ensuring durability and precision for your facility.</p>
-      </div>
+      <p style="margin:0 0 24px;font-size:16px;color:#374151;line-height:1.7;text-align:center;">We are excited to introduce our latest addition to the medical equipment catalog. Discover how this new solution can benefit your facility.</p>
       <a href="${WEBSITE_URL}products" style="display:block;text-align:center;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:16px;border-radius:12px;font-size:15px;font-weight:700;">Explore Product Catalog</a>
       <div style="margin-top:32px;padding-top:32px;border-top:1px solid #e5e7eb;">
         <p style="margin:0 0 16px;font-size:13px;font-weight:700;color:#1e293b;text-transform:uppercase;letter-spacing:1px;text-align:center;">Need Assistance?</p>

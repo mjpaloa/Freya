@@ -39,7 +39,7 @@ export const fetchProducts = async (): Promise<WebProduct[]> => {
       let categorizedSpecs: { title: string, items: string[] }[] = [];
       let usage = '';
 
-      if (infoText.includes('[DESCRIPTION]')) {
+      if (infoText.includes('[TECHNICAL SPECS]')) {
         description = infoText.split('[TECHNICAL SPECS]')[0]?.replace('[DESCRIPTION]', '').trim() || infoText;
         const specsPart = infoText.split('[TECHNICAL SPECS]')[1] || '';
         const specs = specsPart.split('[USAGE]')[0]?.trim() || '';
@@ -50,14 +50,13 @@ export const fetchProducts = async (): Promise<WebProduct[]> => {
           let currentSection: { title: string, items: string[] } | null = null;
           
           lines.forEach(line => {
-            if (line.startsWith('[SECTION:')) {
+            if (!line.startsWith('-') && !line.startsWith('•') && !line.startsWith('*')) {
               if (currentSection) categorizedSpecs.push(currentSection);
-              const title = line.replace('[SECTION:', '').replace(']', '').trim();
-              currentSection = { title, items: [] };
+              currentSection = { title: line, items: [] };
             } else if (currentSection) {
-              currentSection.items.push(line.replace(/^-/, '').trim());
+              currentSection.items.push(line.replace(/^[-•*]/, '').trim());
             } else {
-              features.push(line.replace(/^-/, '').trim());
+              features.push(line.replace(/^[-•*]/, '').trim());
             }
           });
           if (currentSection) categorizedSpecs.push(currentSection);
@@ -96,30 +95,32 @@ export const fetchProductById = async (id: string): Promise<WebProduct | null> =
     let categorizedSpecs: { title: string, items: string[] }[] = [];
     let usage = '';
 
-    if (infoText.includes('[DESCRIPTION]')) {
-      description = infoText.split('[TECHNICAL SPECS]')[0]?.replace('[DESCRIPTION]', '').trim() || infoText;
-      const specsPart = infoText.split('[TECHNICAL SPECS]')[1] || '';
-      const specs = specsPart.split('[USAGE]')[0]?.trim() || '';
-      usage = specsPart.split('[USAGE]')[1]?.trim() || '';
-      
-      if (specs) {
-        const lines = specs.split('\n').map(s => s.trim()).filter(Boolean);
-        let currentSection: { title: string, items: string[] } | null = null;
+      if (infoText.includes('[TECHNICAL SPECS]')) {
+        description = infoText.split('[TECHNICAL SPECS]')[0]?.replace('[DESCRIPTION]', '').trim() || infoText;
+        const specsPart = infoText.split('[TECHNICAL SPECS]')[1] || '';
+        const specs = specsPart.split('[USAGE]')[0]?.trim() || '';
+        usage = specsPart.split('[USAGE]')[1]?.trim() || '';
         
-        lines.forEach(line => {
-          if (line.startsWith('[SECTION:')) {
-            if (currentSection) categorizedSpecs.push(currentSection);
-            const title = line.replace('[SECTION:', '').replace(']', '').trim();
-            currentSection = { title, items: [] };
-          } else if (currentSection) {
-            currentSection.items.push(line.replace(/^-/, '').trim());
-          } else {
-            features.push(line.replace(/^-/, '').trim());
-          }
-        });
-        if (currentSection) categorizedSpecs.push(currentSection);
+        if (specs) {
+          const lines = specs.split('\n').map(s => s.trim()).filter(Boolean);
+          let currentSection: { title: string, items: string[] } | null = null;
+          
+          lines.forEach(line => {
+            // If line doesn't start with a dash/bullet, treat it as a potential title
+            if (!line.startsWith('-') && !line.startsWith('•') && !line.startsWith('*')) {
+              if (currentSection) categorizedSpecs.push(currentSection);
+              currentSection = { title: line, items: [] };
+            } else if (currentSection) {
+              // It's a bullet point under a title
+              currentSection.items.push(line.replace(/^[-•*]/, '').trim());
+            } else {
+              // It's a bullet point but no title was defined yet
+              features.push(line.replace(/^[-•*]/, '').trim());
+            }
+          });
+          if (currentSection) categorizedSpecs.push(currentSection);
+        }
       }
-    }
 
     return {
       id: sp.id,
