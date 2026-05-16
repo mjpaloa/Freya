@@ -29,6 +29,7 @@ const resolveLogoAsset = () => {
   const logoCandidates = [
     path.resolve(process.cwd(), 'src/assets/logo1.png'),
     path.resolve(process.cwd(), 'assets/logo1.png'),
+    path.resolve(process.cwd(), 'public/logo1.png'),
     path.resolve(process.cwd(), '../freya-web/public/logo1.png'),
     path.resolve(process.cwd(), '../../freya-web/public/logo1.png'),
   ];
@@ -37,32 +38,52 @@ const resolveLogoAsset = () => {
   const logoAttachment = logoPath
     ? [{ filename: 'logo1.png', path: logoPath, cid: 'freya-logo' }]
     : [];
+  
+  // High-quality logo markup
   const logoMarkup = logoPath
-    ? '<img src="cid:freya-logo" alt="Freya Medical" style="display:block;height:40px;width:auto;margin:0 auto;" />'
-    : '<span style="font-size:24px;font-weight:800;color:#ffffff;display:block;text-align:center;">Freya</span>';
+    ? `<img src="cid:freya-logo" alt="Freya Medical" style="display:block;height:50px;width:auto;margin:0 auto;filter:brightness(0) invert(1);" />`
+    : '<span style="font-size:28px;font-weight:900;color:#ffffff;letter-spacing:-1px;">FREYA MEDICAL</span>';
 
   return { logoAttachment, logoMarkup };
 };
 
 const renderEmailShell = (content: string) => `
-  <div style="font-family:-apple-system,'Segoe UI',sans-serif;color:#111827;line-height:1.6;max-width:560px;margin:0 auto;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;background-color:#ffffff;">
+  <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;line-height:1.6;max-width:600px;margin:0 auto;border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;background-color:#ffffff;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1);">
     ${content}
   </div>
 `;
 
 const renderContactRows = (accentColor: string) => `
-  <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#f8fafc;border-radius:10px;border:0.5px solid #e2e8f0;margin-bottom:10px;">
-    <div style="width:32px;height:32px;background:#ede9fe;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;">📞</div>
-    <div>
-      <p style="margin:0;font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Support Hotline</p>
-      <p style="margin:0;font-size:14px;font-weight:700;color:#1e293b;">283629227</p>
+  <div style="display:table;width:100%;border-collapse:separate;border-spacing:0 12px;">
+    <div style="display:table-row;">
+      <div style="display:table-cell;vertical-align:middle;padding:16px;background:#f8fafc;border-radius:12px;border:1px solid #edf2f7;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td width="48" style="padding-right:16px;">
+              <div style="width:40px;height:40px;background:#ede9fe;border-radius:10px;text-align:center;line-height:40px;font-size:20px;">📞</div>
+            </td>
+            <td>
+              <p style="margin:0;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Support Hotline</p>
+              <p style="margin:0;font-size:15px;font-weight:800;color:#1e293b;">283629227</p>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-  </div>
-  <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#f8fafc;border-radius:10px;border:0.5px solid #e2e8f0;">
-    <div style="width:32px;height:32px;background:#eff6ff;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;">💬</div>
-    <div>
-      <p style="margin:0;font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Facebook Messenger</p>
-      <a href="https://www.facebook.com/freyatradinginc" style="display:block;font-size:14px;font-weight:700;color:#1877f2;text-decoration:none;">Freya Trading Incorporated</a>
+    <div style="display:table-row;">
+      <div style="display:table-cell;vertical-align:middle;padding:16px;background:#f8fafc;border-radius:12px;border:1px solid #edf2f7;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td width="48" style="padding-right:16px;">
+              <div style="width:40px;height:40px;background:#eff6ff;border-radius:10px;text-align:center;line-height:40px;font-size:20px;">💬</div>
+            </td>
+            <td>
+              <p style="margin:0;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Messenger</p>
+              <a href="https://www.facebook.com/freyatradinginc" style="display:block;font-size:15px;font-weight:800;color:#1877f2;text-decoration:none;">Freya Trading Incorporated</a>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
 `;
