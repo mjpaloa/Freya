@@ -78,14 +78,10 @@
   background: rgba(245, 158, 11, 0.1);
 }
 
+.status-indicator.done,
 .status-indicator.responded {
   color: var(--primary);
   background: rgba(99, 102, 241, 0.1);
-}
-
-.status-indicator.closed {
-  color: var(--success);
-  background: rgba(16, 185, 129, 0.1);
 }
 
 .inquiry-card .col-name,
@@ -335,6 +331,8 @@
   border: 1px solid var(--glass-border);
   min-height: 120px;
   white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .modal-footer-actions {

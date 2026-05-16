@@ -24,22 +24,34 @@ export default function InquiryForm() {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    
-    // Auto-detect type based on subject
-    const inquiryType = formData.subject === 'Business Partnership' ? 'partnership' : 'technical';
+
+    const isBusinessPartnership = formData.subject === 'Business Partnership / Collaboration' || formData.subject === 'Business Partnership';
+    const inquiryType = isBusinessPartnership ? 'partnership' : 'technical';
 
     try {
-      await submitInquiry({
-        type: inquiryType,
-        full_name: formData.fullName,
-        email: formData.email,
-        contact_number: formData.phone,
-        facility_id: inquiryType === 'technical' ? formData.facilityId : 'N/A',
-        subject: formData.subject,
-        message: formData.message,
-        company_hospital: formData.company,
-        job_title: formData.jobTitle
-      });
+      await submitInquiry(
+        inquiryType === 'partnership'
+            ? {
+                type: 'partnership',
+                full_name: formData.fullName,
+                email: formData.email,
+                contact_number: formData.phone || '',
+                facility_id: 'N/A',
+                subject: formData.subject,
+                message: formData.message,
+                company_hospital: formData.company || '',
+                job_title: formData.jobTitle || '',
+              }
+            : {
+                type: 'technical',
+                full_name: formData.fullName,
+                email: formData.email,
+                contact_number: formData.phone || '',
+                facility_id: formData.facilityId || '',
+                subject: formData.subject,
+                message: formData.message,
+              }
+      );
       alert('Your inquiry has been submitted. Our team will respond shortly.');
       setFormData({ fullName: '', email: '', phone: '', facilityId: '', subject: '', message: '', company: '', jobTitle: '' });
     } catch (error) {
@@ -130,12 +142,12 @@ export default function InquiryForm() {
             <option value="Equipment Maintenance">Equipment Maintenance</option>
             <option value="Software/System Issue">Software/System Issue</option>
             <option value="Warranty Claim">Warranty Claim</option>
-            <option value="Business Partnership">Business Partnership / Collaboration</option>
+            <option value="Business Partnership / Collaboration">Business Partnership / Collaboration</option>
             <option value="Other">Other</option>
           </select>
         </div>
 
-        {formData.subject === 'Business Partnership' && (
+        {formData.subject === 'Business Partnership / Collaboration' && (
           <div className="modal-form-row" style={{ display: 'flex', gap: '1.5rem', width: '100%' }}>
             <div className="form-group" style={{ flex: 1 }}>
               <label htmlFor="company" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#1a1c2e', textTransform: 'uppercase', marginBottom: '8px' }}>Company Name *</label>
@@ -196,7 +208,7 @@ export default function InquiryForm() {
             transition: 'background 0.2s ease'
           }}
         >
-          {isSubmitting ? 'Sending...' : 'Send Secure Message'}
+          {isSubmitting ? 'Sending...' : 'Submit Request'}
         </button>
       </form>
     </div>

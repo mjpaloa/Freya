@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './HeroSection.module.css';
 
 export default function HeroSection() {
@@ -17,13 +18,13 @@ export default function HeroSection() {
           </p>
           
           <div className={styles.actions}>
-            <button className={styles.btnPrimary}>
+            <Link to="/products" className={styles.btnPrimary}>
               Browse equipment
               <span className="material-symbols-outlined">arrow_forward</span>
-            </button>
-            <button className={styles.btnSecondary}>
+            </Link>
+            <Link to="/contact" className={styles.btnSecondary}>
               Request quote
-            </button>
+            </Link>
           </div>
         </div>
       </div>

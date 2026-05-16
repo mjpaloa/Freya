@@ -9,16 +9,31 @@ interface NavbarProps {
   onMenuClick: () => void;
 }
 
+interface InquiryNotification {
+  id: string;
+  status: 'pending' | 'done';
+  created_at?: string;
+}
+
+const LAST_SEEN_KEY = 'inquiry_notifications_last_seen_at';
+
 const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
+    const getLastSeenAt = () => localStorage.getItem(LAST_SEEN_KEY) || '1970-01-01T00:00:00.000Z';
+
     const fetchNotifications = async () => {
       try {
         const response = await api.get('/inquiries');
-        const pendingCount = response.data.filter((iq: any) => iq.status === 'pending').length;
+        const lastSeenAt = getLastSeenAt();
+        const pendingCount = (response.data as InquiryNotification[]).filter((iq) => {
+          if (iq.status !== 'pending') return false;
+          if (!iq.created_at) return true;
+          return new Date(iq.created_at).getTime() > new Date(lastSeenAt).getTime();
+        }).length;
         setNotificationCount(pendingCount);
       } catch (error) {
         console.error('Failed to fetch notifications', error);
@@ -30,6 +45,12 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
     const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleNotificationClick = () => {
+    localStorage.setItem(LAST_SEEN_KEY, new Date().toISOString());
+    setNotificationCount(0);
+    navigate('/inquiries');
+  };
   
   return (
     <header className="navbar glass-panel">
@@ -40,7 +61,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
       </div>
       
       <div className="navbar-right">
-        <button className="nav-btn" onClick={() => navigate('/inquiries')}>
+        <button className="nav-btn" onClick={handleNotificationClick} aria-label="Open inquiries notifications">
           <Bell size={20} />
           {notificationCount > 0 && (
             <span className="notification-dot">{notificationCount}</span>

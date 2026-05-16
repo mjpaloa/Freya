@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { 
   User, 
   Mail, 
-  Camera, 
   Save, 
   Shield, 
   Key,
@@ -72,30 +71,6 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const uploadData = new FormData();
-    uploadData.append('image', file); // Matches server expectation
-
-    setIsLoading(true);
-    try {
-      const response = await api.post('/upload/image', uploadData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      const newUrl = response.data.url;
-      setFormData({ ...formData, avatar_url: newUrl });
-      setImgError(false);
-    } catch (error: any) {
-      console.error('Upload failed:', error);
-      const message = error.response?.data?.error || error.response?.data?.message || 'Please check your connection.';
-      alert(`Failed to upload image: ${message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordError('');
@@ -153,10 +128,6 @@ const Profile: React.FC = () => {
                     {formData.full_name ? formData.full_name.charAt(0).toUpperCase() : <User size={40} />}
                   </div>
                 )}
-                <label className="change-avatar">
-                  <Camera size={18} />
-                  <input type="file" hidden accept="image/*" onChange={handleAvatarUpload} />
-                </label>
               </div>
             </div>
             <div className="profile-info-stat">
@@ -173,11 +144,7 @@ const Profile: React.FC = () => {
             <h3>Security Status</h3>
             <div className="status-item">
               <CheckCircle2 size={18} className="success-icon" />
-              <span>Two-factor Authentication</span>
-            </div>
-            <div className="status-item">
-              <CheckCircle2 size={18} className="success-icon" />
-              <span>Verified Email</span>
+              <span>Security status is managed by the backend</span>
             </div>
             <button className="btn-outline" onClick={() => setIsPasswordModalOpen(true)}>
               <Key size={18} />

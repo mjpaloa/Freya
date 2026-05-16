@@ -101,10 +101,10 @@ export const sendReply = async (req: Request, res: Response) => {
       return res.status(500).json({ error: 'Failed to send email reply via Gmail.' });
     }
 
-    // 2. Automatically update status to 'responded'
+    // 2. Automatically update status to 'done'
     await supabase
       .from('inquiries')
-      .update({ status: 'responded' })
+      .update({ status: 'done' })
       .eq('id', id);
 
     return res.status(200).json({ message: 'Reply sent successfully and status updated.' });

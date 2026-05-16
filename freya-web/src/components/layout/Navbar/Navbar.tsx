@@ -35,17 +35,17 @@ export default function Navbar() {
             <NavLink to="/contact" onClick={closeMenu} className={({ isActive }) => isActive ? `${styles.navLink} ${styles.active}` : styles.navLink}>
               Contacts
             </NavLink>
-            <button className={`${styles.quoteBtn} ${styles.mobileQuoteBtn}`}>
+            <Link to="/contact" onClick={closeMenu} className={`${styles.quoteBtn} ${styles.mobileQuoteBtn}`}>
               Request Quote
-            </button>
+            </Link>
           </nav>
 
         </div>
 
         <div className={styles.rightSide}>
-          <button className={`${styles.quoteBtn} ${styles.desktopQuoteBtn}`}>
+          <Link to="/contact" className={`${styles.quoteBtn} ${styles.desktopQuoteBtn}`}>
             Request Quote
-          </button>
+          </Link>
           <button className={styles.mobileToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             <span className="material-symbols-outlined">{isMobileMenuOpen ? 'close' : 'menu'}</span>
           </button>

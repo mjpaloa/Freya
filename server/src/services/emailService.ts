@@ -134,8 +134,17 @@ export const sendReplyEmail = async (to: string, subject: string, message: strin
           </div>
           <br>
           <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 32px 0;">
-          <p style="font-size: 14px; color: #6b7280;">
-            Thank you for reaching out to us. If you have any further questions, feel free to reply directly to this email.
+          <p style="font-size: 14px; color: #6b7280; margin-bottom: 12px;">
+            Thank you for reaching out to us.
+          </p>
+          <p style="font-size: 14px; color: #4b5563; margin: 0 0 8px 0;">
+            You may contact us at <strong>283629227</strong>.
+          </p>
+          <p style="font-size: 14px; color: #4b5563; margin: 0;">
+            Or message us on our Facebook page:
+            <a href="https://www.facebook.com/freyatradinginc" target="_blank" rel="noopener noreferrer" style="color: #6366f1; font-weight: 700; text-decoration: none;">
+              Freya Trading Incorporated
+            </a>
           </p>
           <p style="font-size: 14px; color: #4b5563; font-weight: 700; margin-top: 16px;">
             Best regards,<br>

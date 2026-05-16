@@ -33,16 +33,24 @@ interface Inquiry {
   company_hospital?: string;
   product_interest?: string;
   marketing_consent?: boolean;
-  status: 'pending' | 'responded' | 'closed';
+  status: 'pending' | 'done';
   created_at: string;
 }
+
+const normalizeStatus = (status: string): Inquiry['status'] => {
+  return status === 'pending' ? 'pending' : 'done';
+};
+
+const getStatusLabel = (status: Inquiry['status']) => {
+  return status === 'pending' ? 'Pending' : 'Done';
+};
 
 const InquiryManagement: React.FC = () => {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'technical' | 'sales' | 'partnership'>('all');
-  const [statusFilter, setStatusFilter] = useState<'active' | 'closed'>('active');
+  const [statusFilter, setStatusFilter] = useState<'active' | 'archive'>('active');
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -53,7 +61,10 @@ const InquiryManagement: React.FC = () => {
     setIsLoading(true);
     try {
       const response = await api.get('/inquiries');
-      setInquiries(response.data);
+      setInquiries(response.data.map((iq: any) => ({
+        ...iq,
+        status: normalizeStatus(iq.status),
+      })));
     } catch (error) {
       console.error('Error fetching inquiries:', error);
     } finally {
@@ -68,9 +79,10 @@ const InquiryManagement: React.FC = () => {
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
       await api.patch(`/inquiries/${id}/status`, { status });
-      setInquiries(inquiries.map(iq => iq.id === id ? { ...iq, status: status as any } : iq));
+      const normalizedStatus = normalizeStatus(status);
+      setInquiries(inquiries.map(iq => iq.id === id ? { ...iq, status: normalizedStatus } : iq));
       if (selectedInquiry?.id === id) {
-        setSelectedInquiry({ ...selectedInquiry, status: status as any });
+        setSelectedInquiry({ ...selectedInquiry, status: normalizedStatus });
       }
     } catch (error) {
       console.error('Error updating status:', error);
@@ -88,8 +100,8 @@ const InquiryManagement: React.FC = () => {
         message: replyMessage
       });
 
-      setInquiries(inquiries.map(iq => iq.id === selectedInquiry.id ? { ...iq, status: 'responded' } : iq));
-      setSelectedInquiry({ ...selectedInquiry, status: 'responded' });
+      setInquiries(inquiries.map(iq => iq.id === selectedInquiry.id ? { ...iq, status: 'done' } : iq));
+      setSelectedInquiry({ ...selectedInquiry, status: 'done' });
       setReplyMessage('');
       alert('Reply sent successfully to ' + selectedInquiry.email);
     } catch (error: any) {
@@ -110,8 +122,8 @@ const InquiryManagement: React.FC = () => {
     const matchesType = filterType === 'all' || iq.type === filterType;
 
     const matchesStatus = statusFilter === 'active'
-      ? (iq.status === 'pending' || iq.status === 'responded')
-      : iq.status === 'closed';
+      ? iq.status === 'pending'
+      : iq.status === 'done';
 
     return matchesSearch && matchesType && matchesStatus;
   });
@@ -139,11 +151,11 @@ const InquiryManagement: React.FC = () => {
               Active
             </button>
             <button 
-              className={`status-tab-btn ${statusFilter === 'closed' ? 'active' : ''}`}
-              onClick={() => setStatusFilter('closed')}
+              className={`status-tab-btn ${statusFilter === 'archive' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('archive')}
             >
               <CheckCircle2 size={16} />
-              Closed
+              Archive
             </button>
           </div>
         </div>
@@ -212,7 +224,7 @@ const InquiryManagement: React.FC = () => {
                     <div className="col-actions">
                       <div className={`status-indicator ${iq.status}`}>
                         {iq.status === 'pending' ? <Clock size={16} /> : <CheckCircle2 size={16} />}
-                        <span>{iq.status}</span>
+                        <span>{getStatusLabel(iq.status)}</span>
                       </div>
                     </div>
                   </div>
@@ -267,8 +279,7 @@ const InquiryManagement: React.FC = () => {
                       className="glass-select"
                     >
                       <option value="pending">Pending</option>
-                      <option value="responded">Responded</option>
-                      <option value="closed">Closed</option>
+                      <option value="done">Done</option>
                     </select>
                   </div>
                 </div>
