@@ -13,8 +13,7 @@ const ProductDetailPage: React.FC = () => {
   const [modalDismissed, setModalDismissed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '', lastName: '', email: '', phone: '',
-    jobTitle: '', specialty: '', hospital: '', agreed: false,
+    firstName: '', lastName: '', email: '', phone: '', agreed: false,
   });
   const hasTriggered = useRef(false);
 
@@ -74,16 +73,12 @@ const ProductDetailPage: React.FC = () => {
         last_name: formData.lastName,
         email: formData.email,
         contact_number: formData.phone,
-        job_title: formData.jobTitle,
-        clinical_specialty: formData.specialty,
-        company_hospital: formData.hospital,
         product_interest: product.name,
         marketing_consent: formData.agreed
       });
       alert('Thank you! Our sales team will contact you shortly.');
       setFormData({
-        firstName: '', lastName: '', email: '', phone: '',
-        jobTitle: '', specialty: '', hospital: '', agreed: false,
+        firstName: '', lastName: '', email: '', phone: '', agreed: false,
       });
       closeModal();
     } catch (error) {
@@ -223,21 +218,6 @@ const ProductDetailPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="modal-form-row">
-                <div className="modal-form-group">
-                  <label>Job Title *</label>
-                  <input type="text" name="jobTitle" placeholder="e.g. Chief Surgeon" value={formData.jobTitle} onChange={handleFormChange} required />
-                </div>
-                <div className="modal-form-group">
-                  <label>Clinical Specialty *</label>
-                  <input type="text" name="specialty" placeholder="e.g. Cardiology" value={formData.specialty} onChange={handleFormChange} required />
-                </div>
-              </div>
-
-              <div className="modal-form-group">
-                <label>Company / Hospital *</label>
-                <input type="text" name="hospital" placeholder="Hospital Name" value={formData.hospital} onChange={handleFormChange} required />
-              </div>
 
               <div className="modal-form-group">
                 <label>Product Interest</label>

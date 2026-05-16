@@ -26,20 +26,20 @@ const escapeHtml = (value: unknown) => {
 };
 
 const resolveLogoAsset = () => {
-  // Still include the logo attachment in case we want to use it elsewhere
+  // We still attach the logo for branding in some clients, but we won't show it in the header
   const logoPath = path.resolve(__dirname, '../assets/logo1.png');
   const logoAttachment = fs.existsSync(logoPath)
     ? [{ filename: 'logo1.png', path: logoPath, cid: 'freya-logo' }]
     : [];
   
-  // Back to professional text branding as requested
-  const logoMarkup = '<span style="font-size:26px;font-weight:900;color:#ffffff;letter-spacing:1px;text-transform:uppercase;">Freya Medical</span>';
+  // Empty markup to keep the header small
+  const logoMarkup = '';
 
   return { logoAttachment, logoMarkup };
 };
 
 const renderEmailShell = (content: string) => `
-  <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;line-height:1.6;max-width:600px;margin:0 auto;border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;background-color:#ffffff;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1);">
+  <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;line-height:1.6;max-width:600px;margin:0 auto;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;background-color:#ffffff;">
     ${content}
   </div>
 `;
@@ -106,12 +106,9 @@ export const sendInquiryEmail = async (inquiry: any) => {
   const safeEmailUser = escapeHtml(process.env.EMAIL_USER);
 
   const html = renderEmailShell(`
-    <div style="background:#0a0a0a;padding:32px;text-align:center;">
-      <div style="margin-bottom:24px;">${logoMarkup}</div>
-      <div style="border-top:1px solid #1f2937;padding-top:24px;">
-        <h2 style="margin:0 0 8px 0;font-size:24px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;">New ${typeTitle}</h2>
-        <p style="margin:0;font-size:14px;color:#9ca3af;">Internal notification from ${safeEmailUser}</p>
-      </div>
+    <div style="background:#0a0a0a;padding:24px 32px;text-align:center;">
+      <h2 style="margin:0 0 4px 0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;">New ${typeTitle}</h2>
+      <p style="margin:0;font-size:13px;color:#9ca3af;">Internal notification from ${safeEmailUser}</p>
     </div>
     <div style="padding:32px;">
       <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:24px;">
@@ -164,12 +161,9 @@ export const sendProductBroadcast = async (product: any, recipients: string[]) =
   const productImage = product.image_url || '';
 
   const html = renderEmailShell(`
-    <div style="background:#0a0a0a;padding:32px;text-align:center;">
-      <div style="margin-bottom:24px;">${logoMarkup}</div>
-      <div style="border-top:1px solid #1f2937;padding-top:24px;">
-        <span style="display:inline-block;padding:4px 12px;background:${productImage ? 'rgba(255,255,255,0.1)' : '#4f46e5'};color:#ffffff;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">${safeType}</span>
-        <h2 style="margin:0;font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-1px;">${safeName}</h2>
-      </div>
+    <div style="background:#0a0a0a;padding:24px 32px;text-align:center;">
+      <span style="display:inline-block;padding:4px 12px;background:#4f46e5;color:#ffffff;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">${safeType}</span>
+      <h2 style="margin:0;font-size:26px;font-weight:800;color:#ffffff;letter-spacing:-1px;">${safeName}</h2>
     </div>
     ${productImage ? `<div style="padding:0;"><img src="${productImage}" alt="${safeName}" style="width:100%;height:auto;display:block;" /></div>` : ''}
     <div style="padding:32px;">
@@ -218,12 +212,9 @@ export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
   const newsImage = news.image_url || '';
 
   const html = renderEmailShell(`
-    <div style="background:#0a0a0a;padding:32px;text-align:center;">
-      <div style="margin-bottom:24px;">${logoMarkup}</div>
-      <div style="border-top:1px solid #1f2937;padding-top:24px;">
-        <span style="display:inline-block;padding:4px 12px;background:#d97706;color:#ffffff;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">${safeCategory}</span>
-        <h2 style="margin:0;font-size:26px;font-weight:800;color:#ffffff;line-height:1.2;">${safeTitle}</h2>
-      </div>
+    <div style="background:#0a0a0a;padding:24px 32px;text-align:center;">
+      <span style="display:inline-block;padding:4px 12px;background:#d97706;color:#ffffff;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">${safeCategory}</span>
+      <h2 style="margin:0;font-size:24px;font-weight:800;color:#ffffff;line-height:1.2;">${safeTitle}</h2>
     </div>
     ${newsImage ? `<div style="padding:0;"><img src="${newsImage}" alt="News" style="width:100%;height:auto;display:block;" /></div>` : ''}
     <div style="padding:32px;">
@@ -264,12 +255,9 @@ export const sendReplyEmail = async (to: string, subject: string, message: strin
   const safeMessage = escapeHtml(message);
 
   const html = renderEmailShell(`
-    <div style="background:#0a0a0a;padding:32px;text-align:center;">
-      <div style="margin-bottom:24px;">${logoMarkup}</div>
-      <div style="border-top:1px solid #1f2937;padding-top:24px;">
-        <h2 style="margin:0 0 4px 0;font-size:22px;font-weight:700;color:#ffffff;">Official Response</h2>
-        <p style="margin:0;font-size:13px;color:#71717a;">Re: ${safeSubject}</p>
-      </div>
+    <div style="background:#0a0a0a;padding:24px 32px;text-align:center;">
+      <h2 style="margin:0 0 4px 0;font-size:22px;font-weight:700;color:#ffffff;">Official Response</h2>
+      <p style="margin:0;font-size:13px;color:#71717a;">Re: ${safeSubject}</p>
     </div>
     <div style="padding:32px;">
       <p style="font-size:15px;margin-top:0;color:#111827;">Hello,</p>

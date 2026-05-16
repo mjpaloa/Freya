@@ -292,8 +292,6 @@ const InquiryManagement: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <div className="detail-info-item"><label>Company</label><span>{selectedInquiry.company_hospital}</span></div>
-                      <div className="detail-info-item"><label>Job Title</label><span>{selectedInquiry.job_title}</span></div>
                       {selectedInquiry.type === 'sales' && <div className="detail-info-item"><label>Interest</label><span>{selectedInquiry.product_interest}</span></div>}
                     </>
                   )}

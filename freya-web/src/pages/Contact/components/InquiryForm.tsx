@@ -9,8 +9,6 @@ export default function InquiryForm() {
     facilityId: '',
     subject: '',
     message: '',
-    company: '',
-    jobTitle: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -39,8 +37,6 @@ export default function InquiryForm() {
                 facility_id: 'N/A',
                 subject: formData.subject,
                 message: formData.message,
-                company_hospital: formData.company || '',
-                job_title: formData.jobTitle || '',
               }
             : {
                 type: 'technical',
@@ -53,7 +49,7 @@ export default function InquiryForm() {
               }
       );
       alert('Your inquiry has been submitted. Our team will respond shortly.');
-      setFormData({ fullName: '', email: '', phone: '', facilityId: '', subject: '', message: '', company: '', jobTitle: '' });
+      setFormData({ fullName: '', email: '', phone: '', facilityId: '', subject: '', message: '' });
     } catch (error) {
       alert('Failed to submit inquiry. Please try again later.');
     } finally {
@@ -147,36 +143,6 @@ export default function InquiryForm() {
           </select>
         </div>
 
-        {formData.subject === 'Business Partnership / Collaboration' && (
-          <div className="modal-form-row" style={{ display: 'flex', gap: '1.5rem', width: '100%' }}>
-            <div className="form-group" style={{ flex: 1 }}>
-              <label htmlFor="company" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#1a1c2e', textTransform: 'uppercase', marginBottom: '8px' }}>Company Name *</label>
-              <input
-                type="text"
-                id="company"
-                name="company"
-                placeholder="e.g. MedSupply Co."
-                required
-                value={formData.company}
-                onChange={handleChange}
-                style={{ width: '100%', padding: '12px 16px', borderRadius: '4px', border: '1px solid #e2e8f0', background: '#f8fafc' }}
-              />
-            </div>
-            <div className="form-group" style={{ flex: 1 }}>
-              <label htmlFor="jobTitle" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#1a1c2e', textTransform: 'uppercase', marginBottom: '8px' }}>Job Title *</label>
-              <input
-                type="text"
-                id="jobTitle"
-                name="jobTitle"
-                placeholder="e.g. Manager"
-                required
-                value={formData.jobTitle}
-                onChange={handleChange}
-                style={{ width: '100%', padding: '12px 16px', borderRadius: '4px', border: '1px solid #e2e8f0', background: '#f8fafc' }}
-              />
-            </div>
-          </div>
-        )}
 
         <div className="form-group full-width">
           <label htmlFor="message" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#1a1c2e', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.05em' }}>Your Message *</label>
