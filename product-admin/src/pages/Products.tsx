@@ -350,15 +350,15 @@ ${formData.usage_purpose}
 
                             // 2. Upload directly to Supabase Storage
                             const { error: uploadError } = await supabase.storage
-                              .from('freya-assets') // Make sure this bucket exists and is public
-                              .upload(filePath, file);
+                              .from('brochures') 
+                              .upload(fileName, file);
 
                             if (uploadError) throw uploadError;
 
                             // 3. Get Public URL
                             const { data: { publicUrl } } = supabase.storage
-                              .from('freya-assets')
-                              .getPublicUrl(filePath);
+                              .from('brochures')
+                              .getPublicUrl(fileName);
 
                             setFormData({ ...formData, brochure_url: publicUrl });
                             alert('Brochure uploaded successfully!');
