@@ -2,13 +2,20 @@ import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_APP_PASSWORD,
-  },
-});
+const getTransporter = () => {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_APP_PASSWORD) {
+    console.error('CRITICAL ERROR: EMAIL_USER or EMAIL_APP_PASSWORD is not defined in environment variables.');
+    return null;
+  }
+  
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_APP_PASSWORD,
+    },
+  });
+};
 
 if (!process.env.EMAIL_USER || !process.env.EMAIL_APP_PASSWORD) {
   console.warn('WARNING: EMAIL_USER or EMAIL_APP_PASSWORD is not set. Emails will not be sent.');
@@ -144,10 +151,13 @@ export const sendInquiryEmail = async (inquiry: any) => {
   };
 
   try {
+    const transporter = getTransporter();
+    if (!transporter) return false;
     await transporter.sendMail(mailOptions);
+    console.log(`[SUCCESS] Inquiry email sent for: ${safeName}`);
     return true;
   } catch (error) {
-    console.error('Error sending inquiry email:', error);
+    console.error('[ERROR] Failed to send inquiry email:', error);
     return false;
   }
 };
@@ -193,12 +203,14 @@ export const sendProductBroadcast = async (product: any, recipients: string[]) =
   };
 
   try {
-    console.log(`Attempting to broadcast product update to ${recipients.length} recipients...`);
+    const transporter = getTransporter();
+    if (!transporter) return false;
+    console.log(`[BROADCAST] Sending product update to ${recipients.length} users...`);
     await transporter.sendMail(mailOptions);
-    console.log('Product broadcast sent successfully.');
+    console.log('[SUCCESS] Product broadcast completed.');
     return true;
   } catch (error) {
-    console.error('Error sending product broadcast:', error);
+    console.error('[ERROR] Product broadcast failed:', error);
     return false;
   }
 };
@@ -239,12 +251,14 @@ export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
   };
 
   try {
-    console.log(`Attempting to broadcast news update to ${recipients.length} recipients...`);
+    const transporter = getTransporter();
+    if (!transporter) return false;
+    console.log(`[BROADCAST] Sending news update to ${recipients.length} users...`);
     await transporter.sendMail(mailOptions);
-    console.log('News broadcast sent successfully.');
+    console.log('[SUCCESS] News broadcast completed.');
     return true;
   } catch (error) {
-    console.error('Error sending news broadcast:', error);
+    console.error('[ERROR] News broadcast failed:', error);
     return false;
   }
 };
@@ -285,10 +299,13 @@ export const sendReplyEmail = async (to: string, subject: string, message: strin
   };
 
   try {
+    const transporter = getTransporter();
+    if (!transporter) return false;
     await transporter.sendMail(mailOptions);
+    console.log(`[SUCCESS] Reply email sent to: ${to}`);
     return true;
   } catch (error) {
-    console.error('Error sending reply email:', error);
+    console.error('[ERROR] Failed to send reply email:', error);
     return false;
   }
 };
