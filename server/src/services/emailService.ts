@@ -25,54 +25,6 @@ const escapeHtml = (value: unknown) => {
     .replace(/'/g, '&#39;');
 };
 
-const renderEmailShell = (content: string) => `
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-      @media only screen and (max-width: 600px) {
-        .container { width: 100% !important; border-radius: 0 !important; }
-        .content { padding: 20px !important; }
-        .hero { padding: 30px 20px !important; }
-      }
-    </style>
-  </head>
-  <body style="margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f7f9; padding: 40px 0;">
-      <tr>
-        <td align="center">
-          <table class="container" role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e1e8ed;">
-            ${content}
-            <!-- Footer -->
-            <tr>
-              <td style="padding: 32px; background-color: #fcfdfe; border-top: 1px solid #edf2f7; text-align: center;">
-                <p style="margin: 0 0 16px 0; font-size: 14px; color: #64748b;">
-                  Connect with us
-                </p>
-                <div style="margin-bottom: 24px;">
-                  <a href="https://www.facebook.com/freyatradinginc" style="display: inline-block; margin: 0 8px; text-decoration: none;">
-                    <img src="https://img.icons8.com/color/48/000000/facebook-new.png" width="24" height="24" alt="FB" style="display: block;">
-                  </a>
-                  <a href="${WEBSITE_URL}" style="display: inline-block; margin: 0 8px; text-decoration: none;">
-                    <img src="https://img.icons8.com/ios-filled/50/6366f1/globe.png" width="24" height="24" alt="Web" style="display: block;">
-                  </a>
-                </div>
-                <p style="margin: 0; font-size: 12px; color: #94a3b8; line-height: 1.6;">
-                  &copy; 2026 Freya Trading Incorporated. All rights reserved.<br>
-                  Building a Healthier Future with Innovation and Excellence.
-                </p>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
-  </html>
-`;
-
 const resolveLogoAsset = () => {
   const logoCandidates = [
     path.resolve(process.cwd(), 'src/assets/logo1.png'),
@@ -86,11 +38,34 @@ const resolveLogoAsset = () => {
     ? [{ filename: 'logo1.png', path: logoPath, cid: 'freya-logo' }]
     : [];
   const logoMarkup = logoPath
-    ? '<img src="cid:freya-logo" alt="Freya" style="display: block; height: 50px; width: auto; margin: 0 auto;">'
-    : '<span style="font-size: 28px; font-weight: 800; color: #6366f1; letter-spacing: -1px; display: block; text-align: center;">Freya</span>';
+    ? '<img src="cid:freya-logo" alt="Freya Medical" style="display:block;height:40px;width:auto;margin:0 auto;" />'
+    : '<span style="font-size:24px;font-weight:800;color:#ffffff;display:block;text-align:center;">Freya</span>';
 
   return { logoAttachment, logoMarkup };
 };
+
+const renderEmailShell = (content: string) => `
+  <div style="font-family:-apple-system,'Segoe UI',sans-serif;color:#111827;line-height:1.6;max-width:560px;margin:0 auto;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;background-color:#ffffff;">
+    ${content}
+  </div>
+`;
+
+const renderContactRows = (accentColor: string) => `
+  <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#f8fafc;border-radius:10px;border:0.5px solid #e2e8f0;margin-bottom:10px;">
+    <div style="width:32px;height:32px;background:#ede9fe;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;">📞</div>
+    <div>
+      <p style="margin:0;font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Support Hotline</p>
+      <p style="margin:0;font-size:14px;font-weight:700;color:#1e293b;">283629227</p>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#f8fafc;border-radius:10px;border:0.5px solid #e2e8f0;">
+    <div style="width:32px;height:32px;background:#eff6ff;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;">💬</div>
+    <div>
+      <p style="margin:0;font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Facebook Messenger</p>
+      <a href="https://www.facebook.com/freyatradinginc" style="display:block;font-size:14px;font-weight:700;color:#1877f2;text-decoration:none;">Freya Trading Incorporated</a>
+    </div>
+  </div>
+`;
 
 export const sendInquiryEmail = async (inquiry: any) => {
   const type = inquiry.type;
@@ -101,13 +76,13 @@ export const sendInquiryEmail = async (inquiry: any) => {
   let typeTitle = 'General Inquiry';
 
   if (type === 'technical') {
-    accentColor = '#8b5cf6';
+    accentColor = '#7c3aed';
     typeTitle = 'Technical Support';
   } else if (type === 'sales') {
-    accentColor = '#10b981';
+    accentColor = '#059669';
     typeTitle = 'Sales Inquiry';
   } else if (type === 'partnership') {
-    accentColor = '#f59e0b';
+    accentColor = '#d97706';
     typeTitle = 'Partnership Proposal';
   }
 
@@ -116,51 +91,38 @@ export const sendInquiryEmail = async (inquiry: any) => {
   const safeEmail = escapeHtml(inquiry.email);
   const safeSubject = escapeHtml(type === 'sales' ? inquiry.product_interest : inquiry.subject);
   const safeMessage = escapeHtml(inquiry.message);
+  const safeEmailUser = escapeHtml(process.env.EMAIL_USER);
 
   const html = renderEmailShell(`
-    <!-- Header -->
-    <tr>
-      <td style="padding: 40px 32px; background-color: #ffffff; text-align: center; border-bottom: 1px solid #f1f5f9;">
-        ${logoMarkup}
-        <div style="margin-top: 12px; color: #94a3b8; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Internal Notification</div>
-      </td>
-    </tr>
-    <!-- Hero Section -->
-    <tr>
-      <td style="padding: 48px 32px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); text-align: center;">
-        <h1 style="margin: 0 0 16px 0; font-size: 28px; color: #ffffff; font-weight: 800; letter-spacing: -0.5px;">New ${typeTitle}</h1>
-        <p style="margin: 0; font-size: 16px; color: #94a3b8; line-height: 1.5;">You have received a new request from ${safeName}</p>
-      </td>
-    </tr>
-    <!-- Details -->
-    <tr>
-      <td style="padding: 32px;">
-        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-          <h3 style="margin: 0 0 16px 0; font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Customer Details</h3>
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-            <tr>
-              <td style="padding-bottom: 8px; font-size: 14px; color: #475569;">Name:</td>
-              <td style="padding-bottom: 8px; font-size: 14px; font-weight: 600; color: #1e293b; text-align: right;">${safeName}</td>
-            </tr>
-            <tr>
-              <td style="padding-bottom: 8px; font-size: 14px; color: #475569;">Email:</td>
-              <td style="padding-bottom: 8px; font-size: 14px; font-weight: 600; color: ${accentColor}; text-align: right;">${safeEmail}</td>
-            </tr>
-            <tr>
-              <td style="padding-bottom: 8px; font-size: 14px; color: #475569;">Subject:</td>
-              <td style="padding-bottom: 8px; font-size: 14px; font-weight: 600; color: #1e293b; text-align: right;">${safeSubject}</td>
-            </tr>
+    <div style="background:#0a0a0a;padding:32px;text-align:center;">
+      <div style="margin-bottom:24px;">${logoMarkup}</div>
+      <div style="border-top:1px solid #1f2937;padding-top:24px;">
+        <h2 style="margin:0 0 8px 0;font-size:24px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;">New ${typeTitle}</h2>
+        <p style="margin:0;font-size:14px;color:#9ca3af;">Internal notification from ${safeEmailUser}</p>
+      </div>
+    </div>
+    <div style="padding:32px;">
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:24px;">
+        <div style="padding:12px 16px;background:#f3f4f6;border-bottom:1px solid #e5e7eb;">
+          <p style="margin:0;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;">Customer Information</p>
+        </div>
+        <div style="padding:16px;">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:4px 0;font-size:13px;color:#6b7280;">Name</td><td style="padding:4px 0;font-size:13px;font-weight:700;color:#111827;text-align:right;">${safeName}</td></tr>
+            <tr><td style="padding:4px 0;font-size:13px;color:#6b7280;">Email</td><td style="padding:4px 0;font-size:13px;font-weight:700;color:${accentColor};text-align:right;">${safeEmail}</td></tr>
+            <tr><td style="padding:4px 0;font-size:13px;color:#6b7280;">Subject</td><td style="padding:4px 0;font-size:13px;font-weight:700;color:#111827;text-align:right;">${safeSubject}</td></tr>
           </table>
         </div>
-        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px;">
-          <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Message</h3>
-          <p style="margin: 0; font-size: 15px; color: #334155; line-height: 1.6; white-space: pre-line;">${safeMessage}</p>
-        </div>
-        <div style="margin-top: 32px; text-align: center;">
-          <a href="mailto:${safeEmail}" style="display: inline-block; padding: 14px 28px; background-color: ${accentColor}; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Reply to Customer</a>
-        </div>
-      </td>
-    </tr>
+      </div>
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:32px;">
+        <p style="margin:0 0 12px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;">Message Content</p>
+        <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;font-style:italic;">"${safeMessage}"</p>
+      </div>
+      <a href="mailto:${safeEmail}" style="display:block;text-align:center;background:${accentColor};color:#ffffff;text-decoration:none;padding:14px;border-radius:10px;font-size:14px;font-weight:700;box-shadow:0 4px 6px rgba(0,0,0,0.05);">Reply to Customer</a>
+    </div>
+    <div style="padding:24px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
+      <p style="margin:0;font-size:12px;color:#9ca3af;">&copy; 2026 Freya Medical System. All rights reserved.</p>
+    </div>
   `);
 
   const mailOptions = {
@@ -183,51 +145,36 @@ export const sendInquiryEmail = async (inquiry: any) => {
 
 export const sendProductBroadcast = async (product: any, recipients: string[]) => {
   if (recipients.length === 0) return;
-
   const { logoAttachment, logoMarkup } = resolveLogoAsset();
   const safeName = escapeHtml(product.name);
   const safeInfo = escapeHtml(product.info || 'Discover our newest addition to our medical catalog.');
-  const safeType = escapeHtml(product.type || '');
+  const safeType = escapeHtml(product.type || 'New Arrival');
   const productImage = product.image_url || '';
 
   const html = renderEmailShell(`
-    <!-- Header -->
-    <tr>
-      <td style="padding: 40px 32px; background-color: #ffffff; text-align: center; border-bottom: 1px solid #f1f5f9;">
-        ${logoMarkup}
-      </td>
-    </tr>
-    <!-- Product Showcase -->
-    <tr>
-      <td style="padding: 0;">
-        ${productImage ? `<img src="${productImage}" alt="${safeName}" style="width: 100%; max-height: 400px; object-fit: cover; display: block;">` : ''}
-      </td>
-    </tr>
-    <tr>
-      <td style="padding: 48px 32px; text-align: center;">
-        <span style="display: inline-block; padding: 6px 12px; background-color: #e0e7ff; color: #4338ca; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">${safeType || 'New Arrival'}</span>
-        <h1 style="margin: 0 0 16px 0; font-size: 32px; color: #1e293b; font-weight: 800; letter-spacing: -1px;">${safeName}</h1>
-        <p style="margin: 0 0 32px 0; font-size: 16px; color: #64748b; line-height: 1.6; max-width: 480px; margin-left: auto; margin-right: auto;">
-          ${safeInfo}
-        </p>
-        <a href="${WEBSITE_URL}products" style="display: inline-block; padding: 16px 32px; background-color: #6366f1; color: #ffffff; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 16px; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);">View on Website</a>
-      </td>
-    </tr>
-    <!-- Features -->
-    <tr>
-      <td style="padding: 0 32px 48px;">
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-          <tr>
-            <td style="background-color: #f8fafc; border-radius: 16px; padding: 32px;">
-              <h2 style="margin: 0 0 16px 0; font-size: 18px; color: #1e293b; font-weight: 700;">Why choose Freya?</h2>
-              <p style="margin: 0; font-size: 14px; color: #64748b; line-height: 1.6;">
-                We provide high-quality medical equipment and supplies, ensuring the best care for your patients. Our team is dedicated to excellence and innovation in the healthcare industry.
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+    <div style="background:#0a0a0a;padding:32px;text-align:center;">
+      <div style="margin-bottom:24px;">${logoMarkup}</div>
+      <div style="border-top:1px solid #1f2937;padding-top:24px;">
+        <span style="display:inline-block;padding:4px 12px;background:${productImage ? 'rgba(255,255,255,0.1)' : '#4f46e5'};color:#ffffff;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">${safeType}</span>
+        <h2 style="margin:0;font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-1px;">${safeName}</h2>
+      </div>
+    </div>
+    ${productImage ? `<div style="padding:0;"><img src="${productImage}" alt="${safeName}" style="width:100%;height:auto;display:block;" /></div>` : ''}
+    <div style="padding:32px;">
+      <p style="margin:0 0 24px;font-size:16px;color:#374151;line-height:1.7;">${safeInfo}</p>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin-bottom:32px;">
+        <h3 style="margin:0 0 16px;font-size:14px;font-weight:700;color:#1e293b;">Why choose this product?</h3>
+        <p style="margin:0;font-size:14px;color:#64748b;line-height:1.6;">Our medical equipment is sourced from the most reliable manufacturers, ensuring durability and precision for your facility.</p>
+      </div>
+      <a href="${WEBSITE_URL}products" style="display:block;text-align:center;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:16px;border-radius:12px;font-size:15px;font-weight:700;">Explore Product Catalog</a>
+      <div style="margin-top:32px;padding-top:32px;border-top:1px solid #e5e7eb;">
+        <p style="margin:0 0 16px;font-size:13px;font-weight:700;color:#1e293b;text-transform:uppercase;letter-spacing:1px;text-align:center;">Need Assistance?</p>
+        ${renderContactRows('#4f46e5')}
+      </div>
+    </div>
+    <div style="padding:24px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
+      <p style="margin:0;font-size:12px;color:#9ca3af;">&copy; 2026 Freya Medical. Building a healthier future.</p>
+    </div>
   `);
 
   const mailOptions = {
@@ -252,47 +199,31 @@ export const sendProductBroadcast = async (product: any, recipients: string[]) =
 
 export const sendNewsBroadcast = async (news: any, recipients: string[]) => {
   if (recipients.length === 0) return;
-
   const { logoAttachment, logoMarkup } = resolveLogoAsset();
   const safeTitle = escapeHtml(news.title);
-  const safeCategory = escapeHtml(news.category || 'Latest News');
+  const safeCategory = escapeHtml(news.category || 'Updates');
   const safeExcerpt = escapeHtml(news.excerpt || 'Stay updated with the latest from Freya Medical.');
   const newsImage = news.image_url || '';
 
   const html = renderEmailShell(`
-    <!-- Header -->
-    <tr>
-      <td style="padding: 40px 32px; background-color: #ffffff; text-align: center; border-bottom: 1px solid #f1f5f9;">
-        ${logoMarkup}
-      </td>
-    </tr>
-    <!-- News Header -->
-    <tr>
-      <td style="padding: 48px 32px; background-color: #f8fafc;">
-        <span style="display: inline-block; padding: 4px 8px; background-color: #fef3c7; color: #d97706; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">${safeCategory}</span>
-        <h1 style="margin: 0 0 12px 0; font-size: 28px; color: #1e293b; font-weight: 800; line-height: 1.2;">${safeTitle}</h1>
-        <p style="margin: 0; font-size: 16px; color: #64748b; line-height: 1.5;">${safeExcerpt}</p>
-      </td>
-    </tr>
-    <!-- Image -->
-    ${newsImage ? `
-    <tr>
-      <td style="padding: 0 32px;">
-        <img src="${newsImage}" alt="News" style="width: 100%; border-radius: 12px; display: block; margin-top: -20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
-      </td>
-    </tr>
-    ` : ''}
-    <!-- Content -->
-    <tr>
-      <td style="padding: 48px 32px; text-align: left;">
-        <div style="font-size: 16px; color: #334155; line-height: 1.8;">
-          ${safeExcerpt}
-        </div>
-        <div style="margin-top: 40px; text-align: center;">
-          <a href="${WEBSITE_URL}news" style="display: inline-block; padding: 14px 28px; background-color: #1e293b; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px;">Read Full Story</a>
-        </div>
-      </td>
-    </tr>
+    <div style="background:#0a0a0a;padding:32px;text-align:center;">
+      <div style="margin-bottom:24px;">${logoMarkup}</div>
+      <div style="border-top:1px solid #1f2937;padding-top:24px;">
+        <span style="display:inline-block;padding:4px 12px;background:#d97706;color:#ffffff;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">${safeCategory}</span>
+        <h2 style="margin:0;font-size:26px;font-weight:800;color:#ffffff;line-height:1.2;">${safeTitle}</h2>
+      </div>
+    </div>
+    ${newsImage ? `<div style="padding:0;"><img src="${newsImage}" alt="News" style="width:100%;height:auto;display:block;" /></div>` : ''}
+    <div style="padding:32px;">
+      <div style="font-size:15px;color:#374151;line-height:1.8;margin-bottom:32px;">${safeExcerpt}</div>
+      <a href="${WEBSITE_URL}news" style="display:block;text-align:center;background:#d97706;color:#ffffff;text-decoration:none;padding:14px;border-radius:8px;font-size:14px;font-weight:700;">Read Full Article</a>
+      <div style="margin-top:40px;padding-top:32px;border-top:1px solid #e5e7eb;">
+        ${renderContactRows('#d97706')}
+      </div>
+    </div>
+    <div style="padding:24px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
+      <p style="margin:0;font-size:12px;color:#9ca3af;">&copy; 2026 Freya Medical. Stay informed.</p>
+    </div>
   `);
 
   const mailOptions = {
@@ -321,29 +252,32 @@ export const sendReplyEmail = async (to: string, subject: string, message: strin
   const safeMessage = escapeHtml(message);
 
   const html = renderEmailShell(`
-    <!-- Header -->
-    <tr>
-      <td style="padding: 40px 32px; background-color: #ffffff; text-align: center; border-bottom: 1px solid #f1f5f9;">
-        ${logoMarkup}
-      </td>
-    </tr>
-    <!-- Content -->
-    <tr>
-      <td style="padding: 48px 32px;">
-        <h2 style="margin: 0 0 24px 0; font-size: 20px; color: #1e293b; font-weight: 700;">Re: ${safeSubject}</h2>
-        <div style="font-size: 16px; color: #334155; line-height: 1.7; white-space: pre-line; margin-bottom: 40px;">
-          ${safeMessage}
-        </div>
-        <p style="margin: 0; font-size: 15px; color: #64748b;">
-          Best regards,<br>
-          <strong style="color: #1e293b;">Freya Support Team</strong>
-        </p>
-      </td>
-    </tr>
+    <div style="background:#0a0a0a;padding:32px;text-align:center;">
+      <div style="margin-bottom:24px;">${logoMarkup}</div>
+      <div style="border-top:1px solid #1f2937;padding-top:24px;">
+        <h2 style="margin:0 0 4px 0;font-size:22px;font-weight:700;color:#ffffff;">Official Response</h2>
+        <p style="margin:0;font-size:13px;color:#71717a;">Re: ${safeSubject}</p>
+      </div>
+    </div>
+    <div style="padding:32px;">
+      <p style="font-size:15px;margin-top:0;color:#111827;">Hello,</p>
+      <div style="margin:16px 0 32px;font-size:14px;color:#374151;line-height:1.7;white-space:pre-line;">${safeMessage}</div>
+      <div style="background:#f9fafb;border-radius:12px;border:0.5px solid #e5e7eb;padding:20px;margin-bottom:32px;">
+        <p style="margin:0 0 16px;font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;">Need to reach us again?</p>
+        ${renderContactRows('#7c3aed')}
+      </div>
+      <p style="font-size:14px;color:#4b5563;margin:0;">
+        Best regards,<br>
+        <strong style="color:#111827;">Freya Medical Support Team</strong>
+      </p>
+    </div>
+    <div style="padding:24px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
+      <p style="margin:0;font-size:12px;color:#9ca3af;">&copy; 2026 Freya Medical. Building a healthier future.</p>
+    </div>
   `);
 
   const mailOptions = {
-    from: `"Freya Support" <${process.env.EMAIL_USER}>`,
+    from: `"Freya Medical Support" <${process.env.EMAIL_USER}>`,
     to: to,
     subject: `Re: ${subject}`,
     html: html,
