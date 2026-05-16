@@ -2,10 +2,12 @@ import axios from 'axios';
 
 const remoteApiUrl = 'https://freya-server-mu.vercel.app/api';
 const envApiUrl = import.meta.env.VITE_API_URL?.trim();
-const baseURL = envApiUrl || remoteApiUrl;
+const baseURL = import.meta.env.DEV
+  ? '/api'
+  : envApiUrl || remoteApiUrl;
 
 const api = axios.create({
-  // Use the hosted API by default.
+  // In local dev, Vite proxies /api to the hosted backend so the browser stays same-origin.
   baseURL,
   headers: {
     'Content-Type': 'application/json',
