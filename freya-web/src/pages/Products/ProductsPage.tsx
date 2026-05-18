@@ -4,7 +4,7 @@ export default function ProductsPage() {
   return (
     <main>
       <section style={{
-        padding: 'clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2rem) 2rem',
+        padding: '3rem clamp(1rem, 4vw, 2rem) 2rem',
         textAlign: 'center',
         width: '100%',
         maxWidth: 'var(--container-max)',
@@ -17,6 +17,7 @@ export default function ProductsPage() {
           lineHeight: 1.15,
           color: 'var(--on-surface)',
           letterSpacing: '-0.03em',
+          marginTop: 0, /* Prevents browser default top margin */
           marginBottom: '1rem',
         }}>
           Advanced <span style={{ color: 'var(--primary)' }}>clinical</span> solutions

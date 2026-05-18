@@ -1,22 +1,27 @@
 import { Link } from 'react-router-dom';
 import styles from './HeroSection.module.css';
+import bgHero from '../../../assets/logo/hero-section.jpg';
 
 export default function HeroSection() {
   return (
-    <section className={styles.hero}>
+    <section
+      className={styles.hero}
+      style={{ backgroundImage: `url(${bgHero})` }}
+    >
+      <div className={styles.heroOverlay} />
       <div className={styles.contentWrapper}>
         <div className={styles.textContent}>
           <div className={styles.badge}>Leading Philippines Distributor</div>
-          
+
           <h1 className={styles.title}>
             Global <span>trading</span> & import <span>excellence</span>
           </h1>
-          
+
           <p className={styles.subtitle}>
-            Precision-engineered distribution and importation of world-class clinical technology. 
+            Precision-engineered distribution and importation of world-class clinical technology.
             Empowering Philippine healthcare through technical excellence and direct global sourcing.
           </p>
-          
+
           <div className={styles.actions}>
             <Link to="/products" className={styles.btnPrimary}>
               Browse equipment

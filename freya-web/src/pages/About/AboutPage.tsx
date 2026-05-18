@@ -4,7 +4,7 @@ export default function AboutPage() {
   return (
     <main>
       <section style={{ 
-        padding: '8rem 2rem 4rem', 
+        padding: '3rem 2rem 4rem', 
         textAlign: 'center',
         background: 'linear-gradient(180deg, var(--surface-container-lowest) 0%, var(--surface) 100%)'
       }}>
@@ -14,6 +14,7 @@ export default function AboutPage() {
           fontWeight: 700, 
           letterSpacing: '-0.04em',
           color: 'var(--secondary)',
+          marginTop: 0, /* Prevents browser default top margin */
           marginBottom: '1.5rem'
         }}>
           Pioneering <span style={{ color: 'var(--primary)' }}>Health</span> Solutions
