@@ -27,6 +27,7 @@ export interface NewsArticle {
   category: string;
   title: string;
   excerpt: string;
+  content?: string;
   published_date: string;
   image_url?: string;
   featured: boolean;
@@ -50,6 +51,7 @@ const News: React.FC = () => {
     category: '',
     title: '',
     excerpt: '',
+    content: '',
     published_date: new Date().toISOString().split('T')[0],
     image_url: '',
     featured: false,
@@ -87,6 +89,7 @@ const News: React.FC = () => {
         category: article.category,
         title: article.title,
         excerpt: article.excerpt,
+        content: article.content || '',
         published_date: article.published_date,
         image_url: article.image_url || '',
         featured: article.featured,
@@ -98,6 +101,7 @@ const News: React.FC = () => {
         category: '',
         title: '',
         excerpt: '',
+        content: '',
         published_date: new Date().toISOString().split('T')[0],
         image_url: '',
         featured: false,
@@ -360,10 +364,10 @@ const News: React.FC = () => {
                   </label>
                 </div>
 
-                {/* Section: Content Summary */}
+                {/* Section: Content Summary & Full Story */}
                 <div className="news-form-section">
-                  <div className="news-section-label">Content Summary</div>
-                  <p className="news-section-desc">Keep the excerpt readable and concise for article preview cards.</p>
+                  <div className="news-section-label">Content Summary & Full Story</div>
+                  <p className="news-section-desc">Keep the excerpt readable and concise for article preview cards. Use the Full Story for the actual news content.</p>
 
                   <div className="news-field">
                     <label className="news-field-label">Excerpt (Short Summary)</label>
@@ -374,6 +378,17 @@ const News: React.FC = () => {
                       required
                       value={formData.excerpt}
                       onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="news-field">
+                    <label className="news-field-label">Full Story (Content)</label>
+                    <textarea
+                      className="news-input news-textarea"
+                      rows={8}
+                      placeholder="Write the full news story here..."
+                      value={formData.content}
+                      onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                     />
                   </div>
                 </div>
@@ -419,6 +434,12 @@ const News: React.FC = () => {
                   <label>Excerpt / Summary</label>
                   <p style={{ whiteSpace: 'pre-wrap' }}>{viewingArticle.excerpt}</p>
                 </div>
+                {viewingArticle.content && (
+                  <div className="detail-section" style={{ marginTop: '20px' }}>
+                    <label>Full Story</label>
+                    <p style={{ whiteSpace: 'pre-wrap' }}>{viewingArticle.content}</p>
+                  </div>
+                )}
                 <div className="detail-grid">
                   <div className="detail-item">
                     <div className="item-icon"><Calendar size={18} /></div>
