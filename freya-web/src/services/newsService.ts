@@ -7,6 +7,7 @@ export interface NewsArticle {
   category: string;
   title: string;
   excerpt: string;
+  content?: string;
   published_date: string;
   image_url?: string;
   featured: boolean;
