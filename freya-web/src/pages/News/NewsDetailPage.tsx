@@ -84,6 +84,13 @@ const NewsDetailPage: React.FC = () => {
             
             <div className="article-body">
               <p className="article-excerpt">{article.excerpt}</p>
+
+              {article.content && article.content.trim() !== '' && (
+                <div className="article-text">
+                  <h3>Full Story</h3>
+                  <div style={{ whiteSpace: 'pre-wrap' }}>{article.content}</div>
+                </div>
+              )}
               
               {article.article_url && article.article_url.trim() !== '' && article.article_url !== '#' && (
                 <div className="article-text" style={{ textAlign: 'center', padding: '2rem 0' }}>
