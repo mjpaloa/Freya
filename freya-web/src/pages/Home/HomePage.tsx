@@ -9,7 +9,7 @@ import PartnersSection from '../../components/sections/PartnersSection/PartnersS
 
 export default function HomePage() {
   return (
-    <main>
+    <>
       <HeroSection />
       <QuickFeatures />
       <SectorsGrid />
@@ -17,8 +17,7 @@ export default function HomePage() {
       <FutureCta />
       <PartnersSection />
       <VendorSection />
-
-    </main>
+    </>
   );
 }
 

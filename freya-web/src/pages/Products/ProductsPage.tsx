@@ -2,7 +2,7 @@ import ProductGrid from '../../components/sections/ProductGrid/ProductGrid';
 
 export default function ProductsPage() {
   return (
-    <main>
+    <>
       <section style={{
         padding: '3rem clamp(1rem, 4vw, 2rem) 2rem',
         textAlign: 'center',
@@ -34,6 +34,6 @@ export default function ProductsPage() {
       </section>
 
       <ProductGrid />
-    </main>
+    </>
   );
 }

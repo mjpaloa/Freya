@@ -2,7 +2,7 @@ import MissionVision from '../../components/sections/MissionVision/MissionVision
 
 export default function AboutPage() {
   return (
-    <main>
+    <>
       <section style={{ 
         padding: '3rem 2rem 4rem', 
         textAlign: 'center',
@@ -31,7 +31,7 @@ export default function AboutPage() {
       </section>
 
       <MissionVision />
-    </main>
+    </>
   );
 }
 

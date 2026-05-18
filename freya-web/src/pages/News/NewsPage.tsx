@@ -54,7 +54,7 @@ const NewsPage: React.FC = () => {
       <div className="container">
         <div className="news-content-layout">
           {/* Main Column */}
-          <main className="news-main-content">
+          <div className="news-main-content">
             {loading ? (
               <div className="loading-state">Loading latest insights...</div>
             ) : (
@@ -63,12 +63,12 @@ const NewsPage: React.FC = () => {
                 
                 <div className="news-grid">
                   {otherArticles.map(article => (
-                    <NewsCard key={article.id} article={article} />
+                     <NewsCard key={article.id} article={article} />
                   ))}
                 </div>
               </>
             )}
-          </main>
+          </div>
 
 
           {/* Sidebar Column */}

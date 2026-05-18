@@ -77,7 +77,7 @@ const NewsDetailPage: React.FC = () => {
 
       <div className="container">
         <div className="news-content-layout">
-          <main className="news-main-content">
+          <div className="news-main-content">
             <div className="article-featured-image">
               <img src={article.image_url || "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=1200"} alt={article.title} />
             </div>
@@ -112,7 +112,7 @@ const NewsDetailPage: React.FC = () => {
                 </div>
               </div>
             </div>
-          </main>
+          </div>
 
           <Sidebar articles={article ? [article] : []} />
         </div>
