@@ -31,26 +31,26 @@ export default function InquiryForm() {
     try {
       await submitInquiry(
         inquiryType === 'partnership'
-            ? {
-                type: 'partnership',
-                full_name: formData.fullName,
-                email: formData.email,
-                contact_number: formData.phone || '',
-                facility_id: 'N/A',
-                subject: formData.subject,
-                message: formData.message,
-                company_hospital: formData.company,
-                job_title: formData.jobTitle,
-              }
-            : {
-                type: 'technical',
-                full_name: formData.fullName,
-                email: formData.email,
-                contact_number: formData.phone || '',
-                facility_id: formData.facilityId || '',
-                subject: formData.subject,
-                message: formData.message,
-              }
+          ? {
+            type: 'partnership',
+            full_name: formData.fullName,
+            email: formData.email,
+            contact_number: formData.phone || '',
+            facility_id: 'N/A',
+            subject: formData.subject,
+            message: formData.message,
+            company_hospital: formData.company,
+            job_title: formData.jobTitle,
+          }
+          : {
+            type: 'technical',
+            full_name: formData.fullName,
+            email: formData.email,
+            contact_number: formData.phone || '',
+            facility_id: formData.facilityId || '',
+            subject: formData.subject,
+            message: formData.message,
+          }
       );
       alert('Your inquiry has been submitted. Our team will respond shortly.');
       setFormData({ fullName: '', email: '', phone: '', facilityId: '', subject: '', message: '', company: '', jobTitle: '' });
@@ -191,19 +191,19 @@ export default function InquiryForm() {
           />
         </div>
 
-        <button 
-          type="submit" 
-          className="submit-btn" 
+        <button
+          type="submit"
+          className="submit-btn"
           disabled={isSubmitting}
-          style={{ 
-            width: '100%', 
-            padding: '16px', 
-            borderRadius: '4px', 
-            background: '#eb6a35', 
-            color: 'white', 
-            border: 'none', 
-            fontWeight: '700', 
-            fontSize: '1rem', 
+          style={{
+            width: '100%',
+            padding: '16px',
+            borderRadius: '4px',
+            background: '#eb6a35',
+            color: 'white',
+            border: 'none',
+            fontWeight: '700',
+            fontSize: '1rem',
             cursor: 'pointer',
             transition: 'background 0.2s ease'
           }}

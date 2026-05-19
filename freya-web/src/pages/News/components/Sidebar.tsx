@@ -10,7 +10,7 @@ const Sidebar: React.FC<SidebarProps> = ({ articles = [] }) => {
   // Derive categories dynamically from the actual articles in the database
   const dynamicCategories = React.useMemo(() => {
     const counts: Record<string, number> = {};
-    
+
     articles.forEach(article => {
       const cat = article.category || 'Uncategorized';
       counts[cat] = (counts[cat] || 0) + 1;

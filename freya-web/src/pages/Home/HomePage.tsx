@@ -3,9 +3,8 @@ import QuickFeatures from '../../components/sections/QuickFeatures/QuickFeatures
 import SectorsGrid from '../../components/sections/SectorsGrid/SectorsGrid';
 import ProductHighlight from '../../components/sections/ProductHighlight/ProductHighlight';
 import FutureCta from '../../components/sections/FutureCta/FutureCta';
-import VendorSection from '../../components/sections/VendorSection/VendorSection';
 import PartnersSection from '../../components/sections/PartnersSection/PartnersSection';
-
+import FeaturedNews from '../../components/sections/FeaturedNews/FeaturedNews';
 
 export default function HomePage() {
   return (
@@ -16,7 +15,7 @@ export default function HomePage() {
       <ProductHighlight />
       <FutureCta />
       <PartnersSection />
-      <VendorSection />
+      <FeaturedNews />
     </>
   );
 }

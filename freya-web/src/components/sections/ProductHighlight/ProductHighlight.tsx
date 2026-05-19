@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './ProductHighlight.module.css';
 
 export default function ProductHighlight() {
@@ -6,13 +7,13 @@ export default function ProductHighlight() {
       <div className={styles.container}>
         <div className={styles.textContent}>
           <h3>Clinical Diagnostic Systems</h3>
-          <h2>BIO-RAD</h2>
+          <h2>FUJIFILM</h2>
           <p>
-            The latest generation of BIO-RAD diagnostic technology allows for faster, more accurate results. Empowering Philippine laboratories with world-class precision and automated workflows.
+            Empowering Philippine hospitals with the latest generation of FUJIFILM diagnostic imaging. Experience world-class precision, speed, and seamless clinical workflows.
           </p>
-          <button className={styles.btnPrimary}>
+          <Link to="/products" className={styles.btnPrimary}>
             Discover More →
-          </button>
+          </Link>
         </div>
       </div>
     </section>

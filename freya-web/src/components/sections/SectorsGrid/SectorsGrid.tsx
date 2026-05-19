@@ -85,9 +85,9 @@ export default function SectorsGrid() {
           <p>
             FREYA is also at your disposal for a wide range of accessories and technical parts for clinical equipment.
           </p>
-          <button className={styles.btnSecondary}>
+          <Link to="/contact" className={styles.btnSecondary}>
             Learn More
-          </button>
+          </Link>
         </div>
       </div>
     </section>

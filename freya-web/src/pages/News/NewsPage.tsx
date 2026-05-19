@@ -30,10 +30,10 @@ const NewsPage: React.FC = () => {
 
   // Filter featured articles for the top section
   const featuredArticles = articles.filter(a => a.featured);
-  
+
   // If no articles are explicitly marked featured, use the first one
   const displayFeatured = featuredArticles.length > 0 ? featuredArticles : (articles.length > 0 ? [articles[0]!] : []);
-  
+
   // Keep all articles in the list below (as per user request "same as before")
   const otherArticles = articles;
 
@@ -45,7 +45,7 @@ const NewsPage: React.FC = () => {
           <span className="category-tag">CLINICAL INTELLIGENCE</span>
           <h1>Clinical Insights & Updates</h1>
           <p>
-            Bridging the gap between cutting-edge medical technology and healthcare 
+            Bridging the gap between cutting-edge medical technology and healthcare
             delivery through expert analysis and regional updates.
           </p>
         </div>
@@ -60,10 +60,10 @@ const NewsPage: React.FC = () => {
             ) : (
               <>
                 {displayFeatured.length > 0 && <FeaturedCarousel articles={displayFeatured} />}
-                
+
                 <div className="news-grid">
                   {otherArticles.map(article => (
-                     <NewsCard key={article.id} article={article} />
+                    <NewsCard key={article.id} article={article} />
                   ))}
                 </div>
               </>

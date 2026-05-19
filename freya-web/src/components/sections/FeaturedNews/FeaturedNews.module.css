@@ -1,0 +1,180 @@
+.section {
+  padding: 5rem 0;
+  background-color: var(--surface-alt);
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.heading {
+  font-family: var(--font-headline);
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: var(--secondary);
+  text-align: center;
+  margin-bottom: 3.5rem;
+  letter-spacing: -0.02em;
+}
+
+.brandName {
+  position: relative;
+  display: inline-block;
+  color: var(--primary); /* Freya Orange */
+  padding-bottom: 4px;
+}
+
+.brandName::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  border-bottom: 3px double var(--primary); /* Double underline style */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.card {
+  background-color: var(--white);
+  border-radius: 8px; /* Slightly rounded as in screenshot */
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Soft premium shadow */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.imageContainer {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: var(--surface-container);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+.cardBody {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: var(--font-headline);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--secondary);
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.readMore {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #556987; /* Grayish blue reading */
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.readMore:hover {
+  color: var(--primary); /* Highlight with brand primary color on hover */
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem 0;
+  font-size: 1.125rem;
+  color: var(--on-surface-variant);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .heading {
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .heading {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+  }
+  
+  .section {
+    padding: 3rem 0;
+  }
+}
+
+.cardLinks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.inquireLink {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary); /* Highlight with Freya orange brand color */
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.inquireLink:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 480px) {
+  .cardLinks {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
