@@ -1,15 +1,36 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { products as staticProducts } from '../../../constants/products';
 import type { Product } from '../../../constants/products';
 import { fetchProducts } from '../../../services/productService';
 import styles from './ProductGrid.module.css';
 
 const categories = ['All', 'Ultrasound', 'X-Ray', 'Endoscopy', 'CT Scan', 'MRI', 'Healthcare IT', 'Bone Densitometry'] as const;
+const categoryAliases: Record<string, (typeof categories)[number]> = {
+  'mri systems': 'MRI',
+  'ultrasound systems': 'Ultrasound',
+  'x-ray & radiography': 'X-Ray',
+  'digital mammography': 'X-Ray',
+  'bone densitometry': 'Bone Densitometry',
+  'healthcare it': 'Healthcare IT',
+  'ct scan': 'CT Scan',
+  'endoscopy': 'Endoscopy',
+  'mri': 'MRI',
+  'ultrasound': 'Ultrasound',
+  'x-ray': 'X-Ray',
+};
+
+const normalizeCategory = (value: string | null): (typeof categories)[number] => {
+  if (!value) return 'All';
+
+  const normalized = value.trim().toLowerCase();
+  return categoryAliases[normalized] ?? (categories.includes(value as (typeof categories)[number]) ? (value as (typeof categories)[number]) : 'All');
+};
 
 export default function ProductGrid() {
   const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState<typeof categories[number]>('All');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeCategory, setActiveCategory] = useState<string>(normalizeCategory(searchParams.get('category')));
   const [displayProducts, setDisplayProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,9 +54,24 @@ export default function ProductGrid() {
     loadProducts();
   }, []);
 
+  useEffect(() => {
+    setActiveCategory(normalizeCategory(searchParams.get('category')));
+  }, [searchParams]);
+
   const filteredProducts = activeCategory === 'All' 
     ? displayProducts 
     : displayProducts.filter(p => p.category?.trim().toLowerCase() === activeCategory.trim().toLowerCase());
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+
+    if (category === 'All') {
+      setSearchParams({});
+      return;
+    }
+
+    setSearchParams({ category });
+  };
 
   return (
     <section className={styles.section}>
@@ -45,7 +81,7 @@ export default function ProductGrid() {
             <button
               key={cat}
               className={`${styles.filterBtn} ${activeCategory === cat ? styles.active : ''}`}
-              onClick={() => setActiveCategory(cat)}
+              onClick={() => handleCategoryChange(cat)}
             >
               {cat}
             </button>

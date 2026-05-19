@@ -16,7 +16,7 @@ export default function FutureCta() {
         </div>
         
         <div className={styles.imageContent}>
-          <h2>Leading<br />The Future</h2>
+          <h2 className={styles.imageHeading}>Leading The Future</h2>
           <img 
             src="https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=1932&auto=format&fit=crop" 
             alt="Robotic Surgery" 
